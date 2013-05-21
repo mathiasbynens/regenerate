@@ -65,9 +65,9 @@
 	// (which is the case for all code point values).
 	var pad = function(number, totalCharacters) {
 		var string = String(number);
-		return totalCharacters < string.length
-			? string
-			: (Array(totalCharacters + 1).join('0') + string).slice(-totalCharacters);
+		return string.length < totalCharacters
+			? (Array(totalCharacters + 1).join('0') + string).slice(-totalCharacters)
+			: string;
 	};
 
 	var hex = function(number) {
@@ -99,22 +99,21 @@
 		} else if (codePoint <= 0xFF) {
 			// http://mathiasbynens.be/notes/javascript-escapes#hexadecimal
 			string = '\\x' + pad(hex(codePoint), 2);
-		} else if (codePoint <= 0xFFFF) {
+		} else { // if (codePoint <= 0xFFFF)
 			// http://mathiasbynens.be/notes/javascript-escapes#unicode
 			string = '\\u' + pad(hex(codePoint), 4);
-		} else {
-			// surrogate pairs
-			string = '\\u' + pad(hex(highSurrogate(codePoint)), 4)
-				+ '\\u' + pad(hex(lowSurrogate(codePoint)), 4);
 		}
+
+		// There’s no need to account for astral symbols / surrogate pairs here,
+		// since `codePointToString` is private and only used for BMP code points.
+		// But if that’s what you need, just add an `else` block with this code:
+		//     string = '\\u' + pad(hex(highSurrogate(codePoint)), 4)
+		//     	+ '\\u' + pad(hex(lowSurrogate(codePoint)), 4);
+
 		return string;
 	};
 
 	var createBMPRange = function(codePoints) {
-		if (!codePoints.length) {
-			return '';
-		}
-
 		var tmp = [];
 		var start = codePoints[0];
 		var end = codePoints[0];
@@ -128,21 +127,17 @@
 				end = code;
 				predict = code + 1;
 				return;
-			} else {
-				if (start == end) {
-					tmp.push(codePointToString(start));
-					counter += 1;
-				} else if (end == start + 1) {
-					tmp.push(codePointToString(start) + codePointToString(end));
-					counter += 2;
-				} else {
-					tmp.push(codePointToString(start) + '-' + codePointToString(end));
-					counter += 2;
-				}
-				start = code;
-				end = code;
-				predict = code + 1;
 			}
+			if (start == end) {
+				tmp.push(codePointToString(start));
+				counter += 1;
+			} else {
+				tmp.push(codePointToString(start) + '-' + codePointToString(end));
+				counter += 2;
+			}
+			start = code;
+			end = code;
+			predict = code + 1;
 		});
 
 		if (start == end) {
@@ -172,6 +167,10 @@
 
 		if (!isArray(codePoints)) {
 			throw TypeError('The argument to `fromCodePoints` must be an array.');
+		}
+
+		if (!codePoints.length) {
+			return '';
 		}
 
 		// Sort code points numerically

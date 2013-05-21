@@ -58,8 +58,8 @@
 		'fromCodePoints': [
 			{
 				'description': 'BMP code points',
-				'codePoints': [0x10, 0x11, 0x12, 0x13, 0x40, 0x41, 0x42, 0x43, 0x44, 0xFD3F, 0xFFFF],
-				'expected': '[\\x10-\\x13\\x40-D\\uFD3F\\uFFFF]'
+				'codePoints': [0x10, 0x11, 0x12, 0x13, 0x40, 0x41, 0x42, 0x43, 0x44, 0x2603, 0xFD3F, 0xFFFF],
+				'expected': '[\\x10-\\x13\\x40-D\\u2603\\uFD3F\\uFFFF]'
 			},
 			{
 				'description': 'BMP code points within the a-zA-Z range',
@@ -105,6 +105,11 @@
 				'description': 'All Unicode code points',
 				'codePoints': unicode,
 				'expected': '[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+			},
+			{
+				'description': 'Empty array as input',
+				'codePoints': [],
+				'expected': ''
 			},
 			{
 				'description': 'Invalid code point > 0x10FFFF',
