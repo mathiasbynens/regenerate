@@ -28,6 +28,15 @@
 		return toString.call(object) == '[object Array]';
 	};
 
+	var map = function(array, callback) {
+		var index = -1;
+		var length = array.length;
+		while (++index < length) {
+			array[index] = callback(array[index]);
+		}
+		return array;
+	};
+
 	var forEach = function(array, callback) {
 		var index = -1;
 		var length = array.length;
@@ -116,6 +125,21 @@
 
 		return string;
 	};
+
+	// Based on `punycode.ucs2.decode`: http://mths.be/punycode
+	function symbolToCodePoint(symbol) {
+		var length = symbol.length;
+		var value = symbol.charCodeAt(0);
+		var extra;
+		if ((value & 0xF800) == 0xD800 && length > 1) {
+			// `value` is a high surrogate, and there is a next character — assume
+			// it’s a low surrogate (else it’s invalid use of Regenerate anyway).
+			extra = symbol.charCodeAt(1);
+			return ((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000;
+		} else {
+			return value;
+		}
+	}
 
 	var createBMPCharacterClasses = function(codePoints) {
 		var tmp = [];
@@ -237,13 +261,32 @@
 		return createCharacterClasses(range(start, end));
 	};
 
+	var fromSymbols = function(symbols) {
+		if (!isArray(symbols)) {
+			throw TypeError('The argument to `fromSymbols` must be an array.');
+		}
+
+		if (!symbols.length) {
+			return '';
+		}
+
+		var codePoints = map(symbols, symbolToCodePoint);
+
+		// Sort code points numerically
+		codePoints = codePoints.sort(function(a, b) {
+			return a - b;
+		});
+
+		return createCharacterClasses(codePoints);
+	};
+
 	/*--------------------------------------------------------------------------*/
 
 	var regenerate = {
 		'version': '0.1.0',
 		'fromCodePoints': fromCodePoints,
 		'fromCodePointRange': fromCodePointRange,
-		// TODO: fromSymbols
+		'fromSymbols': fromSymbols,
 		// TODO: fromSymbolRange
 		'range': range
 	};
