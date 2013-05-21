@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 				'failOnError': true
 			},
 			'cover': {
-				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "<%= meta.testFile %>"'
+				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "<%= meta.testFile %>"; istanbul report --root "coverage" --format "html"'
 			},
 			// Rhino 1.7R4 has a bug that makes it impossible to test regenerate.
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=775566
