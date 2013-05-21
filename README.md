@@ -52,12 +52,6 @@ require(
 Usage example:
 
 ~~~js
-// Code points used in this example:
-// U+1F604 SMILING FACE WITH OPEN MOUTH AND SMILING EYES
-// U+1F605 SMILING FACE WITH OPEN MOUTH AND COLD SWEAT
-// U+1F606 SMILING FACE WITH OPEN MOUTH AND TIGHTLY-CLOSED EYES
-// U+1F607 SMILING FACE WITH HALO
-
 // Create a regular expression that matches any of the given code points:
 regenerate.fromCodePoints([0x1F604, 0x1F605, 0x1F606, 0x1F607]);
 // → '\\uD83D[\\uDE04-\\uDE07]'
@@ -70,10 +64,23 @@ regenerate.fromCodePointRange(0x1F604, 0x1F607);
 regenerate.fromCodePointRange(0x000000, 0x10FFFF);
 // → '[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
 
+// Create a regular expression that matches any of the given Unicode symbols:
 regenerate.fromSymbols(['𝐀', '𝐁', '𝐂', '𝐃', '𝐄']);
 // → '\\uD835[\\uDC00-\\uDC04]'
+
+// Create a regular expression that matches any Unicode symbol in the given range:
 regenerate.fromSymbolRange('𝐏', '𝐟');
 // → '\\uD835[\\uDC0F-\\uDC1F]'
+
+// Create a regular expression based on a dynamically created range of code points:
+var part1 = regenerate.range(0x00, 0xFF);
+// → [0x00, 0x01, 0x02, 0x03, …, 0xFC, 0xFD, 0xFE, 0xFF]
+var part2 = regenerate.range(0x2603, 0x2608);
+// → [0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608]
+var codePoints = part1.concat(part2);
+// → [0x00, 0x01, …, 0xFE, 0xFF, 0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608]
+regenerate.fromCodePoints(codePoints);
+// → '[\\0-\\xFF\\u2603-\\u2608]'
 ~~~
 
 Note that all of Regenerate’s methods return **strings** that can be used as (part of) a regular expression literal. To convert an output string into a regular expression dynamically, just wrap it in `RegExp(…)`:
@@ -82,8 +89,8 @@ Note that all of Regenerate’s methods return **strings** that can be used as (
 // Create a regular expression that matches any code point in the given range:
 var result = regenerate.fromCodePointRange(0x1F604, 0x1F607);
 // → '\\uD83D[\\uDE04-\\uDE07]'
-
 var regex = RegExp(result);
+// → /\uD83D[\uDE04-\uDE07]/
 regex.test('\uD83D\uDE03'); // 0x1F603
 // → false
 regex.test('\uD83D\uDE04'); // 0x1F604
