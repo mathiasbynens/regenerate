@@ -213,6 +213,33 @@
 				'symbols': 'lolwat',
 				'error': TypeError
 			}
+		],
+
+		'fromSymbolRange': [
+			{
+				'description': 'BMP code points',
+				'start': '\x10',
+				'end': '\x13',
+				'expected': '[\\x10-\\x13]'
+			},
+			{
+				'description': 'BMP code points within the a-zA-Z range',
+				'start': 'A',
+				'end': 'a',
+				'expected': '[A-a]'
+			},
+			{
+				'description': 'Start value greater than end value',
+				'start': '\uFFFF',
+				'end': '\0',
+				'error': Error
+			},
+			{
+				'description': 'All Unicode code points',
+				'start': '\0',
+				'end': '\uDBFF\uDFFF',
+				'expected': '[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+			}
 		]
 
 	};
@@ -229,45 +256,45 @@
 
 	QUnit.module('regenerate');
 
-	// test('fromCodePoints', function() {
-	// 	forEach(data.fromCodePoints, function(item) {
-	// 		if (item.error) {
-	// 			raises(
-	// 				function() {
-	// 					regenerate.fromCodePoints(item.codePoints);
-	// 				},
-	// 				item.error,
-	// 				item.description
-	// 			);
-	// 		} else {
-	// 			equal(
-	// 				regenerate.fromCodePoints(item.codePoints),
-	// 				item.expected,
-	// 				item.description
-	// 			);
-	// 		}
-	// 	});
-	// });
+	test('fromCodePoints', function() {
+		forEach(data.fromCodePoints, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.fromCodePoints(item.codePoints);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				equal(
+					regenerate.fromCodePoints(item.codePoints),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
 
-	// test('fromCodePointRange', function() {
-	// 	forEach(data.fromCodePointRange, function(item) {
-	// 		if (item.error) {
-	// 			raises(
-	// 				function() {
-	// 					regenerate.fromCodePointRange(item.start, item.end);
-	// 				},
-	// 				item.error,
-	// 				item.description
-	// 			);
-	// 		} else {
-	// 			equal(
-	// 				regenerate.fromCodePointRange(item.start, item.end),
-	// 				item.expected,
-	// 				item.description
-	// 			);
-	// 		}
-	// 	});
-	// });
+	test('fromCodePointRange', function() {
+		forEach(data.fromCodePointRange, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.fromCodePointRange(item.start, item.end);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				equal(
+					regenerate.fromCodePointRange(item.start, item.end),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
 
 	test('fromSymbols', function() {
 		forEach(data.fromSymbols, function(item) {
@@ -282,6 +309,26 @@
 			} else {
 				equal(
 					regenerate.fromSymbols(item.symbols),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
+
+	test('fromSymbolRange', function() {
+		forEach(data.fromSymbolRange, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.fromSymbolRange(item.start, item.end);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				equal(
+					regenerate.fromSymbolRange(item.start, item.end),
 					item.expected,
 					item.description
 				);

@@ -280,6 +280,12 @@
 		return createCharacterClasses(codePoints);
 	};
 
+	var fromSymbolRange = function(start, end) {
+		return createCharacterClasses(
+			range(symbolToCodePoint(start), symbolToCodePoint(end))
+		);
+	};
+
 	/*--------------------------------------------------------------------------*/
 
 	var regenerate = {
@@ -287,7 +293,7 @@
 		'fromCodePoints': fromCodePoints,
 		'fromCodePointRange': fromCodePointRange,
 		'fromSymbols': fromSymbols,
-		// TODO: fromSymbolRange
+		'fromSymbolRange': fromSymbolRange,
 		'range': range
 	};
 
