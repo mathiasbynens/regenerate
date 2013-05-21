@@ -53,9 +53,11 @@
 		}
 	};
 
-	var range = function(start, stop) { // inclusive, e.g. `range(1, 3)` → `[1, 2, 3]`
+	var range = function(start, stop) {
+		// inclusive, e.g. `range(1, 3)` → `[1, 2, 3]`
 		if (stop < start) {
-			throw Error('A range\u2019s `stop` value must be greater than or equal to the `start` value.');
+			throw Error('A range\u2019s `stop` value must be greater than or equal ' +
+				'to the `start` value.');
 		}
 		for (var result = []; start <= stop; result.push(start++));
 		return result;
@@ -63,10 +65,11 @@
 
 	// This assumes that `number` is a positive integer that `toString()`s nicely
 	// (which is the case for all code point values).
+	var zeroes = '0000';
 	var pad = function(number, totalCharacters) {
 		var string = String(number);
 		return string.length < totalCharacters
-			? (Array(totalCharacters + 1).join('0') + string).slice(-totalCharacters)
+			? (zeroes + string).slice(-totalCharacters)
 			: string;
 	};
 
@@ -107,13 +110,14 @@
 		// There’s no need to account for astral symbols / surrogate pairs here,
 		// since `codePointToString` is private and only used for BMP code points.
 		// But if that’s what you need, just add an `else` block with this code:
+		//
 		//     string = '\\u' + pad(hex(highSurrogate(codePoint)), 4)
 		//     	+ '\\u' + pad(hex(lowSurrogate(codePoint)), 4);
 
 		return string;
 	};
 
-	var createBMPRange = function(codePoints) {
+	var createBMPCharacterClasses = function(codePoints) {
 		var tmp = [];
 		var start = codePoints[0];
 		var end = codePoints[0];
@@ -158,25 +162,12 @@
 		}
 	};
 
-	/*--------------------------------------------------------------------------*/
-
-	var fromCodePoints = function(codePoints) {
+	var createCharacterClasses = function(codePoints) {
+		// At this point, it’s safe to assume `codePoints` is a sorted array of
+		// numeric code point values.
 		var bmp = [];
 		var astralMap = {};
 		var surrogates = [];
-
-		if (!isArray(codePoints)) {
-			throw TypeError('The argument to `fromCodePoints` must be an array.');
-		}
-
-		if (!codePoints.length) {
-			return '';
-		}
-
-		// Sort code points numerically
-		codePoints = codePoints.sort(function(a, b) {
-			return a - b;
-		});
 
 		forEach(codePoints, function(codePoint) {
 			if (codePoint >= 0xD800 && codePoint <= 0xDBFF) {
@@ -196,29 +187,28 @@
 					lowSurrogate(codePoint)
 				);
 			} else {
-				throw RangeError('Invalid code point value. Code points range from U+000000 to U+10FFFF.');
+				throw RangeError('Invalid code point value. Code points range from ' +
+					'U+000000 to U+10FFFF.');
 			}
 		});
 
 		var astralMapByLowRanges = {};
 
 		forOwn(astralMap, function(highSurrogate, lowSurrogate) {
-			var bmpRange = createBMPRange(lowSurrogate);
+			var bmpRange = createBMPCharacterClasses(lowSurrogate);
 			append(astralMapByLowRanges, bmpRange, +highSurrogate);
-			// `astralMapByLowRanges` looks like this:
-			// { 'low surrogate range': [list of high surrogates that have this exact low surrogate range] }
 		});
 
 		var tmp = [];
 		if (bmp.length) {
-			tmp.push(createBMPRange(bmp));
+			tmp.push(createBMPCharacterClasses(bmp));
 		}
 		forOwn(astralMapByLowRanges, function(lowSurrogate, highSurrogate) {
-			tmp.push(createBMPRange(highSurrogate) + lowSurrogate);
+			tmp.push(createBMPCharacterClasses(highSurrogate) + lowSurrogate);
 		});
 		// individual code points that are high surrogates must go at the end
 		if (surrogates.length) {
-			tmp.push(createBMPRange(surrogates));
+			tmp.push(createBMPCharacterClasses(surrogates));
 		}
 		return tmp
 			.join('|')
@@ -226,8 +216,25 @@
 			.replace(/\\x00([^01234567]|$)/g, '\\0$1');
 	};
 
+	var fromCodePoints = function(codePoints) {
+		if (!isArray(codePoints)) {
+			throw TypeError('The argument to `fromCodePoints` must be an array.');
+		}
+
+		if (!codePoints.length) {
+			return '';
+		}
+
+		// Sort code points numerically
+		codePoints = codePoints.sort(function(a, b) {
+			return a - b;
+		});
+
+		return createCharacterClasses(codePoints);
+	};
+
 	var fromCodePointRange = function(start, end) {
-		return fromCodePoints(range(start, end));
+		return createCharacterClasses(range(start, end));
 	};
 
 	/*--------------------------------------------------------------------------*/
