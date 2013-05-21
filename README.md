@@ -2,7 +2,7 @@
 
 [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.png)](https://gemnasium.com/mathiasbynens/regenerate)
 
-Regenerate is a regular expression generator for JavaScript. Easily generate JavaScript-compatible regular expressions based on a given set of symbols or code points.
+_Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points.
 
 Feel free to fork if you see possible improvements!
 
@@ -65,9 +65,9 @@ regenerate.fromCodePoints([0x1F604, 0x1F605, 0x1F606, 0x1F607]);
 regenerate.fromCodePointRange(0x1F604, 0x1F607);
 // → '\\uD83D[\\uDE04-\\uDE07]'
 
-// Create a regular expression that matches any BMP code point:
-regenerate.fromCodePointRange(0x0000, 0xFFFF);
-// → '[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF]'
+// Create a regular expression that matches any Unicode code point:
+regenerate.fromCodePointRange(0x000000, 0x10FFFF);
+// → '[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
 ~~~
 
 ## Unit tests & code coverage
