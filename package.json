@@ -45,7 +45,7 @@
 		"grunt-shell": "~0.2.2",
 		"qunitjs": "~1.11.0",
 		"qunit-clib": "~1.3.0",
-		"requirejs": "~2.1.5"
+		"requirejs": "~2.1.6"
 	},
 	"readmeFilename": "README.md"
 }
