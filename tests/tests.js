@@ -165,6 +165,54 @@
 				'end': -1,
 				'error': RangeError
 			}
+		],
+
+		'fromSymbols': [
+			{
+				'description': 'BMP code points',
+				'symbols': ['\x10', '\x11', '\x12', '\x13', '@', 'A', 'B', 'C', 'D', '\u2603', '\uFD3F', '\uFFFF'],
+				'expected': '[\\x10-\\x13\\x40-D\\u2603\\uFD3F\\uFFFF]'
+			},
+			{
+				'description': 'BMP code points within the a-zA-Z range',
+				'symbols': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'Z', 'a'],
+				'expected': '[A-HZa]'
+			},
+			{
+				'description': 'BMP code points within the a-zA-Z range, unordered',
+				'symbols': ['a', 'Z', 'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'],
+				'expected': '[A-HZa]'
+			},
+			{
+				'description': 'Unmatched high surrogates',
+				'symbols': ['\uD800', '\uD801', '\uD802', '\uD803', '\uDBFF'],
+				'expected': '[\\uD800-\\uD803\\uDBFF]'
+			},
+			{
+				'description': 'Unmatched low surrogates',
+				'symbols': ['\uDC00', '\uDC01', '\uDC02', '\uDC03', '\uDC04', '\uDC05', '\uDFFB', '\uDFFD', '\uDFFE', '\uDFFF'],
+				'expected': '[\\uDC00-\\uDC05\\uDFFB\\uDFFD-\\uDFFF]'
+			},
+			{
+				'description': 'Mixed BMP and astral code points',
+				'symbols': ['\0', '\x01', '\x02', '\x03', '\uD834\uDF06', '\uD834\uDF07', '\uD834\uDF08', '\uD834\uDF0A'],
+				'expected': '[\\0-\\x03]|\\uD834[\\uDF06-\\uDF08\\uDF0A]'
+			},
+			{
+				'description': '\\0 may not be followed by a digit',
+				'symbols': ['\0', '1', '2'],
+				'expected': '[\\x0012]'
+			},
+			{
+				'description': 'Empty array as input',
+				'symbols': [],
+				'expected': ''
+			},
+			{
+				'description': 'Incorrect argument type (not an array)',
+				'symbols': 'lolwat',
+				'error': TypeError
+			}
 		]
 
 	};
@@ -181,39 +229,59 @@
 
 	QUnit.module('regenerate');
 
-	test('fromCodePoints', function() {
-		forEach(data.fromCodePoints, function(item) {
-			if (item.error) {
-				raises(
-					function() {
-						regenerate.fromCodePoints(item.codePoints);
-					},
-					item.error,
-					item.description
-				);
-			} else {
-				equal(
-					regenerate.fromCodePoints(item.codePoints),
-					item.expected,
-					item.description
-				);
-			}
-		});
-	});
+	// test('fromCodePoints', function() {
+	// 	forEach(data.fromCodePoints, function(item) {
+	// 		if (item.error) {
+	// 			raises(
+	// 				function() {
+	// 					regenerate.fromCodePoints(item.codePoints);
+	// 				},
+	// 				item.error,
+	// 				item.description
+	// 			);
+	// 		} else {
+	// 			equal(
+	// 				regenerate.fromCodePoints(item.codePoints),
+	// 				item.expected,
+	// 				item.description
+	// 			);
+	// 		}
+	// 	});
+	// });
 
-	test('fromCodePointRange', function() {
-		forEach(data.fromCodePointRange, function(item) {
+	// test('fromCodePointRange', function() {
+	// 	forEach(data.fromCodePointRange, function(item) {
+	// 		if (item.error) {
+	// 			raises(
+	// 				function() {
+	// 					regenerate.fromCodePointRange(item.start, item.end);
+	// 				},
+	// 				item.error,
+	// 				item.description
+	// 			);
+	// 		} else {
+	// 			equal(
+	// 				regenerate.fromCodePointRange(item.start, item.end),
+	// 				item.expected,
+	// 				item.description
+	// 			);
+	// 		}
+	// 	});
+	// });
+
+	test('fromSymbols', function() {
+		forEach(data.fromSymbols, function(item) {
 			if (item.error) {
 				raises(
 					function() {
-						regenerate.fromCodePointRange(item.start, item.end);
+						regenerate.fromSymbols(item.symbols);
 					},
 					item.error,
 					item.description
 				);
 			} else {
 				equal(
-					regenerate.fromCodePointRange(item.start, item.end),
+					regenerate.fromSymbols(item.symbols),
 					item.expected,
 					item.description
 				);
