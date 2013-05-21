@@ -69,7 +69,26 @@ regenerate.fromCodePointRange(0x1F604, 0x1F607);
 // Create a regular expression that matches any Unicode code point:
 regenerate.fromCodePointRange(0x000000, 0x10FFFF);
 // → '[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+
+regenerate.fromSymbols(['𝐀', '𝐁', '𝐂', '𝐃', '𝐄']);
+// → '\\uD835[\\uDC00-\\uDC04]'
+regenerate.fromSymbolRange('𝐏', '𝐟');
+// → '\\uD835[\\uDC0F-\\uDC1F]'
 ~~~
+
+Note that all of Regenerate’s methods return **strings** that can be used as (part of) a regular expression literal. To convert an output string into a regular expression dynamically, just wrap it in `RegExp(…)`:
+
+```js
+// Create a regular expression that matches any code point in the given range:
+var result = regenerate.fromCodePointRange(0x1F604, 0x1F607);
+// → '\\uD83D[\\uDE04-\\uDE07]'
+
+var regex = RegExp(result);
+regex.test('\uD83D\uDE03'); // 0x1F603
+// → false
+regex.test('\uD83D\uDE04'); // 0x1F604
+// → true
+```
 
 ## Unit tests & code coverage
 
