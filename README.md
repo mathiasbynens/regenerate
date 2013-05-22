@@ -7,7 +7,7 @@ _Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to
 
 Feel free to fork if you see possible improvements!
 
-## Installation and usage
+## Installation
 
 In a browser:
 
@@ -49,7 +49,39 @@ require(
 );
 ~~~
 
-Usage example:
+## API
+
+### `regenerate.version`
+
+A string representing the semantic version number.
+
+### `regenerate.fromCodePoints(codePoints)`
+
+This function takes an array of numerical code point values and returns a string representing (part of) a regular expression that would match all the symbols mapped to those code points.
+
+### `regenerate.fromCodePointRange(start, end)`
+
+This function takes a `start` and an `end` code point value, and returns a string representing (part of) a regular expression that would match all the symbols mapped to the code points within the range _[start, end]_ (inclusive).
+
+### `regenerate.fromCodePointRanges(ranges)`
+
+This function takes an array of ranges or separate code points, and returns a string representing (part of) a regular expression that would match all the symbols mapped to the code points within the listed ranges or separate code points.
+
+### `regenerate.fromSymbols(symbols)`
+
+This function takes an array of strings that each contain a single Unicode symbol. It returns a string representing (part of) a regular expression that would match all those symbols.
+
+### `regenerate.fromSymbolRange(start, end)`
+
+This function takes a `start` and an `end` string which each contain a single Unicode symbol. It returns a string representing (part of) a regular expression that would match all the symbols within the range _[start, end]_ (inclusive).
+
+### `regenerate.range(start, end)`
+
+This function takes a `start` and an `end` number and returns an array of numbers progressing from `start` up to and including `end`, i.e. all the numbers within the range _[start, end]_ (inclusive).
+
+## Usage examples
+
+Some basic examples:
 
 ~~~js
 // Create a regular expression that matches any of the given code points:
@@ -149,6 +181,7 @@ Here’s an example where [Punycode.js](http://mths.be/punycode) is used to conv
 
 ```js
 var regenerate = require('regenerate');
+var _ = require('lodash');
 var punycode = require('punycode');
 
 var string = 'Lorem ipsum dolor sit amet.';
