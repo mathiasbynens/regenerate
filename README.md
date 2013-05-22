@@ -75,7 +75,7 @@ This function takes an array of strings that each contain a single Unicode symbo
 
 This function takes a `start` and an `end` string which each contain a single Unicode symbol. It returns a string representing (part of) a regular expression that would match all the symbols within the range _[start, end]_ (inclusive).
 
-### `regenerate.fromSymbolRanges(start, end)`
+### `regenerate.fromSymbolRanges(ranges)`
 
 This function takes an array of symbol ranges or separate strings, each containing a single Unicode symbol, and returns a string representing (part of) a regular expression that would match all the symbols within the listed symbols or symbol ranges.
 
@@ -147,6 +147,19 @@ regenerate.fromCodePointRanges([
 	[0x2603, 0x2608],      // range
 	0x1F4A9, // separate code point
 	0x1F4BB  // separate code point
+]);
+// → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
+```
+
+Or, by using the symbols directly instead of the code points:
+
+```js
+// Create a regular expression based on a dynamically created range of code points:
+regenerate.fromSymbolRanges([
+	['\0', '\xFF'],           // range
+	['\u2603', '\u2608'],     // range
+	'\uD83D\uDCA9', // separate symbol
+	'\uD83D\uDCBB'  // separate symbol
 ]);
 // → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
 ```
