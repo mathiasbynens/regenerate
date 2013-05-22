@@ -185,8 +185,13 @@
 				'expected': '[\\u200C\\uF900-\\uFDCF\\uFDF0-\\uFFFD]|[\\uD800-\\uDB7F][\\uDC00-\\uDFFF]'
 			},
 			{
-				'description': 'Various code points',
-				'ranges': 'LOL',
+				'description': 'Empty array as input',
+				'ranges': [],
+				'expected': ''
+			},
+			{
+				'description': 'Incorrect argument type (not an array)',
+				'ranges': 'lolwat',
 				'error': TypeError
 			}
 		],
@@ -263,6 +268,29 @@
 				'start': '\0',
 				'end': '\uDBFF\uDFFF',
 				'expected': '[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+			}
+		],
+
+		'fromSymbolRanges': [
+			{
+				'description': 'Various code points',
+				'ranges': [
+					'\u200C',
+					['\uF900', '\uFDCF'],
+					['\uFDF0', '\uFFFD'],
+					['\uD800\uDC00', '\uDB7F\uDFFF'], // U+010000, U+0EFFFF
+				],
+				'expected': '[\\u200C\\uF900-\\uFDCF\\uFDF0-\\uFFFD]|[\\uD800-\\uDB7F][\\uDC00-\\uDFFF]'
+			},
+			{
+				'description': 'Empty array as input',
+				'ranges': [],
+				'expected': ''
+			},
+			{
+				'description': 'Incorrect argument type (not an array)',
+				'ranges': 'lolwat',
+				'error': TypeError
 			}
 		]
 
@@ -373,6 +401,26 @@
 			} else {
 				equal(
 					regenerate.fromSymbolRange(item.start, item.end),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
+
+	test('fromSymbolRanges', function() {
+		forEach(data.fromSymbolRanges, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.fromSymbolRanges(item.ranges);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				equal(
+					regenerate.fromSymbolRanges(item.ranges),
 					item.expected,
 					item.description
 				);

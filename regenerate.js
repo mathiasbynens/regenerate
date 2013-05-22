@@ -280,6 +280,10 @@
 				'array.');
 		}
 
+		if (!ranges.length) {
+			return '';
+		}
+
 		var codePoints = [];
 		forEach(ranges, function(codePointRange) {
 			// If it’s a single code point (not a range)
@@ -320,6 +324,31 @@
 		);
 	};
 
+	var fromSymbolRanges = function(ranges) {
+		if (!isArray(ranges)) {
+			throw TypeError('The argument to `fromSymbolRanges` must be an ' +
+				'array.');
+		}
+
+		if (!ranges.length) {
+			return '';
+		}
+
+		var codePoints = [];
+		forEach(ranges, function(symbolRange) {
+			// If it’s a single symbol (not a range)
+			if (!isArray(symbolRange)) {
+				codePoints.push(symbolToCodePoint(symbolRange));
+				return;
+			}
+			// If it’s a range (not a single code point)
+			var start = symbolToCodePoint(symbolRange[0]);
+			var stop = symbolToCodePoint(symbolRange[1]);
+			codePoints = codePoints.concat(range(start, stop));
+		});
+		return createCharacterClasses(codePoints);
+	};
+
 	/*--------------------------------------------------------------------------*/
 
 	var regenerate = {
@@ -329,6 +358,7 @@
 		'fromCodePointRanges': fromCodePointRanges,
 		'fromSymbols': fromSymbols,
 		'fromSymbolRange': fromSymbolRange,
+		'fromSymbolRanges': fromSymbolRanges,
 		'range': range
 	};
 

@@ -65,7 +65,7 @@ This function takes a `start` and an `end` code point value, and returns a strin
 
 ### `regenerate.fromCodePointRanges(ranges)`
 
-This function takes an array of ranges or separate code points, and returns a string representing (part of) a regular expression that would match all the symbols mapped to the code points within the listed ranges or separate code points.
+This function takes an array of code point ranges or separate code points, and returns a string representing (part of) a regular expression that would match all the symbols mapped to the code points within the listed code points or code point ranges.
 
 ### `regenerate.fromSymbols(symbols)`
 
@@ -74,6 +74,10 @@ This function takes an array of strings that each contain a single Unicode symbo
 ### `regenerate.fromSymbolRange(start, end)`
 
 This function takes a `start` and an `end` string which each contain a single Unicode symbol. It returns a string representing (part of) a regular expression that would match all the symbols within the range _[start, end]_ (inclusive).
+
+### `regenerate.fromSymbolRanges(start, end)`
+
+This function takes an array of symbol ranges or separate strings, each containing a single Unicode symbol, and returns a string representing (part of) a regular expression that would match all the symbols within the listed symbols or symbol ranges.
 
 ### `regenerate.range(start, end)`
 
