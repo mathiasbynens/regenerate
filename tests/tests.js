@@ -94,7 +94,7 @@
 			{
 				'description': 'All BMP code points',
 				'codePoints': bmp,
-				'expected': '[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF]'
+				'expected': '[\\0-\\uFFFF]'
 			},
 			{
 				'description': 'All astral code points',
@@ -140,6 +140,12 @@
 				'start': 0x41,
 				'end': 0x61,
 				'expected': '[A-a]'
+			},
+			{
+				'description': 'All BMP code points',
+				'start': 0x0000,
+				'end': 0xFFFF,
+				'expected': '[\\0-\\uFFFF]'
 			},
 			{
 				'description': 'Start value greater than end value',
