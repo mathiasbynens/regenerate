@@ -71,16 +71,6 @@ regenerate.fromSymbols(['𝐀', '𝐁', '𝐂', '𝐃', '𝐄']);
 // Create a regular expression that matches any Unicode symbol in the given range:
 regenerate.fromSymbolRange('𝐏', '𝐟');
 // → '\\uD835[\\uDC0F-\\uDC1F]'
-
-// Create a regular expression based on a dynamically created range of code points:
-var part1 = regenerate.range(0x00, 0xFF);
-// → [0x00, 0x01, 0x02, 0x03, …, 0xFC, 0xFD, 0xFE, 0xFF]
-var part2 = regenerate.range(0x2603, 0x2608);
-// → [0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608]
-var codePoints = part1.concat(part2);
-// → [0x00, 0x01, …, 0xFE, 0xFF, 0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608]
-regenerate.fromCodePoints(codePoints);
-// → '[\\0-\\xFF\\u2603-\\u2608]'
 ~~~
 
 Note that all of Regenerate’s methods return **strings** that can be used as (part of) a regular expression literal. To convert an output string into a regular expression dynamically, just wrap it in `RegExp(…)`:
@@ -95,6 +85,55 @@ regex.test('\uD83D\uDE03'); // 0x1F603
 // → false
 regex.test('\uD83D\uDE04'); // 0x1F604
 // → true
+```
+
+Here’s a slightly more advanced example, showing how to create a regular expression based on a dynamically generated range of code points:
+
+```js
+// Create a regular expression based on a dynamically created range of code points:
+var part1 = regenerate.range(0x00, 0xFF);
+// → [0x00, 0x01, 0x02, 0x03, …, 0xFC, 0xFD, 0xFE, 0xFF]
+var part2 = regenerate.range(0x2603, 0x2608);
+// → [0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608]
+var codePoints = part1.concat(part2);
+// → [0x00, 0x01, …, 0xFE, 0xFF, 0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608]
+regenerate.fromCodePoints(codePoints);
+// → '[\\0-\\xFF\\u2603-\\u2608]'
+```
+
+Regenerate gets even better when combined with other libraries such as [Lo-Dash](http://lodash.com/) or [Punycode.js](http://mths.be/punycode). For example, you could easily create a regular expression that matches any Unicode symbol except a few blacklisted symbols:
+
+```js
+var regenerate = require('regenerate');
+var _ = require('lodash');
+
+// Start with all Unicode code points:
+var allowed = regenerate.range(0x000000, 0x10FFFF);
+// Disallow U+2603 SNOWMAN and U+1F4A9 PILE OF POO:
+var disallowed = [0x2603, 0x1F4A9];
+// Create the resulting array of code points:
+var codePoints = _.difference(allowed, disallowed);
+
+// Generate a regular expression that matches any of those code points:
+regenerate.fromCodePoints(codePoints);
+// → '[\\0-\\u2602\\u2604-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uD83C\\uD83E-\\uDBFF][\\uDC00-\\uDFFF]|\\uD83D[\\uDC00-\\uDCA8\\uDCAA-\\uDFFF]|[\\uD800-\\uDBFF]'
+```
+
+Here’s an example where [Punycode.js](http://mths.be/punycode) is used to convert a string into an array of code points, that is then passed on to Regenerate:
+
+```js
+var regenerate = require('regenerate');
+var punycode = require('punycode');
+
+var string = 'Lorem ipsum dolor sit amet.';
+// Get an array of all code points used in the string
+var codePoints = punycode.ucs2.decode(string);
+// Remove duplicates and sort the array
+codePoints = _.uniq(codePoints);
+
+// Generate a regular expression that matches any of the symbols used in the string:
+regenerate.fromCodePoints(codePoints);
+// → '[\\x20\\x2ELad-eil-mo-pr-u]'
 ```
 
 ## Unit tests & code coverage
