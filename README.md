@@ -95,13 +95,39 @@ var part1 = regenerate.range(0x00, 0xFF);
 // → [0x00, 0x01, 0x02, 0x03, …, 0xFC, 0xFD, 0xFE, 0xFF]
 var part2 = regenerate.range(0x2603, 0x2608);
 // → [0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608]
-var codePoints = part1.concat(part2);
-// → [0x00, 0x01, …, 0xFE, 0xFF, 0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608]
+var part3 = [0x1F4A9, 0x1F4BB]; // add U+1F4A9 PILE OF POO and U+1F4BB PERSONAL COMPUTER
+var codePoints = part1.concat(part2).concat(part3);
+// → [0x00, 0x01, …, 0xFE, 0xFF, 0x2603, 0x2604, …, 0x2607, 0x2608, 0x1F4A9, 0x1F4BB]
 regenerate.fromCodePoints(codePoints);
-// → '[\\0-\\xFF\\u2603-\\u2608]'
+// → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
 ```
 
-Regenerate gets even better when combined with other libraries such as [Lo-Dash](http://lodash.com/) or [Punycode.js](http://mths.be/punycode). For example, you could easily create a regular expression that matches any Unicode symbol except a few blacklisted symbols:
+The previous example can be rewritten as follows:
+
+```js
+// Create a regular expression based on a dynamically created range of code points:
+regenerate.fromCodePointRanges([
+	[0x00, 0xFF],          // range
+	[0x2603, 0x2608],      // range
+	0x1F4A9, // separate code point
+	0x1F4BB  // separate code point
+]);
+// → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
+```
+
+Similarly, to create a regular expression that matches any Unicode symbol except for a few blacklisted symbols:
+
+```js
+// Allow all Unicode symbols except U+2603 SNOWMAN and U+1F4A9 PILE OF POO
+regenerate.fromCodePointRanges([
+	[0x0000, 0x2602],  // skip 0x2603
+	[0x2604, 0x1F4A8], // skip 0x1F4A9
+	[0x1F4AA, 0x10FFFF]
+]);
+// → '[\\0-\\u2602\\u2604-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uD83C\\uD83E-\\uDBFF][\\uDC00-\\uDFFF]|\\uD83D[\\uDC00-\\uDCA8\\uDCAA-\\uDFFF]|[\\uD800-\\uDBFF]'
+```
+
+Regenerate gets even better when combined with other libraries such as [Lo-Dash](http://lodash.com/) or [Punycode.js](http://mths.be/punycode). Here’s a more readable (albeit slightly more verbose) solution to the previous problem:
 
 ```js
 var regenerate = require('regenerate');
