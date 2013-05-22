@@ -72,6 +72,12 @@
 		return result;
 	};
 
+	var sortNumbers = function(array) {
+		return array.sort(function(a, b) {
+			return a - b;
+		});
+	};
+
 	// This assumes that `number` is a positive integer that `toString()`s nicely
 	// (which is the case for all code point values).
 	var zeroes = '0000';
@@ -192,19 +198,22 @@
 		var bmp = [];
 		var astralMap = {};
 		var surrogates = [];
+		var hasAstral = false;
 
 		forEach(codePoints, function(codePoint) {
 			if (codePoint >= 0xD800 && codePoint <= 0xDBFF) {
 				// If a high surrogate is followed by a low surrogate, the two code
 				// units should be matched together, so that the regex always matches a
 				// full code point. For this reason, separate code points that are
-				// (unmatched) high surrogates go at the end.
+				// (unmatched) high surrogates are tracked separately, so they can be
+				// moved to the end if astral symbols are to be matched as well.
 				surrogates.push(codePoint);
 			} else if (codePoint >= 0x0000 && codePoint <= 0xFFFF) {
 				// non-surrogate BMP code point
 				bmp.push(codePoint);
 			} else if (codePoint >= 0x010000 && codePoint <= 0x10FFFF) {
 				// astral code point
+				hasAstral = true;
 				append(
 					astralMap,
 					highSurrogate(codePoint),
@@ -224,14 +233,20 @@
 		});
 
 		var tmp = [];
+		// If we’re not dealing with any astral symbols, there’s no need to move
+		// individual code points that are high surrogates to the end of the regex.
+		if (!hasAstral && surrogates.length) {
+			bmp = sortNumbers(bmp.concat(surrogates));
+		}
 		if (bmp.length) {
 			tmp.push(createBMPCharacterClasses(bmp));
 		}
 		forOwn(astralMapByLowRanges, function(lowSurrogate, highSurrogate) {
 			tmp.push(createBMPCharacterClasses(highSurrogate) + lowSurrogate);
 		});
-		// individual code points that are high surrogates must go at the end
-		if (surrogates.length) {
+		// Individual code points that are high surrogates must go at the end
+		// if astral symbols are to be matched as well.
+		if (hasAstral && surrogates.length) {
 			tmp.push(createBMPCharacterClasses(surrogates));
 		}
 		return tmp
@@ -250,9 +265,7 @@
 		}
 
 		// Sort code points numerically
-		codePoints = codePoints.sort(function(a, b) {
-			return a - b;
-		});
+		codePoints = sortNumbers(codePoints);
 
 		return createCharacterClasses(codePoints);
 	};
