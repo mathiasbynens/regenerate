@@ -274,6 +274,27 @@
 		return createCharacterClasses(range(start, end));
 	};
 
+	var fromCodePointRanges = function(ranges) {
+		if (!isArray(ranges)) {
+			throw TypeError('The argument to `fromCodePointRanges` must be an ' +
+				'array.');
+		}
+
+		var codePoints = [];
+		forEach(ranges, function(codePointRange) {
+			// If it’s a single code point (not a range)
+			if (!isArray(codePointRange)) {
+				codePoints.push(codePointRange);
+				return;
+			}
+			// If it’s a range (not a single code point)
+			var start = codePointRange[0];
+			var stop = codePointRange[1];
+			codePoints = codePoints.concat(range(start, stop));
+		});
+		return createCharacterClasses(codePoints);
+	};
+
 	var fromSymbols = function(symbols) {
 		if (!isArray(symbols)) {
 			throw TypeError('The argument to `fromSymbols` must be an array.');
@@ -305,6 +326,7 @@
 		'version': '0.2.0',
 		'fromCodePoints': fromCodePoints,
 		'fromCodePointRange': fromCodePointRange,
+		'fromCodePointRanges': fromCodePointRanges,
 		'fromSymbols': fromSymbols,
 		'fromSymbolRange': fromSymbolRange,
 		'range': range

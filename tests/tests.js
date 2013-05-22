@@ -173,6 +173,24 @@
 			}
 		],
 
+		'fromCodePointRanges': [
+			{
+				'description': 'Various code points',
+				'ranges': [
+					0x200C,
+					[0xF900, 0xFDCF],
+					[0xFDF0, 0xFFFD],
+					[0x010000, 0x0EFFFF]
+				],
+				'expected': '[\\u200C\\uF900-\\uFDCF\\uFDF0-\\uFFFD]|[\\uD800-\\uDB7F][\\uDC00-\\uDFFF]'
+			},
+			{
+				'description': 'Various code points',
+				'ranges': 'LOL',
+				'error': TypeError
+			}
+		],
+
 		'fromSymbols': [
 			{
 				'description': 'BMP code points',
@@ -295,6 +313,26 @@
 			} else {
 				equal(
 					regenerate.fromCodePointRange(item.start, item.end),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
+
+	test('fromCodePointRanges', function() {
+		forEach(data.fromCodePointRanges, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.fromCodePointRanges(item.ranges);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				equal(
+					regenerate.fromCodePointRanges(item.ranges),
 					item.expected,
 					item.description
 				);
