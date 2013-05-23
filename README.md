@@ -204,7 +204,7 @@ var punycode = require('punycode');
 var string = 'Lorem ipsum dolor sit amet.';
 // Get an array of all code points used in the string
 var codePoints = punycode.ucs2.decode(string);
-// Remove duplicates and sort the array
+// Remove duplicates
 codePoints = _.uniq(codePoints);
 
 // Generate a regular expression that matches any of the symbols used in the string:
