@@ -1,0 +1,7 @@
+.*
+*.md
+coverage
+node_modules
+tests
+Gruntfile.js
+npm-debug.log
