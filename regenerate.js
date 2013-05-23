@@ -150,7 +150,7 @@
 	var createBMPCharacterClasses = function(codePoints) {
 		var tmp = [];
 		var start = codePoints[0];
-		var end = codePoints[0];
+		var end = start;
 		var predict = start + 1;
 
 		codePoints = codePoints.slice(1);

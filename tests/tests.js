@@ -302,7 +302,7 @@
 	// `throws` is a reserved word in ES3; alias it to avoid errors
 	var raises = QUnit.assert['throws'];
 
-	// Extend `Object.prototype` to see if regenerate can handle it.
+	// Extend `Object.prototype` to see if Regenerate can handle it.
 	// 0xD834 is the high surrogate code point for U+1D306 (among others).
 	Object.prototype[0xD834] = true;
 
