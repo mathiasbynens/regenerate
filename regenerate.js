@@ -1,4 +1,4 @@
-/*! http://mths.be/regenerate v0.3.0 by @mathias */
+/*! http://mths.be/regenerate v0.4.0 by @mathias */
 ;(function(root) {
 
 	// Detect free variables `exports`
@@ -366,7 +366,7 @@
 	/*--------------------------------------------------------------------------*/
 
 	var regenerate = {
-		'version': '0.3.0',
+		'version': '0.4.0',
 		'fromCodePoints': fromCodePoints,
 		'fromCodePointRange': fromCodePointRange,
 		'fromCodePointRanges': fromCodePointRanges,
