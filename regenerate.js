@@ -62,16 +62,6 @@
 		}
 	};
 
-	var range = function(start, stop) {
-		// inclusive, e.g. `range(1, 3)` → `[1, 2, 3]`
-		if (stop < start) {
-			throw Error('A range\u2019s `stop` value must be greater than or equal ' +
-				'to the `start` value.');
-		}
-		for (var result = []; start <= stop; result.push(start++));
-		return result;
-	};
-
 	var sortNumbers = function(array) {
 		return array.sort(function(a, b) {
 			return a - b;
@@ -93,6 +83,42 @@
 	};
 
 	/*--------------------------------------------------------------------------*/
+
+	var range = function(start, stop) {
+		// inclusive, e.g. `range(1, 3)` → `[1, 2, 3]`
+		if (stop < start) {
+			throw Error('A range\u2019s `stop` value must be greater than or equal ' +
+				'to the `start` value.');
+		}
+		for (var result = []; start <= stop; result.push(start++));
+		return result;
+	};
+
+	var ranges = function(codePointRanges) {
+		if (!isArray(codePointRanges)) {
+			throw TypeError('The argument to `ranges` must be an ' +
+				'array.');
+		}
+
+		if (!codePointRanges.length) {
+			return [];
+		}
+
+		var codePoints = [];
+		forEach(codePointRanges, function(codePointRange) {
+			// If it’s a single code point (not a range)
+			if (!isArray(codePointRange)) {
+				codePoints.push(codePointRange);
+				return;
+			}
+			// If it’s a range (not a single code point)
+			var start = codePointRange[0];
+			var stop = codePointRange[1];
+			codePoints = codePoints.concat(range(start, stop));
+		});
+		return codePoints;
+	};
+
 
 	// http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
 	var floor = Math.floor;
@@ -274,29 +300,17 @@
 		return createCharacterClasses(range(start, end));
 	};
 
-	var fromCodePointRanges = function(ranges) {
-		if (!isArray(ranges)) {
+	var fromCodePointRanges = function(codePointRanges) {
+		if (!isArray(codePointRanges)) {
 			throw TypeError('The argument to `fromCodePointRanges` must be an ' +
 				'array.');
 		}
 
-		if (!ranges.length) {
+		if (!codePointRanges.length) {
 			return '';
 		}
 
-		var codePoints = [];
-		forEach(ranges, function(codePointRange) {
-			// If it’s a single code point (not a range)
-			if (!isArray(codePointRange)) {
-				codePoints.push(codePointRange);
-				return;
-			}
-			// If it’s a range (not a single code point)
-			var start = codePointRange[0];
-			var stop = codePointRange[1];
-			codePoints = codePoints.concat(range(start, stop));
-		});
-		return createCharacterClasses(codePoints);
+		return createCharacterClasses(ranges(codePointRanges));
 	};
 
 	var fromSymbols = function(symbols) {
@@ -324,18 +338,18 @@
 		);
 	};
 
-	var fromSymbolRanges = function(ranges) {
-		if (!isArray(ranges)) {
+	var fromSymbolRanges = function(symbolRanges) {
+		if (!isArray(symbolRanges)) {
 			throw TypeError('The argument to `fromSymbolRanges` must be an ' +
 				'array.');
 		}
 
-		if (!ranges.length) {
+		if (!symbolRanges.length) {
 			return '';
 		}
 
 		var codePoints = [];
-		forEach(ranges, function(symbolRange) {
+		forEach(symbolRanges, function(symbolRange) {
 			// If it’s a single symbol (not a range)
 			if (!isArray(symbolRange)) {
 				codePoints.push(symbolToCodePoint(symbolRange));
@@ -359,7 +373,8 @@
 		'fromSymbols': fromSymbols,
 		'fromSymbolRange': fromSymbolRange,
 		'fromSymbolRanges': fromSymbolRanges,
-		'range': range
+		'range': range,
+		'ranges': ranges
 	};
 
 	// Some AMD build optimizers, like r.js, check for specific condition patterns
