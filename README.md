@@ -83,6 +83,10 @@ This function takes an array of symbol ranges or separate strings, each containi
 
 This function takes a `start` and an `end` number and returns an array of numbers progressing from `start` up to and including `end`, i.e. all the numbers within the range _[start, end]_ (inclusive).
 
+### `regenerate.ranges(ranges)`
+
+This function takes an array of code point ranges or separate code points, and returns an array containing all the code points within the listed code points or code point ranges.
+
 ## Usage examples
 
 Some basic examples:
@@ -123,16 +127,16 @@ regex.test('\uD83D\uDE04'); // 0x1F604
 // → true
 ```
 
-Here’s a slightly more advanced example, showing how to create a regular expression based on a dynamically generated range of code points:
+Here’s a slightly more advanced example, showing how to create a regular expression based on a dynamically generated range of code points using `regenerate.ranges`:
 
 ```js
 // Create a regular expression based on a dynamically created range of code points:
-var part1 = regenerate.range(0x00, 0xFF);
-// → [0x00, 0x01, 0x02, 0x03, …, 0xFC, 0xFD, 0xFE, 0xFF]
-var part2 = regenerate.range(0x2603, 0x2608);
-// → [0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608]
-var part3 = [0x1F4A9, 0x1F4BB]; // add U+1F4A9 PILE OF POO and U+1F4BB PERSONAL COMPUTER
-var codePoints = part1.concat(part2).concat(part3);
+var codePoints = regenerate.ranges([
+	[0x00, 0xFF], // → 0x00, 0x01, 0x02, 0x03, …, 0xFC, 0xFD, 0xFE, 0xFF
+	[0x2603, 0x2608], // → 0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608
+	0x1F4A9, // add U+1F4A9 PILE OF POO
+	0x1F4BB // add U+1F4BB PERSONAL COMPUTER
+]);
 // → [0x00, 0x01, …, 0xFE, 0xFF, 0x2603, 0x2604, …, 0x2607, 0x2608, 0x1F4A9, 0x1F4BB]
 regenerate.fromCodePoints(codePoints);
 // → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
