@@ -33,15 +33,6 @@
 		}
 	}
 
-	function forOwn(object, fn) {
-		var key;
-		for (key in object) {
-			if (object.hasOwnProperty(key)) {
-				fn(object[key], key);
-			}
-		}
-	}
-
 	// Avoid using `regenerate.range` here since it slows down the coverage
 	// tests greatly
 	var range = function(start, stop) { // inclusive, e.g. `range(1, 3)` → `[1, 2, 3]`
@@ -292,6 +283,49 @@
 				'ranges': 'lolwat',
 				'error': TypeError
 			}
+		],
+
+		'range': [
+			{
+				'description': 'Simple',
+				'start': 0xF9FF,
+				'end': 0xFA07,
+				'expected': [0xF9FF, 0xFA00, 0xFA01, 0xFA02, 0xFA03, 0xFA04, 0xFA05, 0xFA06, 0xFA07]
+			},
+			{
+				'description': 'Negative numbers',
+				'start': -3,
+				'end': 3,
+				'expected': [-3, -2, -1, 0, 1, 2, 3]
+			},
+			{
+				'description': 'Start value greater than end value',
+				'start': 3,
+				'end': -3,
+				'error': Error
+			}
+		],
+
+		'ranges': [
+			{
+				'description': 'Some code point ranges',
+				'ranges': [
+					[0, 3],
+					0x200C,
+					[0xF900, 0xF902]
+				],
+				'expected': [0, 1, 2, 3, 0x200C, 0xF900, 0xF901, 0xF902]
+			},
+			{
+				'description': 'Empty array as input',
+				'ranges': [],
+				'expected': []
+			},
+			{
+				'description': 'Incorrect argument type (not an array)',
+				'ranges': 'lolwat',
+				'error': TypeError
+			}
 		]
 
 	};
@@ -421,6 +455,46 @@
 			} else {
 				equal(
 					regenerate.fromSymbolRanges(item.ranges),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
+
+	test('range', function() {
+		forEach(data.range, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.range(item.start, item.end);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				deepEqual(
+					regenerate.range(item.start, item.end),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
+
+	test('ranges', function() {
+		forEach(data.ranges, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.ranges(item.ranges);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				deepEqual(
+					regenerate.ranges(item.ranges),
 					item.expected,
 					item.description
 				);
