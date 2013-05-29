@@ -1,9 +1,6 @@
 module.exports = function(grunt) {
 
 	grunt.initConfig({
-		'meta': {
-			'testFile': 'tests/tests.js'
-		},
 		'shell': {
 			'options': {
 				'stdout': true,
@@ -11,9 +8,15 @@ module.exports = function(grunt) {
 				'failOnError': true
 			},
 			'cover': {
-				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "<%= meta.testFile %>"; istanbul report --root "coverage" --format "html"'
+				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "tests/tests.js"'
 			},
-			// Rhino 1.7R4 has a bug that makes it impossible to test regenerate.
+			'test-narwhal': {
+				'command': 'echo "Testing in Narwhal..."; export NARWHAL_OPTIMIZATION=-1; narwhal "tests/tests.js"'
+			},
+			'test-phantomjs': {
+				'command': 'echo "Testing in PhantomJS..."; phantomjs "tests/tests.js"'
+			},
+			// Rhino 1.7R4 has a bug that makes it impossible to test in.
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=775566
 			// To test, use Rhino 1.7R3, or wait (heh) for the 1.7R5 release.
 			'test-rhino': {
@@ -25,13 +28,10 @@ module.exports = function(grunt) {
 				}
 			},
 			'test-ringo': {
-				'command': 'echo "Testing in Ringo..."; ringo -o -1 "<%= meta.testFile %>"'
-			},
-			'test-narwhal': {
-				'command': 'echo "Testing in Narwhal..."; export NARWHAL_OPTIMIZATION=-1; narwhal "<%= meta.testFile %>"'
+				'command': 'echo "Testing in Ringo..."; ringo -o -1 "tests/tests.js"'
 			},
 			'test-node': {
-				'command': 'echo "Testing in Node..."; node "<%= meta.testFile %>"'
+				'command': 'echo "Testing in Node..."; node "tests/tests.js"'
 			},
 			'test-browser': {
 				'command': 'echo "Testing in a browser..."; open "tests/index.html"'
@@ -43,9 +43,10 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('cover', 'shell:cover');
 	grunt.registerTask('test', [
+		'shell:test-narwhal',
+		'shell:test-phantomjs',
 		'shell:test-rhino',
 		'shell:test-ringo',
-		'shell:test-narwhal',
 		'shell:test-node',
 		'shell:test-browser'
 	]);
