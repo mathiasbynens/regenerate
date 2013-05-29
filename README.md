@@ -213,6 +213,10 @@ regenerate.fromCodePoints(codePoints);
 // → '[\\x20\\x2ELad-eil-mo-pr-u]'
 ```
 
+## Support
+
+Regenerate has been tested in at least Chrome 27-29, Firefox 3-22, Safari 4-6, Opera 10-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, PhantomJS 1.9.0, and Rhino 1.7RC4.
+
 ## Unit tests & code coverage
 
 After cloning this repository, run `npm install` to install the dependencies needed for Regenerate development and testing. You may want to install Istanbul _globally_ using `npm install istanbul -g`.
