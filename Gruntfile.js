@@ -1,11 +1,5 @@
 module.exports = function(grunt) {
 
-	var commandOptions = {
-		'stdout': true,
-		'stderr': true,
-		'failOnError': true
-	};
-
 	grunt.initConfig({
 		'meta': {
 			'testFile': 'tests/tests.js'
