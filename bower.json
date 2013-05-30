@@ -1,0 +1,13 @@
+{
+	"name": "regenerate",
+	"version": "0.4.0",
+	"main": "regenerate.js",
+	"ignore": [
+		"coverage",
+		"tests",
+		".*",
+		"Gruntfile.js",
+		"package.json",
+		"node_modules"
+	]
+}
