@@ -119,6 +119,32 @@
 		return codePoints;
 	};
 
+	var contains = function(array, value) {
+		var index = -1;
+		var length = array.length;
+		while (++index < length) {
+			if (array[index] == value) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	var difference = function(a, b) {
+		var index = -1;
+		var length = a.length;
+		var result = [];
+		var value;
+		while (++index < length) {
+			value = a[index];
+			if (!contains(b, value)) {
+				result.push(value);
+			}
+		}
+		return result;
+	};
+
+	/*--------------------------------------------------------------------------*/
 
 	// http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
 	var floor = Math.floor;
@@ -374,7 +400,9 @@
 		'fromSymbolRange': fromSymbolRange,
 		'fromSymbolRanges': fromSymbolRanges,
 		'range': range,
-		'ranges': ranges
+		'ranges': ranges,
+		'contains': contains,
+		'difference': difference
 	};
 
 	// Some AMD build optimizers, like r.js, check for specific condition patterns

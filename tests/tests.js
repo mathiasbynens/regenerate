@@ -326,6 +326,42 @@
 				'ranges': 'lolwat',
 				'error': TypeError
 			}
+		],
+
+		'contains': [
+			{
+				'description': 'contains([1, 2, 3, 4, 5], 5)',
+				'array': [1, 2, 3, 4, 5],
+				'value': 5,
+				'expected': true
+			},
+			{
+				'description': 'contains([1, 2, 3, 4, 5], 0x10FFFF)',
+				'array': [1, 2, 3, 4, 5],
+				'value': 0x10FFFF,
+				'expected': false
+			}
+		],
+
+		'difference': [
+			{
+				'description': 'difference([1, 2, 3, 4, 5, 6, 7], [1, 3, 7])',
+				'a': [1, 2, 3, 4, 5, 6, 7],
+				'b': [1, 3, 7],
+				'expected': [2, 4, 5, 6]
+			},
+			{
+				'description': 'difference([1, 2, 3, 4], [0])',
+				'a': [1, 2, 3, 4],
+				'b': [0],
+				'expected': [1, 2, 3, 4]
+			},
+			{
+				'description': 'Not passing the second argument',
+				'a': [1],
+				'b': undefined,
+				'error': TypeError
+			}
 		]
 
 	};
@@ -495,6 +531,46 @@
 			} else {
 				deepEqual(
 					regenerate.ranges(item.ranges),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
+
+	test('contains', function() {
+		forEach(data.contains, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.contains(item.array, item.value);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				equal(
+					regenerate.contains(item.array, item.value),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
+
+	test('difference', function() {
+		forEach(data.difference, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.difference(item.a, item.b);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				deepEqual(
+					regenerate.difference(item.a, item.b),
 					item.expected,
 					item.description
 				);
