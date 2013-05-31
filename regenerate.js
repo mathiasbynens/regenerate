@@ -174,7 +174,7 @@
 	}
 
 	var createBMPCharacterClasses = function(codePoints) {
-		var tmp = [];
+		var tmp = '';
 		var start = codePoints[0];
 		var end = start;
 		var predict = start + 1;
@@ -189,10 +189,10 @@
 				return;
 			}
 			if (start == end) {
-				tmp.push(codePointToString(start));
+				tmp += codePointToString(start);
 				counter += 1;
 			} else {
-				tmp.push(codePointToString(start) + '-' + codePointToString(end));
+				tmp += codePointToString(start) + '-' + codePointToString(end);
 				counter += 2;
 			}
 			start = code;
@@ -201,20 +201,20 @@
 		});
 
 		if (start == end) {
-			tmp.push(codePointToString(start));
+			tmp += codePointToString(start);
 			counter += 1;
 		} else if (end == start + 1) {
-			tmp.push(codePointToString(start) + codePointToString(end));
+			tmp += codePointToString(start) + codePointToString(end);
 			counter += 2;
 		} else {
-			tmp.push(codePointToString(start) + '-' + codePointToString(end));
+			tmp += codePointToString(start) + '-' + codePointToString(end);
 			counter += 2;
 		}
 
 		if (counter == 1) {
-			return tmp.join('');
+			return tmp;
 		} else {
-			return '[' + tmp.join('') + ']';
+			return '[' + tmp + ']';
 		}
 	};
 
