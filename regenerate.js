@@ -23,9 +23,27 @@
 		return hasOwnProperty.call(object, key);
 	};
 
+	var extend = function(destination, source) {
+		var key;
+		for (key in source) {
+			if (hasOwnProperty.call(source, key)) {
+				destination[key] = source[key];
+			}
+		}
+		return destination;
+	};
+
 	var toString = object.toString;
-	var isArray = function(object) {
-		return toString.call(object) == '[object Array]';
+	var isArray = function(value) {
+		return toString.call(value) == '[object Array]';
+	};
+	var isNumber = function(value) {
+		return typeof value == 'number' ||
+			toString.call(value) == '[object Number]';
+	};
+	var isString = function(value) {
+		return typeof value == 'string' ||
+			toString.call(value) == '[object String]';
 	};
 
 	var map = function(array, callback) {
@@ -41,7 +59,7 @@
 		var index = -1;
 		var length = array.length;
 		while (++index < length) {
-			callback(array[index]);
+			callback(array[index], index);
 		}
 	};
 
@@ -62,10 +80,21 @@
 		}
 	};
 
-	var sortNumbers = function(array) {
-		return array.sort(function(a, b) {
+	var sortUniqueNumbers = function(array) {
+		// Sort numerically in ascending order
+		array = array.sort(function(a, b) {
 			return a - b;
 		});
+		// Remove duplicates
+		var previous;
+		var result = [];
+		forEach(array, function(item, index) {
+			if (previous != item) {
+				result.push(item);
+				previous = item;
+			}
+		});
+		return result;
 	};
 
 	// This assumes that `number` is a positive integer that `toString()`s nicely
@@ -82,6 +111,8 @@
 		return Number(number).toString(16).toUpperCase();
 	};
 
+	var slice = [].slice;
+
 	/*--------------------------------------------------------------------------*/
 
 	var range = function(start, stop) {
@@ -96,7 +127,7 @@
 
 	var ranges = function(codePointRanges) {
 		if (!isArray(codePointRanges)) {
-			throw TypeError('The argument to `ranges` must be an ' +
+			throw TypeError('ranges(): The `codePointRanges` argument must be an ' +
 				'array.');
 		}
 
@@ -144,6 +175,60 @@
 		return result;
 	};
 
+	var intersection = function(a, b) {
+		var index = -1;
+		var length = a.length;
+		var result = [];
+		var value;
+		while (++index < length) {
+			value = a[index];
+			if (contains(b, value)) {
+				result.push(value);
+			}
+		}
+		return result;
+	};
+
+	var add = function(destination, value) {
+		if (!isArray(destination)) {
+			throw TypeError('add(): The `destination` argument must be an array.');
+		}
+		if (isNumber(value)) {
+			destination.push(Number(value));
+			return destination;
+		}
+		if (isString(value)) {
+			destination.push(symbolToCodePoint(value));
+			return destination;
+		}
+		if (isArray(value)) {
+			forEach(value, function(item) {
+				destination = add(destination, item);
+			});
+			return destination;
+		}
+		return destination;
+	};
+
+	var remove = function(destination, value) {
+		if (!isArray(destination)) {
+			throw TypeError('remove(): The `destination` argument must be an array.');
+		}
+		if (isNumber(value)) {
+			return difference(destination, [value]);
+		}
+		if (isString(value)) {
+			return difference(destination, [symbolToCodePoint(value)]);
+		}
+		if (isArray(value)) {
+			forEach(value, function(item) {
+				destination = remove(destination, item);
+			});
+			return destination;
+		}
+		return destination;
+	};
+
 	/*--------------------------------------------------------------------------*/
 
 	// http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
@@ -185,7 +270,7 @@
 	};
 
 	// Based on `punycode.ucs2.decode`: http://mths.be/punycode
-	function symbolToCodePoint(symbol) {
+	var symbolToCodePoint = function(symbol) {
 		var length = symbol.length;
 		var value = symbol.charCodeAt(0);
 		var extra;
@@ -197,7 +282,7 @@
 		} else {
 			return value;
 		}
-	}
+	};
 
 	var createBMPCharacterClasses = function(codePoints) {
 		var tmp = '';
@@ -244,6 +329,7 @@
 		}
 	};
 
+	var regexNull = /\\x00([^01234567]|$)/g;
 	var createCharacterClasses = function(codePoints) {
 		// At this point, it’s safe to assume `codePoints` is a sorted array of
 		// numeric code point values.
@@ -288,7 +374,7 @@
 		// If we’re not dealing with any astral symbols, there’s no need to move
 		// individual code points that are high surrogates to the end of the regex.
 		if (!hasAstral && surrogates.length) {
-			bmp = sortNumbers(bmp.concat(surrogates));
+			bmp = sortUniqueNumbers(bmp.concat(surrogates));
 		}
 		if (bmp.length) {
 			tmp.push(createBMPCharacterClasses(bmp));
@@ -303,21 +389,21 @@
 		}
 		return tmp
 			.join('|')
-			// use `\0` instead of `\x00` where possible
-			.replace(/\\x00([^01234567]|$)/g, '\\0$1');
+			// Use `\0` instead of `\x00` where possible
+			.replace(regexNull, '\\0$1');
 	};
 
 	var fromCodePoints = function(codePoints) {
 		if (!isArray(codePoints)) {
-			throw TypeError('The argument to `fromCodePoints` must be an array.');
+			throw TypeError('fromCodePoints(): The `codePoints` argument must be ' +
+				'an array.');
 		}
 
 		if (!codePoints.length) {
 			return '';
 		}
 
-		// Sort code points numerically
-		codePoints = sortNumbers(codePoints);
+		codePoints = sortUniqueNumbers(codePoints);
 
 		return createCharacterClasses(codePoints);
 	};
@@ -328,8 +414,8 @@
 
 	var fromCodePointRanges = function(codePointRanges) {
 		if (!isArray(codePointRanges)) {
-			throw TypeError('The argument to `fromCodePointRanges` must be an ' +
-				'array.');
+			throw TypeError('fromCodePointRanges(): The `ranges` argument must be ' +
+				'an array.');
 		}
 
 		if (!codePointRanges.length) {
@@ -341,7 +427,8 @@
 
 	var fromSymbols = function(symbols) {
 		if (!isArray(symbols)) {
-			throw TypeError('The argument to `fromSymbols` must be an array.');
+			throw TypeError('fromSymbols(): The `symbols` argument must be an ' +
+				'array.');
 		}
 
 		if (!symbols.length) {
@@ -366,7 +453,7 @@
 
 	var fromSymbolRanges = function(symbolRanges) {
 		if (!isArray(symbolRanges)) {
-			throw TypeError('The argument to `fromSymbolRanges` must be an ' +
+			throw TypeError('fromSymbolRanges(): The `ranges` argument must be an ' +
 				'array.');
 		}
 
@@ -391,7 +478,76 @@
 
 	/*--------------------------------------------------------------------------*/
 
-	var regenerate = {
+	var Set = function(value) {
+		this.__codePoints__ = [];
+		return this;
+	};
+
+	var proto = Set.prototype;
+	extend(proto, {
+		'add': function(value) {
+			if (arguments.length > 1) {
+				value = slice.call(arguments);
+			}
+			this.__codePoints__ = add(this.__codePoints__, value);
+			return this;
+		},
+		'addRange': function(start, end) {
+			this.__codePoints__ = add(this.__codePoints__, range(
+				isNumber(start) ? start : symbolToCodePoint(start),
+				isNumber(end) ? end : symbolToCodePoint(end)
+			));
+			return this;
+		},
+		'removeRange': function(start, end) {
+			this.__codePoints__ = remove(this.__codePoints__, range(
+				isNumber(start) ? start : symbolToCodePoint(start),
+				isNumber(end) ? end : symbolToCodePoint(end)
+			));
+			return this;
+		},
+		'remove': function(value) {
+			if (arguments.length > 1) {
+				value = slice.call(arguments);
+			}
+			this.__codePoints__ = remove(this.__codePoints__, value);
+			return this;
+		},
+		'difference': function(array) {
+			this.__codePoints__ = difference(this.__codePoints__, array);
+			return this;
+		},
+		'intersection': function(array) {
+			this.__codePoints__ = intersection(this.__codePoints__, array);
+			return this;
+		},
+		'contains': function(codePoint) {
+			return contains(this.__codePoints__, codePoint);
+		},
+		'toString': function() {
+			return fromCodePoints(this.__codePoints__);
+		},
+		'toRegExp': function() {
+			return RegExp(fromCodePoints(this.__codePoints__));
+		},
+		'valueOf': function() {
+			return sortUniqueNumbers(this.__codePoints__);
+		}
+	});
+
+	proto.toArray = proto.valueOf;
+
+	var set = function(value) {
+		if (value instanceof Set) {
+			// this is already a set; don’t wrap it again
+			return value;
+		} else if (arguments.length > 1) {
+			value = slice.call(arguments);
+		}
+		return (new Set).add(value);
+	};
+
+	extend(set, {
 		'version': '0.4.0',
 		'fromCodePoints': fromCodePoints,
 		'fromCodePointRange': fromCodePointRange,
@@ -402,8 +558,13 @@
 		'range': range,
 		'ranges': ranges,
 		'contains': contains,
-		'difference': difference
-	};
+		'difference': difference,
+		'intersection': intersection,
+		'add': add,
+		'remove': remove
+	});
+
+	var regenerate = set;
 
 	// Some AMD build optimizers, like r.js, check for specific condition patterns
 	// like the following:
@@ -419,9 +580,7 @@
 		if (freeModule) { // in Node.js or RingoJS v0.8.0+
 			freeModule.exports = regenerate;
 		} else { // in Narwhal or RingoJS v0.7.0-
-			forOwn(regenerate, function(key, value) {
-				freeExports[key] = value;
-			});
+			extend(freeExports, regenerate);
 		}
 	} else { // in Rhino or a web browser
 		root.regenerate = regenerate;
