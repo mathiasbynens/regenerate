@@ -17,6 +17,10 @@
 		);
 	}());
 
+	// Extend `Object.prototype` to see if Regenerate can handle it.
+	// 0xD834 is the high surrogate code point for U+1D306 (among others).
+	Object.prototype[0xD834] = true;
+
 	/** The `regenerate` object to test */
 	var regenerate = root.regenerate || (root.regenerate = (
 		regenerate = load('../regenerate.js') || root.regenerate,
@@ -362,6 +366,66 @@
 				'b': undefined,
 				'error': TypeError
 			}
+		],
+
+		'add': [
+			{
+				'description': 'Adding a symbol to an array',
+				'destination': [0x1D306],
+				'value': 'A',
+				'expected': [0x1D306, 0x41]
+			},
+			{
+				'description': 'Adding a code point to an array',
+				'destination': [0x1D306],
+				'value': 0x41,
+				'expected': [0x1D306, 0x41]
+			},
+			{
+				'description': 'Adding an array of values to an array',
+				'destination': [0x1D306],
+				'value': ['A', 0x1D307, ['B', 'D', '\uD83D\uDCA9']],
+				'expected': [0x1D306, 0x41, 0x1D307, 0x42, 0x44, 0x1F4A9]
+			},
+			{
+				'description': 'First argument is not an array',
+				'destination': {},
+				'value': 0x0,
+				'error': TypeError
+			}
+		],
+
+		'remove': [
+			{
+				'description': 'Removing a symbol from an array',
+				'destination': [0x1D306, 0x41],
+				'value': 'A',
+				'expected': [0x1D306]
+			},
+			{
+				'description': 'Removing a code point from an array',
+				'destination': [0x1D306, 0x41],
+				'value': 0x41,
+				'expected': [0x1D306]
+			},
+			{
+				'description': 'Removing an array of values from an array',
+				'destination': [0x1D306, 0x41, 0x1D307, 0x42, 0x44, 0x1F4A9],
+				'value': ['A', 0x1D307, ['B', 'D', '\uD83D\uDCA9']],
+				'expected': [0x1D306]
+			},
+			{
+				'description': 'First argument is not an array',
+				'destination': 'not an array',
+				'value': 0x0,
+				'error': TypeError
+			},
+			{
+				'description': 'Second argument is not a symbol, code point, or array consisting of those',
+				'destination': [1, 2, 3],
+				'value': null,
+				'expected': [1, 2, 3]
+			}
 		]
 
 	};
@@ -371,10 +435,6 @@
 
 	// `throws` is a reserved word in ES3; alias it to avoid errors
 	var raises = QUnit.assert['throws'];
-
-	// Extend `Object.prototype` to see if Regenerate can handle it.
-	// 0xD834 is the high surrogate code point for U+1D306 (among others).
-	Object.prototype[0xD834] = true;
 
 	QUnit.module('regenerate');
 
@@ -576,6 +636,135 @@
 				);
 			}
 		});
+	});
+
+	test('add', function() {
+		forEach(data.add, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.add(item.destination, item.value);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				deepEqual(
+					regenerate.add(item.destination, item.value),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
+
+	test('remove', function() {
+		forEach(data.remove, function(item) {
+			if (item.error) {
+				raises(
+					function() {
+						regenerate.remove(item.destination, item.value);
+					},
+					item.error,
+					item.description
+				);
+			} else {
+				deepEqual(
+					regenerate.remove(item.destination, item.value),
+					item.expected,
+					item.description
+				);
+			}
+		});
+	});
+
+	test('set (chaining)', function() {
+		var set = regenerate(regenerate.range(0, 10))
+				.add(0x1D306)
+				.add([15, 20])
+				.remove(20)
+				.difference([9, 15])
+				.intersection([3, 7, 10, 0x1D306]);
+		deepEqual(
+			set.toArray(),
+			[3, 7, 10, 0x1D306],
+			'Set: add, remove, difference, intersection'
+		);
+		equal(
+			set.toString(),
+			'[\\x03\\x07\\x0A]|\\uD834\\uDF06',
+			'Set#toString'
+		);
+		equal(
+			set.contains(0x1D306),
+			true,
+			'Set#contains: true'
+		);
+		equal(
+			set.contains(0x1D307),
+			false,
+			'Set#contains: false'
+		);
+		equal(
+			regenerate(0x62).add(0x1D307).contains(0x1D306),
+			false,
+			'Set#contains: false'
+		);
+		equal(
+			regenerate().add([0x1D307, 0x1D3A0, 0x1D3FF]).remove([0x1D3A0, 0x1D3FF]).contains(0x1D3A0),
+			false,
+			'Set#contains: false'
+		);
+		deepEqual(
+			regenerate(0x1D3A0, 0x1D307).add(0x1D3FF, 'A').remove(0x1D3A0, 0x1D3FF).toArray(),
+			[0x41, 0x1D307],
+			'set(a, b, ...)'
+		);
+		deepEqual(
+			regenerate(0x1D3A0, 0x1D307, 'A').add(0x1D3FF).remove(0x1D3A0, 0x1D3FF).toArray(),
+			[0x41, 0x1D307],
+			'set(a, b, ...)'
+		);
+		deepEqual(
+			regenerate(0x0).addRange(0x5, 0x8).toArray(),
+			[0x0, 0x5, 0x6, 0x7, 0x8],
+			'Set#addRange with numbers'
+		);
+		deepEqual(
+			regenerate(0x0).addRange('a', 'c').toArray(),
+			[0x0, 0x61, 0x62, 0x63],
+			'Set#addRange with strings'
+		);
+		deepEqual(
+			regenerate(0x0).addRange(0x61, 'c').toArray(),
+			[0x0, 0x61, 0x62, 0x63],
+			'Set#addRange with a number and a string'
+		);
+		deepEqual(
+			regenerate(new Number(0x0)).addRange(new String('a'), new Number(0x63)).toArray(),
+			[0x0, 0x61, 0x62, 0x63],
+			'Set#addRange with a Number object and a String object'
+		);
+		deepEqual(
+			regenerate(0x1D306).addRange(0x0, 0xFF).removeRange('\0', '\xFE').toArray(),
+			[0xFF, 0x1D306],
+			'Set#removeRange'
+		);
+		deepEqual(
+			regenerate().addRange(0x0000, 0x0300).removeRange(0x0100, 0x0200).toRegExp(),
+			/[\0-\xFF\u0201-\u0300]/,
+			'Set#toRegExp'
+		);
+		deepEqual(
+			regenerate(set),
+			set,
+			'Don’t wrap existing sets'
+		);
+		deepEqual(
+			regenerate(0x61).add(0x61, 0x61, 0x62).add(0x61).toArray(),
+			[0x61, 0x62],
+			'Remove duplicates'
+		);
 	});
 
 	/*--------------------------------------------------------------------------*/
