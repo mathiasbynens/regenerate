@@ -706,7 +706,12 @@
 			'Set#contains: false'
 		);
 		equal(
-			regenerate(0x62).add(0x1D307).contains(0x1D306),
+			set.contains('\uD834\uDF07'),
+			false,
+			'Set#contains: false'
+		);
+		equal(
+			regenerate(0x62).add(0x1D307).contains('\uD834\uDF06'),
 			false,
 			'Set#contains: false'
 		);
@@ -764,6 +769,11 @@
 			regenerate(0x61).add(0x61, 0x61, 0x62).add(0x61).toArray(),
 			[0x61, 0x62],
 			'Remove duplicates'
+		);
+		deepEqual(
+			regenerate().toArray(),
+			[],
+			'Empty set returns empty array'
 		);
 	});
 
