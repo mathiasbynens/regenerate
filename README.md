@@ -48,6 +48,148 @@ require(
 
 ## API
 
+### `regenerate(value1, value2, value3, ...)`
+
+The main Regenerate function. Calling this function creates a new set that gets a chainable API.
+
+```js
+var set = regenerate()
+  .addRange(0x60, 0x69) // add U+0060 to U+0069
+  .remove(0x62, 0x64) // remove U+0062 and U+0064
+  .add(0x1D306) // add U+1D306
+set.valueOf();
+// → [0x60, 0x61, 0x63, 0x65, 0x66, 0x67, 0x68, 0x69, 0x1D306]
+set.toString();
+// → '[\\x60-ace-i]|\\uD834\\uDF06'
+set.toRegExp();
+// → /[\x60-ace-i]|\uD834\uDF06/
+```
+
+Any arguments passed to `regenerate()` will be added to the set right away. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+
+```js
+regenerate(0x1D306, 'A', '©', 0x2603).toString();
+// → '[A\\xA9\\u2603]|\\uD834\\uDF06'
+```
+
+### `regenerate.prototype.add(value1, value2, value3, ...)`
+
+Any arguments passed to `add()` are added to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+
+```js
+regenerate().add(0x1D306, 'A', '©', 0x2603).toString();
+// → '[A\\xA9\\u2603]|\\uD834\\uDF06'
+```
+
+### `regenerate.prototype.remove(value1, value2, value3, ...)`
+
+Any arguments passed to `remove()` are removed to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+
+```js
+regenerate(0x1D306, 'A', '©', 0x2603).remove('☃').toString();
+// → '[A\\xA9]|\\uD834\\uDF06'
+```
+
+### `regenerate.prototype.addRange(start, end)`
+
+Adds a range of code points from `start` to `end` (inclusive) to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+
+```js
+regenerate(0x1D306).addRange(0x00, 0xFF).toString(16);
+// → '[\\0-\\xFF]|\\uD834\\uDF06'
+
+regenerate().addRange('A', 'z').toString();
+// → '[A-z]'
+```
+
+### `regenerate.prototype.removeRange(start, end)`
+
+Removes a range of code points from `start` to `end` (inclusive) from the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+
+```js
+regenerate()
+  .addRange(0x000000, 0x10FFFF) // add all Unicode code points
+  .removeRange('A', 'z') // remove all symbols from `A` to `z`
+  .toString();
+// → '[\\0-\\x40\\x7B-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+
+regenerate()
+  .addRange(0x000000, 0x10FFFF) // add all Unicode code points
+  .removeRange(0x0041, 0x007A) // remove all code points from U+0041 to U+007A
+  .toString();
+// → '[\\0-\\x40\\x7B-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+```
+
+### `regenerate.prototype.difference(codePoints)`
+
+Removes any code points from the set that are present in both the set and the given `codePoints` array. `codePoints` must be an array of numeric code point values, i.e. numbers. If you want to use symbol values (strings) as well, use `regenerate#remove()` instead.
+
+```js
+regenerate()
+  .addRange(0x00, 0xFF) // add ASCII code points
+  .difference([0x61, 0x73]) // remove these code points from the set
+  .toString();
+// → '[\0-\x60b-rt-\xFF]'
+```
+
+### `regenerate.prototype.intersection(codePoints)`
+
+Removes any code points from the set that are not present in both the set and the given `codePoints` array. `codePoints` must be an array of numeric code point values, i.e. numbers.
+
+```js
+regenerate()
+  .addRange(0x00, 0xFF) // add ASCII code points
+  .intersection([0x61, 0x69]) // remove all code points from the set except for these
+  .toString();
+// → '[ai]'
+```
+
+### `regenerate.prototype.contains(value)`
+
+Returns `true` if the given value is part of the set, and `false` otherwise. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+
+var set = regenerate().addRange(0x00, 0xFF);
+set.contains('A');
+// → true
+set.contains(0x1D306);
+// → false
+
+### `regenerate.prototype.toString()`
+
+Returns a string representing (part of) a regular expression that matches all the symbols mapped to the code points within the set.
+
+```js
+regenerate(0x1D306, 0x1F4A9).toString();
+// → '\\uD834\\uDF06|\\uD83D\\uDCA9'
+```
+
+### `regenerate.prototype.toRegExp()`
+
+Returns a regular expression that matches all the symbols mapped to the code points within the set.
+
+```js
+var regex = regenerate(0x1D306, 0x1F4A9).toRegExp();
+// → /\uD834\uDF06|\uD83D\uDCA9/
+regex.test('𝌆');
+// → true
+regex.test('A');
+// → false
+```
+
+**Note:** This probably shouldn’t be used. Regenerate is intended as a tool that is used as part of a build process, not at runtime.
+
+### `regenerate.prototype.valueOf()` or `regenerate.prototype.toArray()`
+
+Returns a sorted array of unique code points in the set.
+
+```js
+regenerate(0x1D306)
+  .addRange(0x60, 0x65)
+  .add(0x59, 0x60) // note: 0x59 is added after 0x65, and 0x60 is a duplicate
+  .valueOf();
+// → [ 0x59, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x1D306 ]
+```
+
 ### `regenerate.version`
 
 A string representing the semantic version number.
@@ -83,6 +225,34 @@ This function takes a `start` and an `end` number and returns an array of number
 ### `regenerate.ranges(ranges)`
 
 This function takes an array of code point ranges or separate code points, and returns an array containing all the code points within the listed code points or code point ranges.
+
+### `regenerate.contains(array, value)`
+
+Returns `true` if `array` contains `value`, and `false` otherwise.
+
+### `regenerate.difference(array1, array2)`
+
+Returns an array of `array1` elements that are not present in `array2`.
+
+### `regenerate.intersection(array1, array2)`
+
+Returns an array of unique elements that are present in both `array1` and `array2`.
+
+### `regenerate.add(array1, value)`
+
+Extends `array1` based on `value` as follows:
+
+* If `value` is a code point (i.e. a number), it’s appended to `array1`.
+* If `value` is a symbol (i.e. a string containing a single Unicode symbol), its numeric code point value is appended to `array1`.
+* If `value` is an array, all its values are added to `array1` following the above steps.
+
+### `regenerate.remove(array, value)`
+
+Removes values from `array1` based on `value` as follows:
+
+* If `value` is a code point (i.e. a number), it’s removed from `array1`.
+* If `value` is a symbol (i.e. a string containing a single Unicode symbol), its numeric code point value is removed from `array1`.
+* If `value` is an array, all its values are removed from `array1` following on the above steps.
 
 ## Usage examples
 
