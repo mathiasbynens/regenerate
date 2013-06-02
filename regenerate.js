@@ -492,6 +492,13 @@
 			this.__codePoints__ = add(this.__codePoints__, value);
 			return this;
 		},
+		'remove': function(value) {
+			if (arguments.length > 1) {
+				value = slice.call(arguments);
+			}
+			this.__codePoints__ = remove(this.__codePoints__, value);
+			return this;
+		},
 		'addRange': function(start, end) {
 			this.__codePoints__ = add(this.__codePoints__, range(
 				isNumber(start) ? start : symbolToCodePoint(start),
@@ -506,13 +513,6 @@
 			));
 			return this;
 		},
-		'remove': function(value) {
-			if (arguments.length > 1) {
-				value = slice.call(arguments);
-			}
-			this.__codePoints__ = remove(this.__codePoints__, value);
-			return this;
-		},
 		'difference': function(array) {
 			this.__codePoints__ = difference(this.__codePoints__, array);
 			return this;
@@ -522,16 +522,22 @@
 			return this;
 		},
 		'contains': function(codePoint) {
-			return contains(this.__codePoints__, codePoint);
+			return contains(
+				this.__codePoints__,
+				isNumber(codePoint) ? codePoint : symbolToCodePoint(codePoint)
+			);
 		},
 		'toString': function() {
-			return fromCodePoints(this.__codePoints__);
+			this.__codePoints__ = sortUniqueNumbers(this.__codePoints__);
+			return createCharacterClasses(this.__codePoints__);
 		},
 		'toRegExp': function() {
-			return RegExp(fromCodePoints(this.__codePoints__));
+			this.__codePoints__ = sortUniqueNumbers(this.__codePoints__);
+			return RegExp(createCharacterClasses(this.__codePoints__));
 		},
-		'valueOf': function() {
-			return sortUniqueNumbers(this.__codePoints__);
+		'valueOf': function() { // has alias `toArray`
+			this.__codePoints__ = sortUniqueNumbers(this.__codePoints__);
+			return this.__codePoints__;
 		}
 	});
 
