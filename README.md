@@ -8,31 +8,31 @@ Feel free to fork if you see possible improvements!
 
 In a browser:
 
-~~~html
+```html
 <script src="regenerate.js"></script>
-~~~
+```
 
 Via [npm](http://npmjs.org/):
 
-~~~bash
+```bash
 npm install regenerate
-~~~
+```
 
 In [Narwhal](http://narwhaljs.org/), [Node.js](http://nodejs.org/), and [RingoJS](http://ringojs.org/):
 
-~~~js
+```js
 var regenerate = require('regenerate');
-~~~
+```
 
 In [Rhino](http://www.mozilla.org/rhino/):
 
-~~~js
+```js
 load('regenerate.js');
-~~~
+```
 
 Using an AMD loader like [RequireJS](http://requirejs.org/):
 
-~~~js
+```js
 require(
   {
     'paths': {
@@ -44,7 +44,7 @@ require(
     console.log(regenerate);
   }
 );
-~~~
+```
 
 ## API
 
@@ -225,10 +225,10 @@ This function takes an array of code point ranges or separate code points, and r
 ```js
 // Create a regular expression based on a dynamically created range of code points:
 regenerate.fromCodePointRanges([
-	[0x00, 0xFF],          // range
-	[0x2603, 0x2608],      // range
-	0x1F4A9, // separate code point
-	0x1F4BB  // separate code point
+  [0x00, 0xFF],          // range
+  [0x2603, 0x2608],      // range
+  0x1F4A9, // separate code point
+  0x1F4BB  // separate code point
 ]);
 // → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
 ```
@@ -236,9 +236,9 @@ regenerate.fromCodePointRanges([
 ```js
 // Allow all Unicode symbols except U+2603 SNOWMAN and U+1F4A9 PILE OF POO
 regenerate.fromCodePointRanges([
-	[0x0000, 0x2602],  // skip 0x2603
-	[0x2604, 0x1F4A8], // skip 0x1F4A9
-	[0x1F4AA, 0x10FFFF]
+  [0x0000, 0x2602],  // skip 0x2603
+  [0x2604, 0x1F4A8], // skip 0x1F4A9
+  [0x1F4AA, 0x10FFFF]
 ]);
 // → '[\\0-\\u2602\\u2604-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uD83C\\uD83E-\\uDBFF][\\uDC00-\\uDFFF]|\\uD83D[\\uDC00-\\uDCA8\\uDCAA-\\uDFFF]|[\\uD800-\\uDBFF]'
 ```
@@ -270,10 +270,10 @@ This function takes an array of symbol ranges or separate strings, each containi
 ```js
 // Create a regular expression based on a dynamically created range of code points:
 regenerate.fromSymbolRanges([
-	['\0', '\xFF'],           // range
-	['\u2603', '\u2608'],     // range
-	'\uD83D\uDCA9', // separate symbol
-	'\uD83D\uDCBB'  // separate symbol
+  ['\0', '\xFF'],           // range
+  ['\u2603', '\u2608'],     // range
+  '\uD83D\uDCA9', // separate symbol
+  '\uD83D\uDCBB'  // separate symbol
 ]);
 // → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
 ```
@@ -289,10 +289,10 @@ This function takes an array of code point ranges or separate code points, and r
 ```js
 // Create a regular expression based on a dynamically created range of code points:
 var codePoints = regenerate.ranges([
-	[0x00, 0xFF], // → 0x00, 0x01, 0x02, 0x03, …, 0xFC, 0xFD, 0xFE, 0xFF
-	[0x2603, 0x2608], // → 0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608
-	0x1F4A9, // add U+1F4A9 PILE OF POO
-	0x1F4BB // add U+1F4BB PERSONAL COMPUTER
+  [0x00, 0xFF], // → 0x00, 0x01, 0x02, 0x03, …, 0xFC, 0xFD, 0xFE, 0xFF
+  [0x2603, 0x2608], // → 0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608
+  0x1F4A9, // add U+1F4A9 PILE OF POO
+  0x1F4BB // add U+1F4BB PERSONAL COMPUTER
 ]);
 // → [0x00, 0x01, …, 0xFE, 0xFF, 0x2603, 0x2604, …, 0x2607, 0x2608, 0x1F4A9, 0x1F4BB]
 regenerate.fromCodePoints(codePoints);
