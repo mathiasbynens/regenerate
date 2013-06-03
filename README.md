@@ -126,7 +126,7 @@ Removes any code points from the set that are present in both the set and the gi
 
 ```js
 regenerate()
-  .addRange(0x00, 0xFF) // add ASCII code points
+  .addRange(0x00, 0xFF) // add extended ASCII code points
   .difference([0x61, 0x73]) // remove these code points from the set
   .toString();
 // → '[\0-\x60b-rt-\xFF]'
@@ -138,7 +138,7 @@ Removes any code points from the set that are not present in both the set and th
 
 ```js
 regenerate()
-  .addRange(0x00, 0xFF) // add ASCII code points
+  .addRange(0x00, 0xFF) // add extended ASCII code points
   .intersection([0x61, 0x69]) // remove all code points from the set except for these
   .toString();
 // → '[ai]'
@@ -148,11 +148,13 @@ regenerate()
 
 Returns `true` if the given value is part of the set, and `false` otherwise. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
 
+```js
 var set = regenerate().addRange(0x00, 0xFF);
 set.contains('A');
 // → true
 set.contains(0x1D306);
 // → false
+```
 
 ### `regenerate.prototype.toString()`
 
@@ -187,7 +189,7 @@ regenerate(0x1D306)
   .addRange(0x60, 0x65)
   .add(0x59, 0x60) // note: 0x59 is added after 0x65, and 0x60 is a duplicate
   .valueOf();
-// → [ 0x59, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x1D306 ]
+// → [0x59, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x1D306]
 ```
 
 ### `regenerate.version`
@@ -234,7 +236,7 @@ regenerate.fromCodePointRanges([
 ```
 
 ```js
-// Allow all Unicode symbols except U+2603 SNOWMAN and U+1F4A9 PILE OF POO
+// Allow all Unicode symbols except U+2603 SNOWMAN and U+1F4A9 PILE OF POO:
 regenerate.fromCodePointRanges([
   [0x0000, 0x2602],  // skip 0x2603
   [0x2604, 0x1F4A8], // skip 0x1F4A9
@@ -282,6 +284,12 @@ regenerate.fromSymbolRanges([
 
 This function takes a `start` and an `end` number and returns an array of numbers progressing from `start` up to and including `end`, i.e. all the numbers within the range _[start, end]_ (inclusive).
 
+```js
+// Create an array containing all extended ASCII code points:
+regenerate.range(0x00, 0xFF);
+// → [0x00, 0x01, 0x02, 0x03, ..., 0xFF]
+```
+
 ### `regenerate.ranges(ranges)`
 
 This function takes an array of code point ranges or separate code points, and returns an array containing all the code points within the listed code points or code point ranges.
@@ -303,29 +311,94 @@ regenerate.fromCodePoints(codePoints);
 
 Returns `true` if `array` contains `value`, and `false` otherwise.
 
+```js
+var ASCII = regenerate.range(0x00, 0xFF); // extended ASCII
+// → [0x00, 0x01, 0x02, 0x03, ..., 0xFF]
+regenerate.contains(ASCII, 0x61);
+// → true
+regenerate.contains(ASCII, 0x1D306);
+// → false
+```
+
 ### `regenerate.difference(array1, array2)`
 
 Returns an array of `array1` elements that are not present in `array2`.
+
+```js
+regenerate.difference(
+  [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06],
+  [0x01, 0x03, 0x05]
+);
+// → [0x00, 0x02, 0x04, 0x06]
+```
 
 ### `regenerate.intersection(array1, array2)`
 
 Returns an array of unique elements that are present in both `array1` and `array2`.
 
-### `regenerate.add(array1, value)`
+```js
+regenerate.intersection(
+  [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06],
+  [0x01, 0x03, 0x05, 0x07]
+);
+// → [0x01, 0x03, 0x05]
+```
 
-Extends `array1` based on `value` as follows:
+### `regenerate.add(array, value)`
 
-* If `value` is a code point (i.e. a number), it’s appended to `array1`.
-* If `value` is a symbol (i.e. a string containing a single Unicode symbol), its numeric code point value is appended to `array1`.
-* If `value` is an array, all its values are added to `array1` following the above steps.
+Extends `array` based on `value` as follows:
+
+* If `value` is a code point (i.e. a number), it’s appended to `array`.
+* If `value` is a symbol (i.e. a string containing a single Unicode symbol), its numeric code point value is appended to `array`.
+* If `value` is an array, all its values are added to `array` following the above steps.
+
+```js
+regenerate.add(
+  [0x00, 0x1D306],
+  0x41
+);
+// → [0x00, 0x1D306, 0x41]
+
+regenerate.add(
+  [0x00, 0x1D306],
+  'A'
+);
+// → [0x00, 0x1D306, 0x41]
+
+regenerate.add(
+  [0x00, 0x1D306],
+  [0x61, 0x203B, 'A']
+);
+// → [0x00, 0x1D306, 0x61, 0x203B, 0x41]
+```
 
 ### `regenerate.remove(array, value)`
 
-Removes values from `array1` based on `value` as follows:
+Removes values from `array` based on `value` as follows:
 
-* If `value` is a code point (i.e. a number), it’s removed from `array1`.
-* If `value` is a symbol (i.e. a string containing a single Unicode symbol), its numeric code point value is removed from `array1`.
-* If `value` is an array, all its values are removed from `array1` following on the above steps.
+* If `value` is a code point (i.e. a number), it’s removed from `array`.
+* If `value` is a symbol (i.e. a string containing a single Unicode symbol), its numeric code point value is removed from `array`.
+* If `value` is an array, all its values are removed from `array` following on the above steps.
+
+```js
+regenerate.remove(
+  [0x00, 0x1D306, 0x41],
+  0x41
+);
+// → [0x00, 0x1D306]
+
+regenerate.remove(
+  [0x00, 0x1D306, 0x41],
+  'A'
+);
+// → [0x00, 0x1D306]
+
+regenerate.remove(
+  [0x00, 0x1D306, 0x61, 0x203B, 0x41],
+  [0x61, 0x203B, 'A']
+);
+// → [0x00, 0x1D306]
+```
 
 ## Combine Regenerate with other libraries
 
@@ -336,7 +409,7 @@ var regenerate = require('regenerate');
 var punycode = require('punycode');
 
 var string = 'Lorem ipsum dolor sit amet.';
-// Get an array of all code points used in the string
+// Get an array of all code points used in the string:
 var codePoints = punycode.ucs2.decode(string);
 
 // Generate a regular expression that matches any of the symbols used in the string:
