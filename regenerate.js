@@ -332,7 +332,7 @@
 		}
 	};
 
-	var regexNull = /\\x00([^01234567]|$)/g;
+	var regexNull = /([^\\]|^)\\x00([^01234567]|$)/g;
 	var createCharacterClasses = function(codePoints) {
 		// At this point, it’s safe to assume `codePoints` is a sorted array of
 		// numeric code point values.
@@ -393,7 +393,7 @@
 		return tmp
 			.join('|')
 			// Use `\0` instead of `\x00` where possible
-			.replace(regexNull, '\\0$1');
+			.replace(regexNull, '$1\\0$2');
 	};
 
 	var fromCodePoints = function(codePoints) {
