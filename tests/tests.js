@@ -67,6 +67,11 @@
 				'expected': '[A-HZa]'
 			},
 			{
+				'description': 'Some BMP code points',
+				'codePoints': [0x20, 0x21, 0x23],
+				'expected': '[\\x20\\x21\\x23]'
+			},
+			{
 				'description': 'Unmatched high surrogates',
 				'codePoints': [0xD800, 0xD801, 0xD802, 0xD803, 0xDBFF],
 				'expected': '[\\uD800-\\uD803\\uDBFF]'
