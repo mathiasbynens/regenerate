@@ -302,6 +302,9 @@
 			if (start == end) {
 				tmp += codePointToString(start);
 				counter += 1;
+			} else if (end == start + 1) {
+				tmp += codePointToString(start) + codePointToString(end);
+				counter += 2;
 			} else {
 				tmp += codePointToString(start) + '-' + codePointToString(end);
 				counter += 2;
