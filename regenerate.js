@@ -332,7 +332,9 @@
 		}
 	};
 
-	var regexNull = /([^\\]|^)\\x00([^01234567]|$)/g;
+	// In Regenerate output, `\0` will never be preceded by `\` because we sort
+	// by code point value, so let’s keep this regular expression simple:
+	var regexNull = /\\x00([^01234567]|$)/g;
 	var createCharacterClasses = function(codePoints) {
 		// At this point, it’s safe to assume `codePoints` is a sorted array of
 		// numeric code point values.
@@ -393,7 +395,7 @@
 		return tmp
 			.join('|')
 			// Use `\0` instead of `\x00` where possible
-			.replace(regexNull, '$1\\0$2');
+			.replace(regexNull, '\\0$1');
 	};
 
 	var fromCodePoints = function(codePoints) {
