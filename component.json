@@ -1,0 +1,17 @@
+{
+	"name": "regenerate",
+	"version": "0.5.1",
+	"description": "Generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points.",
+	"repo": "mathiasbynens/regenerate",
+	"license": "MIT/GPL",
+	"scripts": [
+		"regenerate.js"
+	],
+	"keywords": [
+		"regex",
+		"regexp",
+		"unicode",
+		"generator",
+		"tool"
+	]
+}

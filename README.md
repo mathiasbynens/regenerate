@@ -6,16 +6,28 @@ Feel free to fork if you see possible improvements!
 
 ## Installation
 
-In a browser:
-
-```html
-<script src="regenerate.js"></script>
-```
-
 Via [npm](http://npmjs.org/):
 
 ```bash
 npm install regenerate
+```
+
+Via [Bower](http://bower.io/):
+
+```bash
+bower install regenerate
+```
+
+Via [Component](https://github.com/component/component):
+
+```bash
+component install mathiasbynens/regenerate
+```
+
+In a browser:
+
+```html
+<script src="regenerate.js"></script>
 ```
 
 In [Narwhal](http://narwhaljs.org/), [Node.js](http://nodejs.org/), and [RingoJS](http://ringojs.org/):
