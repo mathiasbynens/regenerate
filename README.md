@@ -30,10 +30,16 @@ In a browser:
 <script src="regenerate.js"></script>
 ```
 
-In [Narwhal](http://narwhaljs.org/), [Node.js](http://nodejs.org/), and [RingoJS](http://ringojs.org/):
+In [Node.js](http://nodejs.org/), and [RingoJS ≥ v0.8.0](http://ringojs.org/):
 
 ```js
 var regenerate = require('regenerate');
+```
+
+In [Narwhal](http://narwhaljs.org/) and [RingoJS ≤ v0.7.0](http://ringojs.org/):
+
+```js
+var regenerate = require('regenerate').regenerate;
 ```
 
 In [Rhino](http://www.mozilla.org/rhino/):
