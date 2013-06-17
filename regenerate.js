@@ -591,7 +591,7 @@
 		if (freeModule) { // in Node.js or RingoJS v0.8.0+
 			freeModule.exports = regenerate;
 		} else { // in Narwhal or RingoJS v0.7.0-
-			extend(freeExports, regenerate);
+			freeExports.regenerate = regenerate;
 		}
 	} else { // in Rhino or a web browser
 		root.regenerate = regenerate;
