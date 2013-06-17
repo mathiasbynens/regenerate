@@ -92,6 +92,11 @@
 				'expected': '[\\x0012]'
 			},
 			{
+				'description': '\\0 may not be followed by a digit, even if it’s not an octal digit',
+				'codePoints': [0, 0x38, 0x39],
+				'expected': '[\\x0089]'
+			},
+			{
 				'description': 'All BMP code points',
 				'codePoints': bmp,
 				'expected': '[\\0-\\uFFFF]'
