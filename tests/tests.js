@@ -440,12 +440,11 @@
 
 	};
 
-	// explicitly call `QUnit.module()` instead of `module()`
-	// in case we are in a CLI environment
-
 	// `throws` is a reserved word in ES3; alias it to avoid errors
 	var raises = QUnit.assert['throws'];
 
+	// explicitly call `QUnit.module()` instead of `module()`
+	// in case we are in a CLI environment
 	QUnit.module('regenerate');
 
 	test('fromCodePoints', function() {
