@@ -92,7 +92,7 @@ regenerate(0x1D306, 'A', '©', 0x2603).toString();
 
 ### `regenerate.prototype.add(value1, value2, value3, ...)`
 
-Any arguments passed to `add()` are added to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+Any arguments passed to `add()` are added to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
 
 ```js
 regenerate().add(0x1D306, 'A', '©', 0x2603).toString();
@@ -101,11 +101,20 @@ regenerate().add(0x1D306, 'A', '©', 0x2603).toString();
 
 ### `regenerate.prototype.remove(value1, value2, value3, ...)`
 
-Any arguments passed to `remove()` are removed to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+Any arguments passed to `remove()` are removed to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
 
 ```js
 regenerate(0x1D306, 'A', '©', 0x2603).remove('☃').toString();
 // → '[A\\xA9]|\\uD834\\uDF06'
+```
+
+Functions can also be passed. In that case, the result of calling the function against a code point value in the set determines whether the element should be removed (`true`) or not (`false`).
+
+```js
+regenerate(0x1D306, 'A', '©', 0x2603).remove(function(codePoint) {
+  return codePoint > 0xFFFF; // remove astral code points from the set
+}).toString();
+// → '[A\\xA9\\u2603]'
 ```
 
 ### `regenerate.prototype.addRange(start, end)`
