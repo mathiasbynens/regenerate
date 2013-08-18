@@ -45,6 +45,9 @@
 		return typeof value == 'string' ||
 			toString.call(value) == '[object String]';
 	};
+	var isFunction = function(value) {
+		return typeof value == 'function';
+	};
 
 	var map = function(array, callback) {
 		var index = -1;
@@ -213,6 +216,15 @@
 	var remove = function(destination, value) {
 		if (!isArray(destination)) {
 			throw TypeError('remove(): The `destination` argument must be an array.');
+		}
+		if (isFunction(value)) {
+			var array = [];
+			forEach(destination, function(item) {
+				if (!value(item)) {
+					array.push(item);
+				}
+			});
+			return array;
 		}
 		if (isNumber(value)) {
 			return difference(destination, [value]);

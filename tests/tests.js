@@ -425,6 +425,12 @@
 				'expected': [0x1D306]
 			},
 			{
+				'description': 'Second argument is a function',
+				'destination': [1, 2, 3, 0x01D306, 0xAAD999, 0x10FFFF],
+				'value': function(codePoint) { return codePoint > 0xFFFF; },
+				'expected': [1, 2, 3]
+			},
+			{
 				'description': 'First argument is not an array',
 				'destination': 'not an array',
 				'value': 0x0,
@@ -690,18 +696,21 @@
 	test('set (chaining)', function() {
 		var set = regenerate(regenerate.range(0, 10))
 				.add(0x1D306)
-				.add([15, 20])
+				.add([15, 16, 20])
 				.remove(20)
 				.difference([9, 15])
-				.intersection([3, 7, 10, 0x1D306]);
+				.intersection([3, 7, 10, 16, 0x1D306])
+				.remove(function(codePoint) {
+					return codePoint == 7 || codePoint == 16;
+				});
 		deepEqual(
 			set.toArray(),
-			[3, 7, 10, 0x1D306],
+			[3, 10, 0x1D306],
 			'Set: add, remove, difference, intersection'
 		);
 		equal(
 			set.toString(),
-			'[\\x03\\x07\\x0A]|\\uD834\\uDF06',
+			'[\\x03\\x0A]|\\uD834\\uDF06',
 			'Set#toString'
 		);
 		equal(
