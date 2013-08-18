@@ -1,4 +1,4 @@
-/*! http://mths.be/regenerate v0.5.2 by @mathias */
+/*! http://mths.be/regenerate v0.5.3 by @mathias */
 ;(function(root) {
 
 	// Detect free variables `exports`
@@ -571,7 +571,7 @@
 	};
 
 	extend(set, {
-		'version': '0.5.2',
+		'version': '0.5.3',
 		'fromCodePoints': fromCodePoints,
 		'fromCodePointRange': fromCodePointRange,
 		'fromCodePointRanges': fromCodePointRanges,
