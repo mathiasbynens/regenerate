@@ -524,10 +524,15 @@
 			return this;
 		},
 		'removeRange': function(start, end) {
-			this.__codePoints__ = remove(this.__codePoints__, range(
-				isNumber(start) ? start : symbolToCodePoint(start),
-				isNumber(end) ? end : symbolToCodePoint(end)
-			));
+			var startCodePoint = isNumber(start) ? start : symbolToCodePoint(start);
+			var endCodePoint = isNumber(end) ? end : symbolToCodePoint(end);
+			var array = [];
+			forEach(this.__codePoints__, function(codePoint) {
+				if (codePoint < startCodePoint || codePoint > endCodePoint) {
+					array.push(codePoint);
+				}
+			});
+			this.__codePoints__ = array;
 			return this;
 		},
 		'difference': function(array) {
