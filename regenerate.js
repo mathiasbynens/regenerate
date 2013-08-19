@@ -1,4 +1,4 @@
-/*! http://mths.be/regenerate v0.5.3 by @mathias | MIT license */
+/*! http://mths.be/regenerate v0.5.4 by @mathias | MIT license */
 ;(function(root) {
 
 	// Detect free variables `exports`
@@ -576,7 +576,7 @@
 	};
 
 	extend(set, {
-		'version': '0.5.3',
+		'version': '0.5.4',
 		'fromCodePoints': fromCodePoints,
 		'fromCodePointRange': fromCodePointRange,
 		'fromCodePointRanges': fromCodePointRanges,
