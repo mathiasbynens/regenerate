@@ -464,4 +464,4 @@ To generate [the code coverage report](http://rawgithub.com/mathiasbynens/regene
 
 ## License
 
-Regenerate is dual licensed under the [MIT](http://mths.be/mit) and [GPL](http://mths.be/gpl) licenses.
+Regenerate is available under the [MIT](http://mths.be/mit) license.
