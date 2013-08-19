@@ -3,7 +3,7 @@
 	"version": "0.5.3",
 	"description": "Generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points.",
 	"repo": "mathiasbynens/regenerate",
-	"license": "MIT/GPL",
+	"license": "MIT",
 	"scripts": [
 		"regenerate.js"
 	],

@@ -1,4 +1,4 @@
-/*! http://mths.be/regenerate v0.5.3 by @mathias */
+/*! http://mths.be/regenerate v0.5.3 by @mathias | MIT license */
 ;(function(root) {
 
 	// Detect free variables `exports`
