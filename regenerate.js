@@ -118,6 +118,344 @@
 
 	/*--------------------------------------------------------------------------*/
 
+	// TODO:
+	// - [x] rewrite data structure to decrease memory usage and allow faster set operations
+	// - [x] remove `.remove(fn)` as it won’t be needed anymore (it was only there to provide better performance, which will soon be available at all times anyway)
+	// - [ ] rewrite `createCharacterClasses` to make use of the new data structure
+	// - [ ] rewrite `difference` to make use of the new data structure
+	// - [ ] rewrite `intersection` to make use of the new data structure
+	// - [ ] deprecate non-chaining APIs?
+	// - [ ] optimization: replace calls to `array.splice(a, b, c)` where `b=1` with just `array[a] = c` (and similar for other argument counts)
+
+	function dataFromCodePointRange(start, end) {
+		// [0, 1, 2, 3, 4, 5, 6, 7] → [0, 8]
+		return [start, end + 1];
+	}
+
+	function dataFromCodePoints(codePoints) {
+		// [0, 3, 6, 7, 8, 9] → [0, 1, 3, 4, 6, 10]
+		var index = -1;
+		var length = codePoints.length;
+		var max = length - 1;
+		var result = [];
+		var isStart = true; // start of range or not?
+		var tmp;
+		var previous = 0;
+		while (++index < length) {
+			tmp = codePoints[index];
+			// console.log(tmp, isStart);
+			if (isStart) {
+				result.push(tmp);
+				// console.log('pushing', tmp);
+				previous = tmp;
+				isStart = false;
+			} else {
+				if (tmp == previous + 1) {
+					if (index != max) {
+						previous = tmp;
+						continue;
+					} else {
+						// console.log('pushing', tmp + 1);
+						result.push(tmp + 1);
+					}
+				} else {
+					// console.log('pushing', previous + 1, tmp);
+					// End the previous range and start a new one
+					result.push(previous + 1, tmp);
+					previous = tmp;
+				}
+			}
+		}
+		return result;
+	}
+
+	// 3,4,5,8,9,10,11 →
+	// [3, 6, 8, 12]
+	// remove 9 → [3, 6, 8, 9, 10, 12]
+	// console.log(dataRemove([3, 6, 8, 12], 9)); // [3, 6, 8, 9, 10, 12]
+	function dataRemove(data, codePoint) {
+		// iterate over the data per (start, end) pair
+		var index = 0;
+		var start;
+		var end;
+		var length = data.length;
+		while (index < length) {
+			start = data[index];
+			end = data[index + 1];
+			if (codePoint >= start && codePoint < end) {
+				// modify this pair
+				if (codePoint == start) {
+					if (end == start + 1) {
+						// just remove `start` and `end`
+						data.splice(index, 2);
+						return data;
+					} else {
+						// just replace `start` with a new value
+						data.splice(index, 1, codePoint + 1);
+						return data;
+					}
+				} else if (codePoint == end - 1) {
+					// just replace `end` with a new value
+					data.splice(index + 1, 1, codePoint);
+					return data;
+				} else {
+					// replace [start, end] with [startA, endA, startB, endB]
+					data.splice(index, 2, start, codePoint, codePoint + 1, end);
+					return data;
+				}
+			}
+			index += 2;
+		}
+		return data;
+	}
+
+	function dataRemoveRange(data, rangeStart, rangeEnd) {
+		if (rangeEnd < rangeStart) {
+			throw Error('A range\u2019s `stop` value must be greater than or equal ' +
+				'to the `start` value.');
+		}
+		// iterate over the data per (start, end) pair
+		var index = 0;
+		var start;
+		var end;
+		var length = data.length;
+		while (index < length) {
+			start = data[index];
+			end = data[index + 1];
+
+			// exit as soon as no more matching pairs can be found
+			if (start > rangeEnd) {
+				return data;
+			}
+
+			// if the bounds of this pair match the range to be removed exactly
+			// e.g. you have `[0, 11, 40, 51]` and want to remove 0-10 → `[40, 51]`
+			if (rangeStart == start && rangeEnd + 1 == end) {
+				// simply remove this pair
+				data.splice(index, 2);
+				return data;
+			}
+
+			// if both `rangeStart` and `rangeEnd` are within the bounds of this pair
+			// e.g. you have `[0, 11]` and want to remove 4-6 → `[0, 4, 7, 11]`
+			if (rangeStart >= start && rangeEnd < end) {
+				// replace [start, end] with [startA, endA, startB, endB]
+				data.splice(index, 2, start, rangeStart, rangeEnd + 1, end);
+				return data;
+			}
+
+			// if only `rangeStart` is within the bounds of this pair
+			// e.g. you have `[0, 11]` and want to remove 4-20 → `[0, 4]`
+			if (rangeStart >= start && rangeStart < end) {
+				// replace `end` with `rangeStart`
+				data.splice(index + 1, 1, rangeStart);
+				// NOTE: we cannot `return` just yet, in case any following pairs still
+				// contain matching code points
+				// e.g. you have `[0, 11, 14, 31]` and want to remove 4-20 → `[0, 4, 21, 31]`
+			}
+
+			// if only `rangeEnd` is within the bounds of this pair
+			// e.g. you have `[14, 31]` and want to remove 4-20 → `[21, 31]`
+			else if (rangeEnd >= start && rangeEnd < end) {
+				// just replace `start`
+				data.splice(index, 1, rangeEnd + 1);
+				return data;
+			}
+
+			index += 2;
+		}
+		return data;
+	}
+
+	function dataAdd(data, codePoint) {
+		// iterate over the data per (start, end) pair
+		var index = 0;
+		var start;
+		var end;
+		var lastIndex = 0;
+		var length = data.length;
+		while (index < length) {
+			start = data[index];
+			end = data[index + 1];
+
+			// the code point is already in the set
+			if (codePoint >= start && codePoint < end) {
+				return data;
+			}
+
+			// if `start` is `greater` than `codePoint`, insert a new [start, end] pair
+			// before the current pair, or after the current pair if there is a positive
+			// last known `lastIndex`
+			if (start > codePoint) {
+				data.splice(lastIndex ? lastIndex + 2 : 0, 0, codePoint, codePoint + 1);
+				return data;
+			}
+
+			if (codePoint == end) {
+				// Check if adding this code point causes two separate ranges to become a
+				// single range, e.g. `dataAdd([0, 4, 5, 10], 4)` → `[0, 10]`
+				if (codePoint + 1 == data[index + 2]) {
+					data.splice(index, 4, start, data[index + 3]);
+					return data;
+				}
+				// else, just replace `end` with a new value
+				data.splice(index + 1, 1, codePoint + 1);
+				return data;
+			} else if (codePoint == start - 1) {
+				// just replace `start` with a new value
+				data.splice(index, 1, codePoint);
+				return data;
+			}
+			lastIndex = index;
+			index += 2;
+		}
+		// the loop has finished; add the new pair to the end of the data set
+		data.push(codePoint, codePoint + 1);
+		return data;
+	}
+
+	function dataAddRange(data, rangeStart, rangeEnd) {
+		if (rangeEnd < rangeStart) {
+			throw Error('A range\u2019s `stop` value must be greater than or equal ' +
+				'to the `start` value.');
+		}
+		// iterate over the data per (start, end) pair
+		var index = 0;
+		var start;
+		var end;
+		var added = false;
+		var length = data.length;
+		while (index < length) {
+			start = data[index];
+			end = data[index + 1];
+
+			if (added) {
+				// The range has already been added to the set; at this point, we just
+				// need to get rid of the following ranges in case they overlap.
+
+				// if this range can be combined with the previous range
+				if (start == rangeEnd + 1) {
+					data.splice(index - 1, 2);
+					return data;
+				}
+
+				// exit as soon as no more possibly overlapping pairs can be found
+				if (start > rangeEnd) {
+					return data;
+				}
+
+				// e.g. `[0, 11, 12, 16]` and we’ve added 5-15, so we now have →
+				// `[0, 16, 12, 16]`. Remove the `12,16` part, as it lies within the [0,16] range that was previously added.
+				// start == 12, end == 16
+				// rangeStart = 5, rangeEnd = 15
+				//
+				if (start >= rangeStart && start <= rangeEnd) { // if `start` lies within the range that was previously added
+
+					if (end > rangeStart && end - 1 <= rangeEnd) { // if `end` lies within the range that was previously added as well
+						// remove this pair
+						data.splice(index, 2);
+						index -= 2;
+						// note: we cannot `return` just yet, as there may still be other overlapping pairs
+					}
+					// `start` lies within the range that was previously added, but `end` doesn’t
+					else {
+						// e.g. `[0, 11, 12, 31]` and we’ve added 5-15, so we now have `[0, 16, 12, 31]`
+						// This must be written as `[0, 31]`.
+						// remove the previously added `end` and the current `start`
+						data.splice(index - 1, 2);
+						index -= 2;
+					}
+
+					// note: we cannot return yet
+				}
+
+			}
+
+			// check if a new pair must be inserted *before* the current one
+			else if (start > rangeEnd) {
+				data.splice(index, 0, rangeStart, rangeEnd + 1);
+				return data;
+			}
+
+			// e.g. `[0, 11]` and you add 5-15 → `[0, 16]`
+			else if (rangeStart >= start && rangeStart < end) {
+				// replace `end` with the new value
+				data.splice(index + 1, 1, rangeEnd + 1);
+				// make sure the next range pair doesn’t overlap
+				// e.g. `[0, 11, 12, 14]` and you add 5-15 → `[0, 16]` (i.e. remove the `12,14` part)
+				added = true;
+				// note: we cannot `return` just yet
+			}
+
+			index += 2;
+		}
+		// the loop has finished without doing anything; add the new pair to the end of the data set
+		if (!added) {
+			data.push(rangeStart, rangeEnd + 1);
+		}
+		return data;
+	}
+
+	function dataContains(data, codePoint) {
+		// iterate over the data per (start, end) pair
+		var index = 0;
+		var start;
+		var end;
+		var length = data.length;
+		while (index < length) {
+			start = data[index];
+			end = data[index + 1];
+			if (codePoint >= start && codePoint < end) {
+				return true;
+			}
+			index += 2;
+		}
+		return false;
+	}
+
+	function dataToArray(data) {
+		// iterate over the data per (start, end) pair
+		var index = 0;
+		var start;
+		var end;
+		var result = [];
+		var length = data.length;
+		while (index < length) {
+			start = data[index];
+			end = data[index + 1];
+			while (start < end) {
+				result.push(start);
+				++start;
+			}
+			index += 2;
+		}
+		return result;
+	}
+
+	function dataFromArray(codePoints) {
+		// note: assumes a sorted list of numbers
+		var index = 0;
+		var length = codePoints.length;
+		var current;
+		var result = [];
+		while (index < length) {
+			current = codePoints[index];
+			result.push(current);
+			while (index < length) {
+				if (codePoints[index] + 1 != codePoints[++index]) {
+					break;
+				}
+			}
+			current = codePoints[index - 1];
+			if (current != 0x10FFFF) {
+				result.push(current + 1);
+			}
+		}
+		return result;
+	}
+
+	/*--------------------------------------------------------------------------*/
+
 	var range = function(start, stop) {
 		// inclusive, e.g. `range(1, 3)` → `[1, 2, 3]`
 		if (stop < start) {
@@ -495,84 +833,106 @@
 
 	/*--------------------------------------------------------------------------*/
 
-	var Set = function(value) {
-		this.__codePoints__ = [];
+	var CodePointSet = function(value) {
+		this.__data__ = [];
 		return this;
 	};
 
-	var proto = Set.prototype;
+	var proto = CodePointSet.prototype;
 	extend(proto, {
 		'add': function(value) {
+			var $this = this;
+			if (value == null) {
+				return $this;
+			}
 			if (arguments.length > 1) {
 				value = slice.call(arguments);
 			}
-			this.__codePoints__ = add(this.__codePoints__, value);
-			return this;
+			if (isArray(value)) {
+				forEach(value, function(item) {
+					var codePoint = isNumber(item) ? item : symbolToCodePoint(item);
+					$this.__data__ = dataAdd($this.__data__, codePoint);
+				});
+				return $this;
+			}
+			$this.__data__ = dataAdd(
+				$this.__data__,
+				isNumber(value) ? value : symbolToCodePoint(value)
+			);
+			return $this;
 		},
 		'remove': function(value) {
+			var $this = this;
 			if (arguments.length > 1) {
 				value = slice.call(arguments);
 			}
-			this.__codePoints__ = remove(this.__codePoints__, value);
-			return this;
+			if (isArray(value)) {
+				forEach(value, function(item) {
+					var codePoint = isNumber(item) ? item : symbolToCodePoint(item);
+					$this.__data__ = dataRemove($this.__data__, codePoint);
+				});
+				return $this;
+			}
+			$this.__data__ = dataRemove(
+				$this.__data__,
+				isNumber(value) ? value : symbolToCodePoint(value)
+			);
+			return $this;
 		},
 		'addRange': function(start, end) {
-			this.__codePoints__ = add(this.__codePoints__, range(
+			var $this = this;
+			$this.__data__ = dataAddRange($this.__data__,
 				isNumber(start) ? start : symbolToCodePoint(start),
 				isNumber(end) ? end : symbolToCodePoint(end)
-			));
-			return this;
+			);
+			return $this;
 		},
 		'removeRange': function(start, end) {
+			var $this = this;
 			var startCodePoint = isNumber(start) ? start : symbolToCodePoint(start);
 			var endCodePoint = isNumber(end) ? end : symbolToCodePoint(end);
-			var array = [];
-			forEach(this.__codePoints__, function(codePoint) {
-				if (codePoint < startCodePoint || codePoint > endCodePoint) {
-					array.push(codePoint);
-				}
-			});
-			this.__codePoints__ = array;
-			return this;
+			$this.__data__ = dataRemoveRange($this.__data__, startCodePoint, endCodePoint);
+			return $this;
 		},
 		'difference': function(array) {
-			this.__codePoints__ = difference(this.__codePoints__, array);
-			return this;
+			var $this = this;
+			$this.__data__ = dataFromArray(difference(dataToArray($this.__data__), array));
+			// TODO: rewrite `difference` to avoid the conversion to/from an unoptimized array
+			return $this;
 		},
 		'intersection': function(array) {
-			this.__codePoints__ = intersection(this.__codePoints__, array);
-			return this;
+			var $this = this;
+			$this.__data__ = dataFromArray(intersection(dataToArray($this.__data__), array));
+			// TODO: rewrite `intersection` to avoid the conversion to/from an unoptimized array
+			return $this;
 		},
 		'contains': function(codePoint) {
-			return contains(
-				this.__codePoints__,
+			return dataContains(
+				this.__data__,
 				isNumber(codePoint) ? codePoint : symbolToCodePoint(codePoint)
 			);
 		},
 		'toString': function() {
-			this.__codePoints__ = sortUniqueNumbers(this.__codePoints__);
-			return createCharacterClasses(this.__codePoints__);
+			return createCharacterClasses(this.toArray());
 		},
 		'toRegExp': function() {
-			this.__codePoints__ = sortUniqueNumbers(this.__codePoints__);
-			return RegExp(createCharacterClasses(this.__codePoints__));
+			return RegExp(this.toString());
 		},
 		'valueOf': function() { // has alias `toArray`
-			this.__codePoints__ = sortUniqueNumbers(this.__codePoints__);
-			return this.__codePoints__;
+			return dataToArray(this.__data__);
 		}
 	});
 
 	proto.toArray = proto.valueOf;
 
 	var set = function(value) {
-		if (value instanceof Set) {
+		if (value instanceof CodePointSet) {
 			// this is already a set; don’t wrap it again
 			return value;
 		} else if (arguments.length > 1) {
 			value = slice.call(arguments);
 		}
-		return (new Set).add(value);
+		return (new CodePointSet).add(value);
 	};
 
 	extend(set, {

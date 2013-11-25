@@ -700,9 +700,10 @@
 				.remove(20)
 				.difference([9, 15])
 				.intersection([3, 7, 10, 16, 0x1D306])
-				.remove(function(codePoint) {
-					return codePoint == 7 || codePoint == 16;
-				});
+				// .remove(function(codePoint) {
+				// 	return codePoint == 7 || codePoint == 16;
+				// });
+				.remove(7, 16);
 		deepEqual(
 			set.toArray(),
 			[3, 10, 0x1D306],
