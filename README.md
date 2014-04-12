@@ -1,12 +1,12 @@
-# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.png?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.png)](https://gemnasium.com/mathiasbynens/regenerate)
+# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.svg)](https://gemnasium.com/mathiasbynens/regenerate)
 
-_Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points.
+_Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](http://mathiasbynens.be/notes/javascript-unicode).)
 
 Feel free to fork if you see possible improvements!
 
 ## Installation
 
-Via [npm](http://npmjs.org/):
+Via [npm](https://npmjs.org/):
 
 ```bash
 npm install regenerate
@@ -99,6 +99,14 @@ regenerate().add(0x1D306, 'A', '©', 0x2603).toString();
 // → '[A\\xA9\\u2603]|\\uD834\\uDF06'
 ```
 
+It’s also possible to pass in a Regenerate instance. Doing so adds all code points in that instance to the current set.
+
+```js
+var set = regenerate(0x1D306, 'A');
+regenerate().add('©', 0x2603).add(set).toString();
+// → '[A\\xA9\\u2603]|\\uD834\\uDF06'
+```
+
 ### `regenerate.prototype.remove(value1, value2, value3, ...)`
 
 Any arguments passed to `remove()` are removed to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
@@ -108,13 +116,12 @@ regenerate(0x1D306, 'A', '©', 0x2603).remove('☃').toString();
 // → '[A\\xA9]|\\uD834\\uDF06'
 ```
 
-Functions can also be passed. In that case, the result of calling the function against a code point value in the set determines whether the element should be removed (`true`) or not (`false`).
+It’s also possible to pass in a Regenerate instance. Doing so removes all code points in that instance from the current set.
 
 ```js
-regenerate(0x1D306, 'A', '©', 0x2603).remove(function(codePoint) {
-  return codePoint > 0xFFFF; // remove astral code points from the set
-}).toString();
-// → '[A\\xA9\\u2603]'
+var set = regenerate('☃');
+regenerate(0x1D306, 'A', '©', 0x2603).remove(set).toString();
+// → '[A\\xA9]|\\uD834\\uDF06'
 ```
 
 ### `regenerate.prototype.addRange(start, end)`
@@ -159,6 +166,17 @@ regenerate()
 // → '[\0-\x60b-rt-\xFF]'
 ```
 
+Instead of the `codePoints` array, it’s also possible to pass in a Regenerate instance.
+
+```js
+var blacklist = regenerate().add(0x61, 0x73);
+var setB = regenerate()
+  .addRange(0x00, 0xFF) // add extended ASCII code points
+  .difference(blacklist) // remove the code points in the `blacklist` set from this set
+  .toString();
+// → '[\0-\x60b-rt-\xFF]'
+```
+
 ### `regenerate.prototype.intersection(codePoints)`
 
 Removes any code points from the set that are not present in both the set and the given `codePoints` array. `codePoints` must be an array of numeric code point values, i.e. numbers.
@@ -167,6 +185,18 @@ Removes any code points from the set that are not present in both the set and th
 regenerate()
   .addRange(0x00, 0xFF) // add extended ASCII code points
   .intersection([0x61, 0x69]) // remove all code points from the set except for these
+  .toString();
+// → '[ai]'
+```
+
+Instead of the `codePoints` array, it’s also possible to pass in a Regenerate instance.
+
+```js
+var whitelist = regenerate().add(0x61, 0x69);
+
+regenerate()
+  .addRange(0x00, 0xFF) // add extended ASCII code points
+  .intersection(whitelist) // remove all code points from the set except for those in the `whitelist` set
   .toString();
 // → '[ai]'
 ```
@@ -181,6 +211,19 @@ set.contains('A');
 // → true
 set.contains(0x1D306);
 // → false
+```
+
+### `regenerate.prototype.clone()`
+
+Returns a clone of the current code point set. Any actions performed on the clone won’t mutate the original set.
+
+```js
+var setA = regenerate(0x1D306);
+var setB = setA.clone().add(0x1F4A9);
+setA.toArray();
+// → [0x1D306]
+setB.toArray();
+// → [0x1D306, 0x1F4A9]
 ```
 
 ### `regenerate.prototype.toString()`
@@ -223,210 +266,6 @@ regenerate(0x1D306)
 
 A string representing the semantic version number.
 
-### `regenerate.fromCodePoints(codePoints)`
-
-This function takes an array of numerical code point values and returns a string representing (part of) a regular expression that would match all the symbols mapped to those code points.
-
-```js
-// Create a regular expression that matches any of the given code points:
-regenerate.fromCodePoints([0x1F604, 0x1F605, 0x1F606, 0x1F607]);
-// → '\\uD83D[\\uDE04-\\uDE07]'
-```
-
-### `regenerate.fromCodePointRange(start, end)`
-
-This function takes a `start` and an `end` code point value, and returns a string representing (part of) a regular expression that would match all the symbols mapped to the code points within the range _[start, end]_ (inclusive).
-
-```js
-// Create a regular expression that matches any code point in the given range:
-regenerate.fromCodePointRange(0x1F604, 0x1F607);
-// → '\\uD83D[\\uDE04-\\uDE07]'
-
-// Create a regular expression that matches any Unicode code point:
-regenerate.fromCodePointRange(0x000000, 0x10FFFF);
-// → '[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
-```
-
-### `regenerate.fromCodePointRanges(ranges)`
-
-This function takes an array of code point ranges or separate code points, and returns a string representing (part of) a regular expression that would match all the symbols mapped to the code points within the listed code points or code point ranges.
-
-```js
-// Create a regular expression based on a dynamically created range of code points:
-regenerate.fromCodePointRanges([
-  [0x00, 0xFF],          // range
-  [0x2603, 0x2608],      // range
-  0x1F4A9, // separate code point
-  0x1F4BB  // separate code point
-]);
-// → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
-```
-
-```js
-// Allow all Unicode symbols except U+2603 SNOWMAN and U+1F4A9 PILE OF POO:
-regenerate.fromCodePointRanges([
-  [0x0000, 0x2602],  // skip 0x2603
-  [0x2604, 0x1F4A8], // skip 0x1F4A9
-  [0x1F4AA, 0x10FFFF]
-]);
-// → '[\\0-\\u2602\\u2604-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uD83C\\uD83E-\\uDBFF][\\uDC00-\\uDFFF]|\\uD83D[\\uDC00-\\uDCA8\\uDCAA-\\uDFFF]|[\\uD800-\\uDBFF]'
-```
-
-### `regenerate.fromSymbols(symbols)`
-
-This function takes an array of strings that each contain a single Unicode symbol. It returns a string representing (part of) a regular expression that would match all those symbols.
-
-```js
-// Create a regular expression that matches any of the given Unicode symbols:
-regenerate.fromSymbols(['𝐀', '𝐁', '𝐂', '𝐃', '𝐄']);
-// → '\\uD835[\\uDC00-\\uDC04]'
-```
-
-### `regenerate.fromSymbolRange(start, end)`
-
-This function takes a `start` and an `end` string which each contain a single Unicode symbol. It returns a string representing (part of) a regular expression that would match all the symbols within the range _[start, end]_ (inclusive).
-
-```js
-// Create a regular expression that matches any Unicode symbol in the given range:
-regenerate.fromSymbolRange('𝐏', '𝐟');
-// → '\\uD835[\\uDC0F-\\uDC1F]'
-```
-
-### `regenerate.fromSymbolRanges(ranges)`
-
-This function takes an array of symbol ranges or separate strings, each containing a single Unicode symbol, and returns a string representing (part of) a regular expression that would match all the symbols within the listed symbols or symbol ranges.
-
-```js
-// Create a regular expression based on a dynamically created range of code points:
-regenerate.fromSymbolRanges([
-  ['\0', '\xFF'],           // range
-  ['\u2603', '\u2608'],     // range
-  '\uD83D\uDCA9', // separate symbol
-  '\uD83D\uDCBB'  // separate symbol
-]);
-// → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
-```
-
-### `regenerate.range(start, end)`
-
-This function takes a `start` and an `end` number and returns an array of numbers progressing from `start` up to and including `end`, i.e. all the numbers within the range _[start, end]_ (inclusive).
-
-```js
-// Create an array containing all extended ASCII code points:
-regenerate.range(0x00, 0xFF);
-// → [0x00, 0x01, 0x02, 0x03, ..., 0xFF]
-```
-
-### `regenerate.ranges(ranges)`
-
-This function takes an array of code point ranges or separate code points, and returns an array containing all the code points within the listed code points or code point ranges.
-
-```js
-// Create a regular expression based on a dynamically created range of code points:
-var codePoints = regenerate.ranges([
-  [0x00, 0xFF], // → 0x00, 0x01, 0x02, 0x03, …, 0xFC, 0xFD, 0xFE, 0xFF
-  [0x2603, 0x2608], // → 0x2603, 0x2604, 0x2605, 0x2606, 0x2607, 0x2608
-  0x1F4A9, // add U+1F4A9 PILE OF POO
-  0x1F4BB // add U+1F4BB PERSONAL COMPUTER
-]);
-// → [0x00, 0x01, …, 0xFE, 0xFF, 0x2603, 0x2604, …, 0x2607, 0x2608, 0x1F4A9, 0x1F4BB]
-regenerate.fromCodePoints(codePoints);
-// → '[\\0-\\xFF\\u2603-\\u2608]|\\uD83D[\\uDCA9\\uDCBB]'
-```
-
-### `regenerate.contains(array, value)`
-
-Returns `true` if `array` contains `value`, and `false` otherwise.
-
-```js
-var ASCII = regenerate.range(0x00, 0xFF); // extended ASCII
-// → [0x00, 0x01, 0x02, 0x03, ..., 0xFF]
-regenerate.contains(ASCII, 0x61);
-// → true
-regenerate.contains(ASCII, 0x1D306);
-// → false
-```
-
-### `regenerate.difference(array1, array2)`
-
-Returns an array of `array1` elements that are not present in `array2`.
-
-```js
-regenerate.difference(
-  [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06],
-  [0x01, 0x03, 0x05]
-);
-// → [0x00, 0x02, 0x04, 0x06]
-```
-
-### `regenerate.intersection(array1, array2)`
-
-Returns an array of unique elements that are present in both `array1` and `array2`.
-
-```js
-regenerate.intersection(
-  [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06],
-  [0x01, 0x03, 0x05, 0x07]
-);
-// → [0x01, 0x03, 0x05]
-```
-
-### `regenerate.add(array, value)`
-
-Extends `array` based on `value` as follows:
-
-* If `value` is a code point (i.e. a number), it’s appended to `array`.
-* If `value` is a symbol (i.e. a string containing a single Unicode symbol), its numeric code point value is appended to `array`.
-* If `value` is an array, all its values are added to `array` following the above steps.
-
-```js
-regenerate.add(
-  [0x00, 0x1D306],
-  0x41
-);
-// → [0x00, 0x1D306, 0x41]
-
-regenerate.add(
-  [0x00, 0x1D306],
-  'A'
-);
-// → [0x00, 0x1D306, 0x41]
-
-regenerate.add(
-  [0x00, 0x1D306],
-  [0x61, 0x203B, 'A']
-);
-// → [0x00, 0x1D306, 0x61, 0x203B, 0x41]
-```
-
-### `regenerate.remove(array, value)`
-
-Removes values from `array` based on `value` as follows:
-
-* If `value` is a code point (i.e. a number), it’s removed from `array`.
-* If `value` is a symbol (i.e. a string containing a single Unicode symbol), its numeric code point value is removed from `array`.
-* If `value` is an array, all its values are removed from `array` following on the above steps.
-
-```js
-regenerate.remove(
-  [0x00, 0x1D306, 0x41],
-  0x41
-);
-// → [0x00, 0x1D306]
-
-regenerate.remove(
-  [0x00, 0x1D306, 0x41],
-  'A'
-);
-// → [0x00, 0x1D306]
-
-regenerate.remove(
-  [0x00, 0x1D306, 0x61, 0x203B, 0x41],
-  [0x61, 0x203B, 'A']
-);
-// → [0x00, 0x1D306]
-```
-
 ## Combine Regenerate with other libraries
 
 Regenerate gets even better when combined with other libraries such as [Punycode.js](http://mths.be/punycode). Here’s an example where [Punycode.js](http://mths.be/punycode) is used to convert a string into an array of code points, that is then passed on to Regenerate:
@@ -446,7 +285,7 @@ regenerate(codePoints).toString();
 
 ## Support
 
-Regenerate has been tested in at least Chrome 27-29, Firefox 3-22, Safari 4-6, Opera 10-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, PhantomJS 1.9.0, and Rhino 1.7RC4.
+Regenerate supports at least Chrome 27+, Firefox 3+, Safari 4+, Opera 10+, IE 6+, Node.js v0.10.0+, Narwhal 0.3.2+, RingoJS 0.8+, PhantomJS 1.9.0+, and Rhino 1.7RC4+.
 
 ## Unit tests & code coverage
 
@@ -458,7 +297,7 @@ To generate [the code coverage report](http://rawgithub.com/mathiasbynens/regene
 
 ## Author
 
-| [![twitter/mathias](http://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125?s=70)](http://twitter.com/mathias "Follow @mathias on Twitter") |
+| [![twitter/mathias](https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125?s=70)](https://twitter.com/mathias "Follow @mathias on Twitter") |
 |---|
 | [Mathias Bynens](http://mathiasbynens.be/) |
 
