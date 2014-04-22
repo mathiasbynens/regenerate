@@ -208,6 +208,11 @@
 			'removeRange removing a partial range'
 		);
 		deepEqual(
+			regenerate().add(42, 50, 51, 53, 57, 59, 60).removeRange(50, 60).toArray(),
+			[42],
+			'removeRange removing several ranges from the data'
+		);
+		deepEqual(
 			regenerate().addRange(0, 5).addRange(3, 7).toArray(),
 			[0, 1, 2, 3, 4, 5, 6, 7],
 			'addRange with overlapping ranges'
@@ -251,11 +256,6 @@
 			set.clone().add('a', '.', '-', ']').toString(),
 			'[\\x03\\x0A\\x2D\\x2E\\x5Da]|\\uD834\\uDF06',
 			'toString escapes special characters'
-		);
-		equal(
-			regenerate().addRange(0x0, 0x10FFFF).toString(),
-			'[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]',
-			'toString for all Unicode code points'
 		);
 		deepEqual(
 			regenerate().addRange(3, 6).add(2).toArray(),
@@ -321,6 +321,11 @@
 			regenerate(0x0, 0x1, 0x2, 0x3, 0x1D306, 0x1D307, 0x1D308, 0x1D30A).toString(),
 			'[\\0-\\x03]|\\uD834[\\uDF06-\\uDF08\\uDF0A]',
 			'Mixed BMP and astral code points'
+		);
+		equal(
+			regenerate(0).toString(),
+			'\\0',
+			'\\0'
 		);
 		equal(
 			regenerate(0, 0x31, 0x32).toString(),
@@ -550,6 +555,61 @@
 			regenerate().add('A', 0x1D307, 119559, ['B', 0x1D306, 'D', '\uD83D\uDCA9']).toArray(),
 			[0x41, 0x42, 0x44, 0x1D306, 0x1D307, 0x1F4A9],
 			'add with various value types'
+		);
+		equal(
+			regenerate().addRange(0x103FE, 0x10401).toString(),
+			'\\uD800[\\uDFFE\\uDFFF]|\\uD801[\\uDC00\\uDC01]',
+			'surrogate bounds (from \\uD800\\uDFFE to \\uD801\\uDC01)'
+		);
+		equal(
+			regenerate().addRange(0x10001, 0x10401).toString(),
+			'\\uD800[\\uDC01-\\uDFFF]|\\uD801[\\uDC00\\uDC01]',
+			'common low surrogates (from \\uD800\\uDC01 to \\uD801\\uDC01)'
+		);
+		equal(
+			regenerate().add(0x10001, 0x10401).toString(),
+			'[\\uD800\\uD801]\\uDC01',
+			'common low surrogates (\\uD800\\uDC01 and \\uD801\\uDC01)'
+		);
+		equal(
+			regenerate().add(0x10001, 0x10401, 0x10801).toString(),
+			'[\\uD800-\\uD802]\\uDC01',
+			'common low surrogates (\\uD800\\uDC01 and \\uD801\\uDC01 and \\uD802\\uDC01)'
+		);
+		equal(
+			regenerate().addRange(0xD800, 0xDBFF).addRange(0xDC00, 0xDFFF).add(0xFFFF).toString(),
+			'[\\uD800-\\uDFFF\\uFFFF]',
+			'BMP-only symbols incl. lone surrogates but with higher code points too'
+		);
+		equal(
+			regenerate().addRange(0xD800, 0xDBFF).addRange(0xDC00, 0xDFFF).add(0xFFFF, 0x1D306).toString(),
+			'[\\uDC00-\\uDFFF\\uFFFF]|\\uD834\\uDF06|[\\uD800-\\uDBFF]',
+			'BMP-only symbols incl. lone surrogates but with higher code points and an astral code point too'
+		);
+		equal(
+			regenerate().addRange(0xD0300, 0xFABFF).toString(),
+			'\\uDB00[\\uDF00-\\uDFFF]|[\\uDB01-\\uDBAA][\\uDC00-\\uDFFF]',
+			'two distinct sets of common low surrogates (from \\uDB00\\uDF00 to \\uDBAA\\uDFFF)'
+		);
+		equal(
+			regenerate().addRange(0xD0000, 0xD03FF).toString(),
+			'\\uDB00[\\uDC00-\\uDFFF]',
+			'common high surrogates (from \\uDB00\\uDC00 to \\uDB00\\uDFFF)'
+		);
+		equal(
+			regenerate().add(0xD0000, 0xD03FF).toString(),
+			'\\uDB00[\\uDC00\\uDFFF]',
+			'common high surrogates (\\uDB00\\uDC00 and \\uDB00\\uDFFF)'
+		);
+		equal(
+			regenerate().add(0xD0200, 0xFA9DD).toString(),
+			'\\uDB00\\uDE00|\\uDBAA\\uDDDD',
+			'two distinct sets of common low surrogates (\\uDB00\\uDE00 and \\uDBAA\\uDDDD)'
+		);
+		equal(
+			regenerate().addRange(0xD0200, 0xFA9DD).toString(),
+			'\\uDB00[\\uDE00-\\uDFFF]|[\\uDB01-\\uDBA9][\\uDC00-\\uDFFF]|\\uDBAA[\\uDC00-\\uDDDD]',
+			'two distinct sets of common low surrogates (from \\uDB00\\uDE00 to \\uDBAA\\uDDDD)'
 		);
 
 	});
