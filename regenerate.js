@@ -36,20 +36,6 @@
 
 	var object = {};
 	var hasOwnProperty = object.hasOwnProperty;
-
-	var hasKey = function(object, key) {
-		return hasOwnProperty.call(object, key);
-	};
-
-	var forOwn = function(object, callback) {
-		var key;
-		for (key in object) {
-			if (hasKey(object, key)) {
-				callback(key, object[key]);
-			}
-		}
-	};
-
 	var extend = function(destination, source) {
 		var key;
 		for (key in source) {
@@ -565,12 +551,6 @@
 		while (index < length) {
 			start = data[index];
 			end = data[index + 1] - 1; // Note: the `- 1` makes `end` inclusive.
-			if (start > 0xFFFF) {
-				break;
-			}
-			if (end > 0xFFFF) {
-				end = 0xFFFF;
-			}
 			if (start == end) {
 				result += codePointToString(start);
 			} else if (start + 1 == end) {
@@ -624,11 +604,9 @@
 					// remaining symbols to `astral`.
 					loneHighSurrogates.push(start, HIGH_SURROGATE_MAX + 1);
 					bmp.push(HIGH_SURROGATE_MAX + 1, 0xFFFF + 1);
-				} else if (start < HIGH_SURROGATE_MIN) {
+				} else { // `start < HIGH_SURROGATE_MIN` holds true.
 					bmp.push(start, HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1, 0xFFFF + 1);
 					loneHighSurrogates.push(HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1);
-				} else {
-					bmp.push(start, 0xFFFF + 1);
 				}
 				astral.push(0xFFFF + 1, end + 1);
 			}
