@@ -135,12 +135,12 @@
 						return data;
 					} else {
 						// Just replace `start` with a new value.
-						data.splice(index, 1, codePoint + 1);
+						data[index] = codePoint + 1;
 						return data;
 					}
 				} else if (codePoint == end - 1) {
 					// Just replace `end` with a new value.
-					data.splice(index + 1, 1, codePoint);
+					data[index + 1] = codePoint;
 					return data;
 				} else {
 					// Replace `[start, end]` with `[startA, endA, startB, endB]`.
@@ -193,7 +193,7 @@
 			// E.g. we have `[0, 11]` and want to remove 4-20 → `[0, 4]`.
 			if (rangeStart >= start && rangeStart < end) {
 				// Replace `end` with `rangeStart`.
-				data.splice(index + 1, 1, rangeStart);
+				data[index + 1] = rangeStart;
 				// Note: we cannot `return` just yet, in case any following pairs still
 				// contain matching code points.
 				// E.g. we have `[0, 11, 14, 31]` and want to remove 4-20
@@ -204,7 +204,7 @@
 			// E.g. we have `[14, 31]` and want to remove 4-20 → `[21, 31]`.
 			else if (rangeEnd >= start && rangeEnd < end) {
 				// Just replace `start`.
-				data.splice(index, 1, rangeEnd + 1);
+				data[index] = rangeEnd + 1;
 				return data;
 			}
 
@@ -234,7 +234,7 @@
 
 			if (codePoint == start - 1) {
 				// Just replace `start` with a new value.
-				data.splice(index, 1, codePoint);
+				data[index] = codePoint;
 				return data;
 			}
 
@@ -259,7 +259,7 @@
 					return data;
 				}
 				// else, just replace `end` with a new value
-				data.splice(index + 1, 1, codePoint + 1);
+				data[index + 1] = codePoint + 1;
 				return data;
 			}
 			lastIndex = index;
@@ -396,7 +396,7 @@
 				end == rangeStart
 			) {
 				// Replace `end` with the new value.
-				data.splice(index + 1, 1, rangeEnd + 1);
+				data[index + 1] = rangeEnd + 1;
 				// Make sure the next range pair doesn’t overlap, e.g. `[0, 11, 12, 14]`
 				// and you add 5-15 → `[0, 16]`, i.e. remove the `12,14` part.
 				added = true;
