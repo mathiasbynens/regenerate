@@ -74,13 +74,13 @@ The main Regenerate function. Calling this function creates a new set that gets 
 var set = regenerate()
   .addRange(0x60, 0x69) // add U+0060 to U+0069
   .remove(0x62, 0x64) // remove U+0062 and U+0064
-  .add(0x1D306) // add U+1D306
+  .add(0x1D306); // add U+1D306
 set.valueOf();
 // → [0x60, 0x61, 0x63, 0x65, 0x66, 0x67, 0x68, 0x69, 0x1D306]
 set.toString();
-// → '[\\x60-ace-i]|\\uD834\\uDF06'
+// → '[`ace-i]|\\uD834\\uDF06'
 set.toRegExp();
-// → /[\x60-ace-i]|\uD834\uDF06/
+// → /[`ace-i]|\uD834\uDF06/
 ```
 
 Any arguments passed to `regenerate()` will be added to the set right away. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
@@ -152,13 +152,13 @@ regenerate()
   .addRange(0x000000, 0x10FFFF) // add all Unicode code points
   .removeRange('A', 'z') // remove all symbols from `A` to `z`
   .toString();
-// → '[\\0-\\x40\\x7B-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+// → '[\\0-@\\{-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
 
 regenerate()
   .addRange(0x000000, 0x10FFFF) // add all Unicode code points
   .removeRange(0x0041, 0x007A) // remove all code points from U+0041 to U+007A
   .toString();
-// → '[\\0-\\x40\\x7B-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+// → '[\\0-@\\{-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
 ```
 
 ### `regenerate.prototype.difference(codePoints)`
@@ -170,7 +170,7 @@ regenerate()
   .addRange(0x00, 0xFF) // add extended ASCII code points
   .difference([0x61, 0x73]) // remove these code points from the set
   .toString();
-// → '[\0-\x60b-rt-\xFF]'
+// → '[\\0-`b-rt-\\xFF]'
 ```
 
 Instead of the `codePoints` array, it’s also possible to pass in a Regenerate instance.
@@ -181,7 +181,7 @@ var setB = regenerate()
   .addRange(0x00, 0xFF) // add extended ASCII code points
   .difference(blacklist) // remove the code points in the `blacklist` set from this set
   .toString();
-// → '[\0-\x60b-rt-\xFF]'
+// → '[\\0-`b-rt-\\xFF]'
 ```
 
 ### `regenerate.prototype.intersection(codePoints)`
@@ -287,7 +287,21 @@ var codePoints = punycode.ucs2.decode(string);
 
 // Generate a regular expression that matches any of the symbols used in the string:
 regenerate(codePoints).toString();
-// → '[\\x20\\x2ELad-eil-mo-pr-u]'
+// → '[ \\.Ladeilmopr-u]'
+```
+
+In ES6 you can do something similar with [`Array.from`](http://mths.be/array-from) which uses [the string’s iterator](http://mathiasbynens.be/notes/javascript-unicode#iterating-over-symbols) to split the given string into an array of strings that each contain a single symbol. [`regenerate()`](#regenerateprototypeaddvalue1-value2-value3-) accepts both strings and code points, remember?
+
+```js
+var regenerate = require('regenerate');
+
+var string = 'Lorem ipsum dolor sit amet.';
+// Get an array of all symbols used in the string:
+var codePoints = Array.from(string);
+
+// Generate a regular expression that matches any of the symbols used in the string:
+regenerate(codePoints).toString();
+// → '[ \\.Ladeilmopr-u]'
 ```
 
 ## Support

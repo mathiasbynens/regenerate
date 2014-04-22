@@ -510,17 +510,59 @@
 	var stringFromCharCode = String.fromCharCode;
 	var codePointToString = function(codePoint) {
 		var string;
-		if (
-			(codePoint >= 0x41 && codePoint <= 0x5A) ||
-			(codePoint >= 0x61 && codePoint <= 0x7A) ||
-			(codePoint >= 0x30 && codePoint <= 0x39)
+		// http://mathiasbynens.be/notes/javascript-escapes#single
+		if (codePoint == 0x08) {
+			string = '\\b';
+		}
+		else if (codePoint == 0x09) {
+			string = '\\t';
+		}
+		// Note: IE < 9 treats `'\v'` as `'v'`, so avoid using it.
+		// else if (codePoint == 0x0B) {
+		// 	string = '\\v';
+		// }
+		else if (codePoint == 0x0A) {
+			string = '\\n';
+		}
+		else if (codePoint == 0x0C) {
+			string = '\\f';
+		}
+		else if (codePoint == 0x0D) {
+			string = '\\r';
+		}
+		else if (codePoint == 0x5C) {
+			string = '\\\\';
+		}
+		else if (
+			codePoint == 0x24 ||
+			(codePoint >= 0x28 && codePoint <= 0x2B) ||
+			codePoint == 0x2D || codePoint == 0x2E || codePoint == 0x3F ||
+			(codePoint >= 0x5B && codePoint <= 0x5E) ||
+			(codePoint >= 0x7B && codePoint <= 0x7D)
 		) {
-			// Use `[a-zA-Z0-9]` directly.
+			// The code point maps to an unsafe printable ASCII character;
+			// backslash-escape it. Here’s the list of those symbols:
+			//
+			//     $()*+-.?[\]^{|}
+			//
+			// See #7 for more info.
+			string = '\\' + stringFromCharCode(codePoint);
+		}
+		else if (codePoint >= 0x20 && codePoint <= 0x7E) {
+			// The code point maps to one of these printable ASCII symbols
+			// (including the space character):
+			//
+			//      !"#%&',/0123456789:;<=>@ABCDEFGHIJKLMNO
+			//     PQRSTUVWXYZ_`abcdefghijklmnopqrstuvwxyz~
+			//
+			// These can safely be used directly.
 			string = stringFromCharCode(codePoint);
-		} else if (codePoint <= 0xFF) {
+		}
+		else if (codePoint <= 0xFF) {
 			// http://mathiasbynens.be/notes/javascript-escapes#hexadecimal
 			string = '\\x' + pad(hex(codePoint), 2);
-		} else { // if (codePoint <= 0xFFFF)
+		}
+		else { // if (codePoint <= 0xFFFF)
 			// http://mathiasbynens.be/notes/javascript-escapes#unicode
 			string = '\\u' + pad(hex(codePoint), 4);
 		}
@@ -864,8 +906,11 @@
 			'highSurrogatesData': highSurrogatesData,
 			'surrogateMappings': optimizeSurrogateMappings(surrogateMappings)
 			// The format of `surrogateMappings` is as follows:
+			//
 			//     [ surrogateMapping1, surrogateMapping2 ]
+			//
 			// i.e.:
+			//
 			//     [
 			//       [ highSurrogates1, lowSurrogates1 ],
 			//       [ highSurrogates2, lowSurrogates2 ]
