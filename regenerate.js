@@ -82,12 +82,11 @@
 	/*--------------------------------------------------------------------------*/
 
 	var dataFromCodePoints = function(codePoints) {
-		// [0, 3, 6, 7, 8, 9] → [0, 1, 3, 4, 6, 10]
 		var index = -1;
 		var length = codePoints.length;
 		var max = length - 1;
 		var result = [];
-		var isStart = true; // start of range or not?
+		var isStart = true;
 		var tmp;
 		var previous = 0;
 		while (++index < length) {
@@ -106,7 +105,7 @@
 						result.push(tmp + 1);
 					}
 				} else {
-					// End the previous range and start a new one
+					// End the previous range and start a new one.
 					result.push(previous + 1, tmp);
 					previous = tmp;
 				}
@@ -118,10 +117,6 @@
 		return result;
 	};
 
-	// 3,4,5,8,9,10,11 →
-	// [3, 6, 8, 12]
-	// remove 9 → [3, 6, 8, 9, 10, 12]
-	// console.log(dataRemove([3, 6, 8, 12], 9)); // [3, 6, 8, 9, 10, 12]
 	var dataRemove = function(data, codePoint) {
 		// Iterate over the data per `(start, end)` pair.
 		var index = 0;
@@ -289,6 +284,26 @@
 				data = dataAdd(data, start);
 			} else {
 				data = dataAddRange(data, start, end);
+			}
+			index += 2;
+		}
+		return data;
+	};
+
+	var dataRemoveData = function(dataA, dataB) {
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		var data = dataA.slice();
+		var length = dataB.length;
+		while (index < length) {
+			start = dataB[index];
+			end = dataB[index + 1] - 1;
+			if (start == end) {
+				data = dataRemove(data, start);
+			} else {
+				data = dataRemoveRange(data, start, end);
 			}
 			index += 2;
 		}
@@ -926,8 +941,8 @@
 			}
 			if (value instanceof CodePointSet) {
 				// Allow passing other `CodePointSet`s.
-				// TODO: Optimize this by writing and using `dataAddData()`.
-				value = dataToArray(value.__data__);
+				$this.__data__ = dataAddData($this.__data__, value.__data__);
+				return $this;
 			}
 			if (arguments.length > 1) {
 				value = slice.call(arguments);
@@ -951,8 +966,8 @@
 			}
 			if (value instanceof CodePointSet) {
 				// Allow passing other `CodePointSet`s.
-				// TODO: Optimize this by writing and using `dataRemoveData()`.
-				value = dataToArray(value.__data__);
+				$this.__data__ = dataRemoveData($this.__data__, value.__data__);
+				return $this;
 			}
 			if (arguments.length > 1) {
 				value = slice.call(arguments);
