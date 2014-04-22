@@ -107,6 +107,13 @@ regenerate().add('©', 0x2603).add(set).toString();
 // → '[A\\xA9\\u2603]|\\uD834\\uDF06'
 ```
 
+Note that the initial call to `regenerate()` acts like `add()`. This allows you to create a new Regenerate instance and add some code points to it in one go:
+
+```js
+regenerate(0x1D306, 'A', '©', 0x2603).toString();
+// → '[A\\xA9\\u2603]|\\uD834\\uDF06'
+```
+
 ### `regenerate.prototype.remove(value1, value2, value3, ...)`
 
 Any arguments passed to `remove()` are removed to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
@@ -192,7 +199,7 @@ regenerate()
 Instead of the `codePoints` array, it’s also possible to pass in a Regenerate instance.
 
 ```js
-var whitelist = regenerate().add(0x61, 0x69);
+var whitelist = regenerate(0x61, 0x69);
 
 regenerate()
   .addRange(0x00, 0xFF) // add extended ASCII code points

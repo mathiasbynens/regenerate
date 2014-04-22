@@ -56,15 +56,15 @@
 				.difference([9, 15])
 				.intersection([3, 7, 10, 16, 0x1D306, 9001])
 				.remove(7, 16);
-		var setB = regenerate(0x1337, 0x31337);
+		var setB = regenerate(0x1337, 0x1338, 0x31337);
 		var setC = regenerate(0x42);
 		deepEqual(
 			set.clone().add(setB).add(setC).toArray(),
-			[3, 10, 0x42, 0x1337, 0x1D306, 0x31337],
+			[3, 10, 0x42, 0x1337, 0x1338, 0x1D306, 0x31337],
 			'add(set) + clone'
 		);
 		deepEqual(
-			regenerate(3, 10, 0x42, 0x1337, 0x1D306, 0x31337).remove(setB).remove(setC).toArray(),
+			regenerate(3, 10, 0x42, 0x1337, 0x1338, 0x1D306, 0x31337).remove(setB).remove(setC).toArray(),
 			[3, 10, 0x1D306],
 			'remove(set)'
 		);
