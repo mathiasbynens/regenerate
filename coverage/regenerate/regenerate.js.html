@@ -183,16 +183,16 @@
     <h1>Code coverage report for <span class="entity">regenerate/regenerate.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">98.73% <small>(312 / 316)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">99.28% <small>(549 / 553)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class="metric">95.6% <small>(152 / 159)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">97.62% <small>(287 / 294)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Functions: <span class="metric">98.31% <small>(58 / 59)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">97.87% <small>(46 / 47)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">98.73% <small>(312 / 316)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">99.28% <small>(549 / 553)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
     </h2>
     <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">regenerate/</a> &#187; regenerate.js</div>
@@ -816,7 +816,508 @@
 615
 616
 617
-618</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648
+649
+650
+651
+652
+653
+654
+655
+656
+657
+658
+659
+660
+661
+662
+663
+664
+665
+666
+667
+668
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685
+686
+687
+688
+689
+690
+691
+692
+693
+694
+695
+696
+697
+698
+699
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710
+711
+712
+713
+714
+715
+716
+717
+718
+719
+720
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733
+734
+735
+736
+737
+738
+739
+740
+741
+742
+743
+744
+745
+746
+747
+748
+749
+750
+751
+752
+753
+754
+755
+756
+757
+758
+759
+760
+761
+762
+763
+764
+765
+766
+767
+768
+769
+770
+771
+772
+773
+774
+775
+776
+777
+778
+779
+780
+781
+782
+783
+784
+785
+786
+787
+788
+789
+790
+791
+792
+793
+794
+795
+796
+797
+798
+799
+800
+801
+802
+803
+804
+805
+806
+807
+808
+809
+810
+811
+812
+813
+814
+815
+816
+817
+818
+819
+820
+821
+822
+823
+824
+825
+826
+827
+828
+829
+830
+831
+832
+833
+834
+835
+836
+837
+838
+839
+840
+841
+842
+843
+844
+845
+846
+847
+848
+849
+850
+851
+852
+853
+854
+855
+856
+857
+858
+859
+860
+861
+862
+863
+864
+865
+866
+867
+868
+869
+870
+871
+872
+873
+874
+875
+876
+877
+878
+879
+880
+881
+882
+883
+884
+885
+886
+887
+888
+889
+890
+891
+892
+893
+894
+895
+896
+897
+898
+899
+900
+901
+902
+903
+904
+905
+906
+907
+908
+909
+910
+911
+912
+913
+914
+915
+916
+917
+918
+919
+920
+921
+922
+923
+924
+925
+926
+927
+928
+929
+930
+931
+932
+933
+934
+935
+936
+937
+938
+939
+940
+941
+942
+943
+944
+945
+946
+947
+948
+949
+950
+951
+952
+953
+954
+955
+956
+957
+958
+959
+960
+961
+962
+963
+964
+965
+966
+967
+968
+969
+970
+971
+972
+973
+974
+975
+976
+977
+978
+979
+980
+981
+982
+983
+984
+985
+986
+987
+988
+989
+990
+991
+992
+993
+994
+995
+996
+997
+998
+999
+1000
+1001
+1002
+1003
+1004
+1005
+1006
+1007
+1008
+1009
+1010
+1011
+1012
+1013
+1014
+1015
+1016
+1017
+1018
+1019
+1020
+1021
+1022
+1023
+1024
+1025
+1026
+1027
+1028
+1029
+1030
+1031
+1032
+1033
+1034
+1035
+1036
+1037
+1038
+1039
+1040
+1041
+1042
+1043
+1044
+1045
+1046
+1047
+1048
+1049
+1050
+1051
+1052
+1053
+1054
+1055
+1056
+1057
+1058
+1059
+1060
+1061
+1062
+1063
+1064
+1065
+1066
+1067
+1068
+1069
+1070
+1071
+1072
+1073
+1074
+1075
+1076
+1077
+1078
+1079
+1080
+1081
+1082
+1083
+1084
+1085
+1086
+1087
+1088
+1089
+1090
+1091
+1092
+1093
+1094
+1095
+1096
+1097
+1098
+1099
+1100
+1101
+1102
+1103
+1104
+1105
+1106
+1107
+1108
+1109
+1110
+1111
+1112
+1113
+1114
+1115
+1116
+1117
+1118
+1119</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -836,579 +1337,1080 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">6041163</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">11</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">85</span>
+<span class="cline-any cline-yes">85</span>
+<span class="cline-any cline-yes">85</span>
+<span class="cline-any cline-yes">689</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">708</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3884</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3603</span>
+<span class="cline-any cline-yes">3603</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3603</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7</span>
 <span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25</span>
+<span class="cline-any cline-yes">25</span>
+<span class="cline-any cline-yes">25</span>
+<span class="cline-any cline-yes">25</span>
+<span class="cline-any cline-yes">25</span>
+<span class="cline-any cline-yes">58</span>
+<span class="cline-any cline-yes">58</span>
+<span class="cline-any cline-yes">58</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24</span>
+<span class="cline-any cline-yes">19</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16</span>
+<span class="cline-any cline-yes">16</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1195</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1142</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">36</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">22</span>
 <span class="cline-any cline-yes">22</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">7</span>
-<span class="cline-any cline-yes">7</span>
-<span class="cline-any cline-yes">7</span>
-<span class="cline-any cline-yes">58</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">6023</span>
-<span class="cline-any cline-yes">6023</span>
-<span class="cline-any cline-yes">6023</span>
-<span class="cline-any cline-yes">15084454</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">60</span>
-<span class="cline-any cline-yes">60</span>
-<span class="cline-any cline-yes">5951</span>
-<span class="cline-any cline-yes">5900</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">6035212</span>
-<span class="cline-any cline-yes">6029312</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5900</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">70470242</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">2359918</span>
-<span class="cline-any cline-yes">2359915</span>
-<span class="cline-any cline-yes">2359915</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">11878</span>
-<span class="cline-any cline-yes">11878</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">11878</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">29</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">26</span>
-<span class="cline-any cline-yes">26</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">22</span>
 <span class="cline-any cline-yes">4</span>
-<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5</span>
-<span class="cline-any cline-yes">5</span>
-<span class="cline-any cline-yes">5</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">103</span>
-<span class="cline-any cline-yes">103</span>
-<span class="cline-any cline-yes">102</span>
-<span class="cline-any cline-yes">179</span>
-<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">724</span>
+<span class="cline-any cline-yes">724</span>
+<span class="cline-any cline-yes">724</span>
+<span class="cline-any cline-yes">724</span>
+<span class="cline-any cline-yes">724</span>
+<span class="cline-any cline-yes">724</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">722</span>
+<span class="cline-any cline-yes">16130</span>
+<span class="cline-any cline-yes">16130</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-yes">16130</span>
+<span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">18</span>
-<span class="cline-any cline-yes">18</span>
-<span class="cline-any cline-yes">18</span>
-<span class="cline-any cline-yes">18</span>
-<span class="cline-any cline-yes">18</span>
-<span class="cline-any cline-yes">84</span>
-<span class="cline-any cline-yes">84</span>
-<span class="cline-any cline-yes">64</span>
+<span class="cline-any cline-yes">16122</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16105</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">17</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">12</span>
-<span class="cline-any cline-yes">12</span>
-<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">16088</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1102</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1101</span>
-<span class="cline-any cline-yes">1076</span>
-<span class="cline-any cline-yes">1076</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25</span>
-<span class="cline-any cline-yes">7</span>
-<span class="cline-any cline-yes">7</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">18</span>
-<span class="cline-any cline-yes">15</span>
-<span class="cline-any cline-yes">1071</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">23</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">22</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">11</span>
-<span class="cline-any cline-yes">6</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20</span>
-<span class="cline-any cline-yes">9</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11</span>
-<span class="cline-any cline-yes">5</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6</span>
-<span class="cline-any cline-yes">5</span>
-<span class="cline-any cline-yes">12</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">6029321</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">6029321</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">11906</span>
-<span class="cline-any cline-yes">11906</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">28</span>
-<span class="cline-any cline-yes">11878</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">29</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11849</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11906</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">93</span>
-<span class="cline-any cline-yes">93</span>
-<span class="cline-any cline-yes">93</span>
-<span class="cline-any cline-yes">93</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11</span>
-<span class="cline-any cline-yes">11</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">82</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">5932</span>
-<span class="cline-any cline-yes">5932</span>
-<span class="cline-any cline-yes">5932</span>
-<span class="cline-any cline-yes">5932</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5932</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5932</span>
-<span class="cline-any cline-yes">5932</span>
-<span class="cline-any cline-yes">6361180</span>
-<span class="cline-any cline-yes">6361143</span>
-<span class="cline-any cline-yes">6361143</span>
-<span class="cline-any cline-yes">6361143</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">37</span>
-<span class="cline-any cline-yes">16</span>
-<span class="cline-any cline-yes">16</span>
-<span class="cline-any cline-yes">21</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20</span>
-<span class="cline-any cline-yes">20</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">37</span>
-<span class="cline-any cline-yes">37</span>
-<span class="cline-any cline-yes">37</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5932</span>
-<span class="cline-any cline-yes">16</span>
-<span class="cline-any cline-yes">16</span>
-<span class="cline-any cline-yes">5916</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5913</span>
-<span class="cline-any cline-yes">5913</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5932</span>
-<span class="cline-any cline-yes">4</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5928</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">130</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">34</span>
-<span class="cline-any cline-yes">34</span>
-<span class="cline-any cline-yes">34</span>
-<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-yes">129</span>
+<span class="cline-any cline-yes">129</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">34</span>
-<span class="cline-any cline-yes">6361225</span>
+<span class="cline-any cline-yes">15958</span>
+<span class="cline-any cline-yes">15958</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5130</span>
-<span class="cline-any cline-yes">6356095</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">326770</span>
-<span class="cline-any cline-yes">6029325</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6029321</span>
-<span class="cline-any cline-yes">6029321</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">5891</span>
-<span class="cline-any cline-yes">5891</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">4</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">29</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">9</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">550</span>
+<span class="cline-any cline-yes">550</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">16</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">14</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">14</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">7</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">9</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">7</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2063</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2061</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2059</span>
+<span class="cline-any cline-yes">2059</span>
+<span class="cline-any cline-yes">2059</span>
+<span class="cline-any cline-yes">2059</span>
+<span class="cline-any cline-yes">2059</span>
+<span class="cline-any cline-yes">2059</span>
+<span class="cline-any cline-yes">376385</span>
+<span class="cline-any cline-yes">376385</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">376385</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7</span>
-<span class="cline-any cline-yes">101</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7</span>
+<span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">376376</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">376375</span>
+<span class="cline-any cline-yes">1484</span>
+<span class="cline-any cline-yes">1484</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">374891</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">219</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">374672</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">374678</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">352</span>
+<span class="cline-any cline-yes">310</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">352</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-yes">77</span>
+<span class="cline-any cline-yes">77</span>
+<span class="cline-any cline-yes">77</span>
+<span class="cline-any cline-yes">21</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">56</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-yes">7</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">150</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">426</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45</span>
+<span class="cline-any cline-yes">45</span>
+<span class="cline-any cline-yes">45</span>
+<span class="cline-any cline-yes">45</span>
+<span class="cline-any cline-yes">45</span>
+<span class="cline-any cline-yes">45</span>
+<span class="cline-any cline-yes">75</span>
+<span class="cline-any cline-yes">75</span>
+<span class="cline-any cline-yes">75</span>
+<span class="cline-any cline-yes">208</span>
+<span class="cline-any cline-yes">208</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">75</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">570</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">570</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3681</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3681</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3680</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3679</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3676</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3675</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3674</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3673</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3666</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">63</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3603</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">51</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3552</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3681</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">118</span>
+<span class="cline-any cline-yes">116</span>
+<span class="cline-any cline-yes">113</span>
+<span class="cline-any cline-yes">113</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">103</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">189</span>
+<span class="cline-any cline-yes">189</span>
+<span class="cline-any cline-yes">189</span>
+<span class="cline-any cline-yes">189</span>
+<span class="cline-any cline-yes">189</span>
+<span class="cline-any cline-yes">189</span>
+<span class="cline-any cline-yes">69</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120</span>
+<span class="cline-any cline-yes">2002</span>
+<span class="cline-any cline-yes">2002</span>
+<span class="cline-any cline-yes">2002</span>
+<span class="cline-any cline-yes">392</span>
+<span class="cline-any cline-yes">1610</span>
+<span class="cline-any cline-yes">193</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1417</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2002</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">1972</span>
+<span class="cline-any cline-yes">1972</span>
+<span class="cline-any cline-yes">1972</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1687</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1681</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1680</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1679</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">281</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">13</span>
-<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">1972</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21</span>
-<span class="cline-any cline-yes">21</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5</span>
-<span class="cline-any cline-yes">5</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">1026</span>
-<span class="cline-any cline-yes">514</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">88</span>
+<span class="cline-any cline-yes">88</span>
+<span class="cline-any cline-yes">88</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">65</span>
+<span class="cline-any cline-yes">65</span>
+<span class="cline-any cline-yes">65</span>
+<span class="cline-any cline-yes">65</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">65</span>
+<span class="cline-any cline-yes">65</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">222</span>
+<span class="cline-any cline-yes">49</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">173</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">222</span>
+<span class="cline-any cline-yes">222</span>
+<span class="cline-any cline-yes">222</span>
+<span class="cline-any cline-yes">222</span>
+<span class="cline-any cline-yes">222</span>
+<span class="cline-any cline-yes">222</span>
+<span class="cline-any cline-yes">222</span>
+<span class="cline-any cline-yes">222</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">65</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">65</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10</span>
-<span class="cline-any cline-yes">10</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">26</span>
 <span class="cline-any cline-yes">14</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">59</span>
+<span class="cline-any cline-yes">59</span>
+<span class="cline-any cline-yes">59</span>
+<span class="cline-any cline-yes">59</span>
+<span class="cline-any cline-yes">59</span>
+<span class="cline-any cline-yes">59</span>
+<span class="cline-any cline-yes">455</span>
+<span class="cline-any cline-yes">455</span>
+<span class="cline-any cline-yes">455</span>
+<span class="cline-any cline-yes">455</span>
+<span class="cline-any cline-yes">455</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-yes">7</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">24</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">269</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">269</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">269</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">285</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">73</span>
+<span class="cline-any cline-yes">73</span>
+<span class="cline-any cline-yes">73</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">235</span>
+<span class="cline-any cline-yes">39</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">235</span>
+<span class="cline-any cline-yes">119</span>
+<span class="cline-any cline-yes">119</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">116</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">742</span>
+<span class="cline-any cline-yes">742</span>
+<span class="cline-any cline-yes">54</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">688</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">685</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">685</span>
+<span class="cline-any cline-yes">53</span>
+<span class="cline-any cline-yes">602</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">53</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">632</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">628</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">14</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1598</span>
+<span class="cline-any cline-yes">1598</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1593</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">43</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1433,18 +2435,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*! http://mths.be/regenerate v0.5.3 by @mathias | MIT license */
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*! http://mths.be/regenerate v0.6.0 by @mathias | MIT license */
 ;(function(root) {
 &nbsp;
-	// Detect free variables `exports`
+	// Detect free variables `exports`.
 	var freeExports = typeof exports == 'object' &amp;&amp; exports;
 &nbsp;
-	// Detect free variable `module`
+	// Detect free variable `module`.
 	var freeModule = typeof module == 'object' &amp;&amp; module &amp;&amp;
 		module.exports == freeExports &amp;&amp; module;
 &nbsp;
 	// Detect free variable `global`, from Node.js or Browserified code,
-	// and use it as `root`
+	// and use it as `root`.
 	var freeGlobal = typeof global == 'object' &amp;&amp; global;
 	<span class="missing-if-branch" title="else path not taken"" >E</span>if (freeGlobal.global === freeGlobal || <span class="branch-1 cbranch-no" title="branch not covered" >freeGlobal.window === freeGlobal)</span> {
 		root = freeGlobal;
@@ -1452,12 +2454,25 @@
 &nbsp;
 	/*--------------------------------------------------------------------------*/
 &nbsp;
-	var object = {};
-	var hasOwnProperty = object.hasOwnProperty;
-	var hasKey = function(object, key) {
-		return hasOwnProperty.call(object, key);
+	var ERRORS = {
+		'rangeOrder': 'A range\u2019s `stop` value must be greater than or equal ' +
+			'to the `start` value.',
+		'codePointRange': 'Invalid code point value. Code points range from ' +
+			'U+000000 to U+10FFFF.'
 	};
 &nbsp;
+	// http://mathiasbynens.be/notes/javascript-encoding#surrogate-pairs
+	var HIGH_SURROGATE_MIN = 0xD800;
+	var HIGH_SURROGATE_MAX = 0xDBFF;
+	var LOW_SURROGATE_MIN = 0xDC00;
+	var LOW_SURROGATE_MAX = 0xDFFF;
+&nbsp;
+	// In Regenerate output, `\0` will never be preceded by `\` because we sort
+	// by code point value, so let’s keep this regular expression simple.
+	var regexNull = /\\x00([^0123456789]|$)/g;
+&nbsp;
+	var object = {};
+	var hasOwnProperty = object.hasOwnProperty;
 	var extend = function(destination, source) {
 		var key;
 		for (key in source) {
@@ -1468,31 +2483,6 @@
 		return destination;
 	};
 &nbsp;
-	var toString = object.toString;
-	var isArray = function(value) {
-		return toString.call(value) == '[object Array]';
-	};
-	var isNumber = function(value) {
-		return typeof value == 'number' ||
-			toString.call(value) == '[object Number]';
-	};
-	var isString = function(value) {
-		return typeof value == 'string' ||
-			toString.call(value) == '[object String]';
-	};
-	var isFunction = function(value) {
-		return typeof value == 'function';
-	};
-&nbsp;
-	var map = function(array, callback) {
-		var index = -1;
-		var length = array.length;
-		while (++index &lt; length) {
-			array[index] = callback(array[index]);
-		}
-		return array;
-	};
-&nbsp;
 	var forEach = function(array, callback) {
 		var index = -1;
 		var length = array.length;
@@ -1501,38 +2491,13 @@
 		}
 	};
 &nbsp;
-	var forOwn = function(object, callback) {
-		var key;
-		for (key in object) {
-			if (hasKey(object, key)) {
-				callback(key, object[key]);
-			}
-		}
+	var toString = object.toString;
+	var isArray = function(value) {
+		return toString.call(value) == '[object Array]';
 	};
-&nbsp;
-	var append = function(object, key, value) {
-		if (hasKey(object, key)) {
-			object[key].push(value);
-		} else {
-			object[key] = [value];
-		}
-	};
-&nbsp;
-	var sortUniqueNumbers = function(array) {
-		// Sort numerically in ascending order
-		array = array.sort(function(a, b) {
-			return a - b;
-		});
-		// Remove duplicates
-		var previous;
-		var result = [];
-		forEach(array, function(item, index) {
-			if (previous != item) {
-				result.push(item);
-				previous = item;
-			}
-		});
-		return result;
+	var isNumber = function(value) {
+		return typeof value == 'number' ||
+			toString.call(value) == '[object Number]';
 	};
 &nbsp;
 	// This assumes that `number` is a positive integer that `toString()`s nicely
@@ -1553,127 +2518,412 @@
 &nbsp;
 	/*--------------------------------------------------------------------------*/
 &nbsp;
-	var range = function(start, stop) {
-		// inclusive, e.g. `range(1, 3)` → `[1, 2, 3]`
-		if (stop &lt; start) {
-			throw Error('A range\u2019s `stop` value must be greater than or equal ' +
-				'to the `start` value.');
+	var dataFromCodePoints = function(codePoints) {
+		var index = -1;
+		var length = codePoints.length;
+		var max = length - 1;
+		var result = [];
+		var isStart = true;
+		var tmp;
+		var previous = 0;
+		while (++index &lt; length) {
+			tmp = codePoints[index];
+			if (isStart) {
+				result.push(tmp);
+				previous = tmp;
+				isStart = false;
+			} else {
+				if (tmp == previous + 1) {
+					if (index != max) {
+						previous = tmp;
+						continue;
+					} else {
+						isStart = true;
+						result.push(tmp + 1);
+					}
+				} else {
+					// End the previous range and start a new one.
+					result.push(previous + 1, tmp);
+					previous = tmp;
+				}
+			}
 		}
-		for (var result = []; start &lt;= stop; result.push(start++));
+		if (!isStart) {
+			result.push(tmp + 1);
+		}
 		return result;
 	};
 &nbsp;
-	var ranges = function(codePointRanges) {
-		if (!isArray(codePointRanges)) {
-			throw TypeError('ranges(): The `codePointRanges` argument must be an ' +
-				'array.');
-		}
-&nbsp;
-		if (!codePointRanges.length) {
-			return [];
-		}
-&nbsp;
-		var codePoints = [];
-		forEach(codePointRanges, function(codePointRange) {
-			// If it’s a single code point (not a range)
-			if (!isArray(codePointRange)) {
-				codePoints.push(codePointRange);
-				return;
+	var dataRemove = function(data, codePoint) {
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		var length = data.length;
+		while (index &lt; length) {
+			start = data[index];
+			end = data[index + 1];
+			if (codePoint &gt;= start &amp;&amp; codePoint &lt; end) {
+				// Modify this pair.
+				if (codePoint == start) {
+					if (end == start + 1) {
+						// Just remove `start` and `end`.
+						data.splice(index, 2);
+						return data;
+					} else {
+						// Just replace `start` with a new value.
+						data[index] = codePoint + 1;
+						return data;
+					}
+				} else if (codePoint == end - 1) {
+					// Just replace `end` with a new value.
+					data[index + 1] = codePoint;
+					return data;
+				} else {
+					// Replace `[start, end]` with `[startA, endA, startB, endB]`.
+					data.splice(index, 2, start, codePoint, codePoint + 1, end);
+					return data;
+				}
 			}
-			// If it’s a range (not a single code point)
-			var start = codePointRange[0];
-			var stop = codePointRange[1];
-			codePoints = codePoints.concat(range(start, stop));
-		});
-		return codePoints;
+			index += 2;
+		}
+		return data;
 	};
 &nbsp;
-	var contains = function(array, value) {
-		var index = -1;
-		var length = array.length;
-		while (++index &lt; length) {
-			if (array[index] == value) {
+	var dataRemoveRange = function(data, rangeStart, rangeEnd) {
+		if (rangeEnd &lt; rangeStart) {
+			throw Error(ERRORS.rangeOrder);
+		}
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		while (index &lt; data.length) {
+			start = data[index];
+			end = data[index + 1];
+&nbsp;
+			// Exit as soon as no more matching pairs can be found.
+			if (start &gt; rangeEnd) {
+				return data;
+			}
+&nbsp;
+			// Check if this range pair is equal to, or forms a subset of, the range
+			// to be removed.
+			// E.g. we have `[0, 11, 40, 51]` and want to remove 0-10 → `[40, 51]`.
+			// E.g. we have `[40, 51]` and want to remove 0-100 → `[]`.
+			if (rangeStart &lt;= start &amp;&amp; rangeEnd + 1 &gt;= end) {
+				// Remove this pair.
+				data.splice(index, 2);
+				continue;
+			}
+&nbsp;
+			// Check if both `rangeStart` and `rangeEnd` are within the bounds of
+			// this pair.
+			// E.g. we have `[0, 11]` and want to remove 4-6 → `[0, 4, 7, 11]`.
+			if (rangeStart &gt;= start &amp;&amp; rangeEnd &lt; end) {
+				// Replace `[start, end]` with `[startA, endA, startB, endB]`.
+				data.splice(index, 2, start, rangeStart, rangeEnd + 1, end);
+				return data;
+			}
+&nbsp;
+			// Check if only `rangeStart` is within the bounds of this pair.
+			// E.g. we have `[0, 11]` and want to remove 4-20 → `[0, 4]`.
+			if (rangeStart &gt;= start &amp;&amp; rangeStart &lt; end) {
+				// Replace `end` with `rangeStart`.
+				data[index + 1] = rangeStart;
+				// Note: we cannot `return` just yet, in case any following pairs still
+				// contain matching code points.
+				// E.g. we have `[0, 11, 14, 31]` and want to remove 4-20
+				// → `[0, 4, 21, 31]`.
+			}
+&nbsp;
+			// Check if only `rangeEnd` is within the bounds of this pair.
+			// E.g. we have `[14, 31]` and want to remove 4-20 → `[21, 31]`.
+			else if (rangeEnd &gt;= start &amp;&amp; rangeEnd &lt; end) {
+				// Just replace `start`.
+				data[index] = rangeEnd + 1;
+				return data;
+			}
+&nbsp;
+			index += 2;
+		}
+		return data;
+	};
+&nbsp;
+	 var dataAdd = function(data, codePoint) {
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		var lastIndex = null;
+		var length = data.length;
+		if (codePoint &lt; 0x0 || codePoint &gt; 0x10FFFF) {
+			throw RangeError(ERRORS.codePointRange);
+		}
+		while (index &lt; length) {
+			start = data[index];
+			end = data[index + 1];
+&nbsp;
+			// Check if the code point is already in the set.
+			if (codePoint &gt;= start &amp;&amp; codePoint &lt; end) {
+				return data;
+			}
+&nbsp;
+			if (codePoint == start - 1) {
+				// Just replace `start` with a new value.
+				data[index] = codePoint;
+				return data;
+			}
+&nbsp;
+			// At this point, if `start` is `greater` than `codePoint`, insert a new
+			// `[start, end]` pair before the current pair, or after the current pair
+			// if there is a known `lastIndex`.
+			if (start &gt; codePoint) {
+				data.splice(
+					lastIndex != null ? lastIndex + 2 : 0,
+					0,
+					codePoint,
+					codePoint + 1
+				);
+				return data;
+			}
+&nbsp;
+			if (codePoint == end) {
+				// Check if adding this code point causes two separate ranges to become
+				// a single range, e.g. `dataAdd([0, 4, 5, 10], 4)` → `[0, 10]`.
+				if (codePoint + 1 == data[index + 2]) {
+					data.splice(index, 4, start, data[index + 3]);
+					return data;
+				}
+				// Else, just replace `end` with a new value.
+				data[index + 1] = codePoint + 1;
+				return data;
+			}
+			lastIndex = index;
+			index += 2;
+		}
+		// The loop has finished; add the new pair to the end of the data set.
+		data.push(codePoint, codePoint + 1);
+		return data;
+	};
+&nbsp;
+	var dataAddData = function(dataA, dataB) {
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		var data = dataA.slice();
+		var length = dataB.length;
+		while (index &lt; length) {
+			start = dataB[index];
+			end = dataB[index + 1] - 1;
+			if (start == end) {
+				data = dataAdd(data, start);
+			} else {
+				data = dataAddRange(data, start, end);
+			}
+			index += 2;
+		}
+		return data;
+	};
+&nbsp;
+	var dataRemoveData = function(dataA, dataB) {
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		var data = dataA.slice();
+		var length = dataB.length;
+		while (index &lt; length) {
+			start = dataB[index];
+			end = dataB[index + 1] - 1;
+			if (start == end) {
+				data = dataRemove(data, start);
+			} else {
+				data = dataRemoveRange(data, start, end);
+			}
+			index += 2;
+		}
+		return data;
+	};
+&nbsp;
+	var dataAddRange = function(data, rangeStart, rangeEnd) {
+		if (rangeEnd &lt; rangeStart) {
+			throw Error(ERRORS.rangeOrder);
+		}
+		if (
+			rangeStart &lt; 0x0 || rangeStart &gt; 0x10FFFF ||
+			rangeEnd &lt; 0x0 || rangeEnd &gt; 0x10FFFF
+		) {
+			throw RangeError(ERRORS.codePointRange);
+		}
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		var added = false;
+		var length = data.length;
+		while (index &lt; length) {
+			start = data[index];
+			end = data[index + 1];
+&nbsp;
+			if (added) {
+				// The range has already been added to the set; at this point, we just
+				// need to get rid of the following ranges in case they overlap.
+&nbsp;
+				// Check if this range can be combined with the previous range.
+				if (start == rangeEnd + 1) {
+					data.splice(index - 1, 2);
+					return data;
+				}
+&nbsp;
+				// Exit as soon as no more possibly overlapping pairs can be found.
+				if (start &gt; rangeEnd) {
+					return data;
+				}
+&nbsp;
+				// E.g. `[0, 11, 12, 16]` and we’ve added 5-15, so we now have
+				// `[0, 16, 12, 16]`. Remove the `12,16` part, as it lies within the
+				// `0,16` range that was previously added.
+				if (start &gt;= rangeStart &amp;&amp; start &lt;= rangeEnd) {
+					// `start` lies within the range that was previously added.
+&nbsp;
+					if (end &gt; rangeStart &amp;&amp; end - 1 &lt;= rangeEnd) {
+						// `end` lies within the range that was previously added as well,
+						// so remove this pair.
+						data.splice(index, 2);
+						index -= 2;
+						// Note: we cannot `return` just yet, as there may still be other
+						// overlapping pairs.
+					} else {
+						// `start` lies within the range that was previously added, but
+						// `end` doesn’t. E.g. `[0, 11, 12, 31]` and we’ve added 5-15, so
+						// now we have `[0, 16, 12, 31]`. This must be written as `[0, 31]`.
+						// Remove the previously added `end` and the current `start`.
+						data.splice(index - 1, 2);
+						index -= 2;
+					}
+&nbsp;
+					// Note: we cannot return yet.
+				}
+&nbsp;
+			}
+&nbsp;
+			else if (start == rangeEnd + 1) {
+				data[index] = rangeStart;
+				return data;
+			}
+&nbsp;
+			// Check if a new pair must be inserted *before* the current one.
+			else if (start &gt; rangeEnd) {
+				data.splice(index, 0, rangeStart, rangeEnd + 1);
+				return data;
+			}
+&nbsp;
+			else if (rangeStart &gt;= start &amp;&amp; rangeStart &lt; end &amp;&amp; rangeEnd + 1 &lt;= end) {
+				// The new range lies entirely within an existing range pair. No action
+				// needed.
+				return data;
+			}
+&nbsp;
+			else if (
+				// E.g. `[0, 11]` and you add 5-15 → `[0, 16]`.
+				(rangeStart &gt;= start &amp;&amp; rangeStart &lt; end) ||
+				// E.g. `[0, 3]` and you add 3-6 → `[0, 7]`.
+				end == rangeStart
+			) {
+				// Replace `end` with the new value.
+				data[index + 1] = rangeEnd + 1;
+				// Make sure the next range pair doesn’t overlap, e.g. `[0, 11, 12, 14]`
+				// and you add 5-15 → `[0, 16]`, i.e. remove the `12,14` part.
+				added = true;
+				// Note: we cannot `return` just yet.
+			}
+&nbsp;
+			index += 2;
+		}
+		// The loop has finished without doing anything; add the new pair to the end
+		// of the data set.
+		if (!added) {
+			data.push(rangeStart, rangeEnd + 1);
+		}
+		return data;
+	};
+&nbsp;
+	var dataContains = function(data, codePoint) {
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		var length = data.length;
+		while (index &lt; length) {
+			start = data[index];
+			end = data[index + 1];
+			if (codePoint &gt;= start &amp;&amp; codePoint &lt; end) {
 				return true;
 			}
+			index += 2;
 		}
 		return false;
 	};
 &nbsp;
-	var difference = function(a, b) {
-		var index = -1;
-		var length = a.length;
+	var dataIntersection = function(data, codePoints) {
+		var index = 0;
+		var length = codePoints.length;
+		var codePoint;
 		var result = [];
-		var value;
-		while (++index &lt; length) {
-			value = a[index];
-			if (!contains(b, value)) {
-				result.push(value);
+		while (index &lt; length) {
+			codePoint = codePoints[index];
+			if (dataContains(data, codePoint)) {
+				result.push(codePoint);
 			}
+			++index;
+		}
+		return dataFromCodePoints(result);
+	};
+&nbsp;
+	var dataDifference = function(data, codePoints) {
+		var index = 0;
+		var length = codePoints.length;
+		var codePoint;
+		// Create a clone to avoid mutating the original `data`.
+		var newData = data.slice(0);
+		while (index &lt; length) {
+			codePoint = codePoints[index];
+			if (dataContains(newData, codePoint)) {
+				newData = dataRemove(newData, codePoint);
+			}
+			++index;
+		}
+		return newData;
+	};
+&nbsp;
+	var dataIsEmpty = function(data) {
+		return !data.length;
+	};
+&nbsp;
+	var dataIsSingleton = function(data) {
+		// Check if the set only represents a single code point.
+		return data.length == 2 &amp;&amp; data[0] + 1 == data[1];
+	};
+&nbsp;
+	var dataToArray = function(data) {
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		var result = [];
+		var length = data.length;
+		while (index &lt; length) {
+			start = data[index];
+			end = data[index + 1];
+			while (start &lt; end) {
+				result.push(start);
+				++start;
+			}
+			index += 2;
 		}
 		return result;
-	};
-&nbsp;
-	var intersection = function(a, b) {
-		var index = -1;
-		var length = a.length;
-		var result = [];
-		var value;
-		while (++index &lt; length) {
-			value = a[index];
-			if (contains(b, value)) {
-				result.push(value);
-			}
-		}
-		return result;
-	};
-&nbsp;
-	var add = function(destination, value) {
-		if (!isArray(destination)) {
-			throw TypeError('add(): The `destination` argument must be an array.');
-		}
-		if (isNumber(value)) {
-			destination.push(Number(value));
-			return destination;
-		}
-		if (isString(value)) {
-			destination.push(symbolToCodePoint(value));
-			return destination;
-		}
-		if (isArray(value)) {
-			forEach(value, function(item) {
-				destination = add(destination, item);
-			});
-			return destination;
-		}
-		return destination;
-	};
-&nbsp;
-	var remove = function(destination, value) {
-		if (!isArray(destination)) {
-			throw TypeError('remove(): The `destination` argument must be an array.');
-		}
-		if (isFunction(value)) {
-			var array = [];
-			forEach(destination, function(item) {
-				if (!value(item)) {
-					array.push(item);
-				}
-			});
-			return array;
-		}
-		if (isNumber(value)) {
-			return difference(destination, [value]);
-		}
-		if (isString(value)) {
-			return difference(destination, [symbolToCodePoint(value)]);
-		}
-		if (isArray(value)) {
-			forEach(value, function(item) {
-				destination = remove(destination, item);
-			});
-			return destination;
-		}
-		return destination;
 	};
 &nbsp;
 	/*--------------------------------------------------------------------------*/
@@ -1681,27 +2931,75 @@
 	// http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
 	var floor = Math.floor;
 	var highSurrogate = function(codePoint) {
-		return parseInt(floor((codePoint - 0x10000) / 0x400) + 0xD800, 10);
+		return parseInt(
+			floor((codePoint - 0x10000) / 0x400) + HIGH_SURROGATE_MIN,
+			10
+		);
 	};
 &nbsp;
 	var lowSurrogate = function(codePoint) {
-		return parseInt((codePoint - 0x10000) % 0x400 + 0xDC00, 10);
+		return parseInt(
+			(codePoint - 0x10000) % 0x400 + LOW_SURROGATE_MIN,
+			10
+		);
 	};
 &nbsp;
 	var stringFromCharCode = String.fromCharCode;
 	var codePointToString = function(codePoint) {
 		var string;
-		if (
-			(codePoint &gt;= 0x41 &amp;&amp; codePoint &lt;= 0x5A) ||
-			(codePoint &gt;= 0x61 &amp;&amp; codePoint &lt;= 0x7A) ||
-			(codePoint &gt;= 0x30 &amp;&amp; codePoint &lt;= 0x39)
+		// http://mathiasbynens.be/notes/javascript-escapes#single
+		if (codePoint == 0x08) {
+			string = '\\b';
+		}
+		else if (codePoint == 0x09) {
+			string = '\\t';
+		}
+		// Note: IE &lt; 9 treats `'\v'` as `'v'`, so avoid using it.
+		// else if (codePoint == 0x0B) {
+		// 	string = '\\v';
+		// }
+		else if (codePoint == 0x0A) {
+			string = '\\n';
+		}
+		else if (codePoint == 0x0C) {
+			string = '\\f';
+		}
+		else if (codePoint == 0x0D) {
+			string = '\\r';
+		}
+		else if (codePoint == 0x5C) {
+			string = '\\\\';
+		}
+		else if (
+			codePoint == 0x24 ||
+			(codePoint &gt;= 0x28 &amp;&amp; codePoint &lt;= 0x2B) ||
+			codePoint == 0x2D || codePoint == 0x2E || codePoint == 0x3F ||
+			(codePoint &gt;= 0x5B &amp;&amp; codePoint &lt;= 0x5E) ||
+			(codePoint &gt;= 0x7B &amp;&amp; codePoint &lt;= 0x7D)
 		) {
-			// [a-zA-Z0-9]
+			// The code point maps to an unsafe printable ASCII character;
+			// backslash-escape it. Here’s the list of those symbols:
+			//
+			//     $()*+-.?[\]^{|}
+			//
+			// See #7 for more info.
+			string = '\\' + stringFromCharCode(codePoint);
+		}
+		else if (codePoint &gt;= 0x20 &amp;&amp; codePoint &lt;= 0x7E) {
+			// The code point maps to one of these printable ASCII symbols
+			// (including the space character):
+			//
+			//      !"#%&amp;',/0123456789:;&lt;=&gt;@ABCDEFGHIJKLMNO
+			//     PQRSTUVWXYZ_`abcdefghijklmnopqrstuvwxyz~
+			//
+			// These can safely be used directly.
 			string = stringFromCharCode(codePoint);
-		} else if (codePoint &lt;= 0xFF) {
+		}
+		else if (codePoint &lt;= 0xFF) {
 			// http://mathiasbynens.be/notes/javascript-escapes#hexadecimal
 			string = '\\x' + pad(hex(codePoint), 2);
-		} else { // if (codePoint &lt;= 0xFFFF)
+		}
+		else { // `codePoint &lt;= 0xFFFF` holds true.
 			// http://mathiasbynens.be/notes/javascript-escapes#unicode
 			string = '\\u' + pad(hex(codePoint), 4);
 		}
@@ -1716,318 +3014,523 @@
 		return string;
 	};
 &nbsp;
-	// Based on `punycode.ucs2.decode`: http://mths.be/punycode
 	var symbolToCodePoint = function(symbol) {
 		var length = symbol.length;
-		var value = symbol.charCodeAt(0);
-		var extra;
-		if ((value &amp; 0xF800) == 0xD800 &amp;&amp; length &gt; 1) {
-			// `value` is a high surrogate, and there is a next character — assume
-			// it’s a low surrogate (else it’s invalid use of Regenerate anyway).
-			extra = symbol.charCodeAt(1);
-			return ((value &amp; 0x3FF) &lt;&lt; 10) + (extra &amp; 0x3FF) + 0x10000;
-		} else {
-			return value;
+		var first = symbol.charCodeAt(0);
+		var second;
+		if (
+			first &gt;= HIGH_SURROGATE_MIN &amp;&amp; first &lt;= HIGH_SURROGATE_MAX &amp;&amp;
+			length &gt; 1 // There is a next code unit.
+		) {
+			// `first` is a high surrogate, and there is a next character. Assume
+			// it’s a low surrogate (else it’s invalid usage of Regenerate anyway).
+			second = symbol.charCodeAt(1);
+			// http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+			return (first - HIGH_SURROGATE_MIN) * 0x400 +
+				second - LOW_SURROGATE_MIN + 0x10000;
 		}
+		return first;
 	};
 &nbsp;
-	var createBMPCharacterClasses = function(codePoints) {
-		var tmp = '';
-		var start = codePoints[0];
-		var end = start;
-		var predict = start + 1;
-&nbsp;
-		codePoints = codePoints.slice(1);
-&nbsp;
-		var counter = 0;
-		forEach(codePoints, function(code) {
-			if (predict == code) {
-				end = code;
-				predict = code + 1;
-				return;
-			}
+	var createBMPCharacterClasses = function(data) {
+		// Iterate over the data per `(start, end)` pair.
+		var result = '';
+		var index = 0;
+		var start;
+		var end;
+		var length = data.length;
+		if (dataIsSingleton(data)) {
+			return codePointToString(data[0]);
+		}
+		while (index &lt; length) {
+			start = data[index];
+			end = data[index + 1] - 1; // Note: the `- 1` makes `end` inclusive.
 			if (start == end) {
-				tmp += codePointToString(start);
-				counter += 1;
-			} else if (end == start + 1) {
-				tmp += codePointToString(start) + codePointToString(end);
-				counter += 2;
+				result += codePointToString(start);
+			} else if (start + 1 == end) {
+				result += codePointToString(start) + codePointToString(end);
 			} else {
-				tmp += codePointToString(start) + '-' + codePointToString(end);
-				counter += 2;
+				result += codePointToString(start) + '-' + codePointToString(end);
 			}
-			start = code;
-			end = code;
-			predict = code + 1;
-		});
-&nbsp;
-		if (start == end) {
-			tmp += codePointToString(start);
-			counter += 1;
-		} else if (end == start + 1) {
-			tmp += codePointToString(start) + codePointToString(end);
-			counter += 2;
-		} else {
-			tmp += codePointToString(start) + '-' + codePointToString(end);
-			counter += 2;
+			index += 2;
 		}
-&nbsp;
-		if (counter == 1) {
-			return tmp;
-		} else {
-			return '[' + tmp + ']';
-		}
+		return '[' + result + ']';
 	};
 &nbsp;
-	// In Regenerate output, `\0` will never be preceded by `\` because we sort
-	// by code point value, so let’s keep this regular expression simple:
-	var regexNull = /\\x00([^0123456789]|$)/g;
-	var createCharacterClasses = function(codePoints) {
-		// At this point, it’s safe to assume `codePoints` is a sorted array of
-		// numeric code point values.
+	var splitAtBMP = function(data) {
+		// Iterate over the data per `(start, end)` pair.
+		var loneHighSurrogates = [];
 		var bmp = [];
-		var astralMap = {};
-		var surrogates = [];
-		var hasAstral = false;
-&nbsp;
-		forEach(codePoints, function(codePoint) {
-			if (codePoint &gt;= 0xD800 &amp;&amp; codePoint &lt;= 0xDBFF) {
-				// If a high surrogate is followed by a low surrogate, the two code
-				// units should be matched together, so that the regex always matches a
-				// full code point. For this reason, separate code points that are
-				// (unmatched) high surrogates are tracked separately, so they can be
-				// moved to the end if astral symbols are to be matched as well.
-				surrogates.push(codePoint);
-			} else if (codePoint &gt;= 0x0000 &amp;&amp; codePoint &lt;= 0xFFFF) {
-				// non-surrogate BMP code point
-				bmp.push(codePoint);
-			} else if (codePoint &gt;= 0x010000 &amp;&amp; codePoint &lt;= 0x10FFFF) {
-				// astral code point
-				hasAstral = true;
-				append(
-					astralMap,
-					highSurrogate(codePoint),
-					lowSurrogate(codePoint)
-				);
-			} else {
-				throw RangeError('Invalid code point value. Code points range from ' +
-					'U+000000 to U+10FFFF.');
+		var astral = [];
+		var index = 0;
+		var start;
+		var end;
+		var length = data.length;
+		while (index &lt; length) {
+			start = data[index];
+			end = data[index + 1] - 1; // Note: the `- 1` makes `end` inclusive.
+			if (start &lt;= 0xFFFF &amp;&amp; end &lt;= 0xFFFF) {
+				// Both `start` and `end` are within the BMP range.
+				if (start &gt;= HIGH_SURROGATE_MIN &amp;&amp; start &lt;= HIGH_SURROGATE_MAX) {
+					// `start` lies in the high surrogates range.
+					if (end &lt;= HIGH_SURROGATE_MAX) {
+						loneHighSurrogates.push(start, end + 1);
+					} else {
+						loneHighSurrogates.push(start, HIGH_SURROGATE_MAX + 1);
+						bmp.push(HIGH_SURROGATE_MAX + 1, end + 1);
+					}
+				} else if (end &gt;= HIGH_SURROGATE_MIN &amp;&amp; end &lt;= HIGH_SURROGATE_MAX) {
+					bmp.push(start, HIGH_SURROGATE_MIN);
+					loneHighSurrogates.push(HIGH_SURROGATE_MIN, end + 1);
+				} else if (start &lt; HIGH_SURROGATE_MIN &amp;&amp; end &gt; HIGH_SURROGATE_MAX) {
+					bmp.push(start, HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1, end + 1);
+					loneHighSurrogates.push(HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1);
+				} else {
+					bmp.push(start, end + 1);
+				}
 			}
+			else if (start &lt;= 0xFFFF &amp;&amp; end &gt; 0xFFFF) {
+				// `start` is in the BMP range, but `end` lies within the astral range.
+				if (start &gt;= HIGH_SURROGATE_MIN &amp;&amp; start &lt;= HIGH_SURROGATE_MAX) {
+					// `start` lies in the high surrogates range. Since `end` is astral,
+					// we can just add all high surrogates starting from `start` to
+					// `loneHighSurrogates`, any other BMP code points to `bmp`, and the
+					// remaining symbols to `astral`.
+					loneHighSurrogates.push(start, HIGH_SURROGATE_MAX + 1);
+					bmp.push(HIGH_SURROGATE_MAX + 1, 0xFFFF + 1);
+				} else if (start &lt; HIGH_SURROGATE_MIN) {
+					bmp.push(start, HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1, 0xFFFF + 1);
+					loneHighSurrogates.push(HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1);
+				} else { // `start &gt; HIGH_SURROGATE_MAX` holds true.
+					bmp.push(start, 0xFFFF + 1);
+				}
+				astral.push(0xFFFF + 1, end + 1);
+			}
+			else {
+				// Both `start` and `end` are in the astral range.
+				astral.push(start, end + 1);
+			}
+			index += 2;
+		}
+		return {
+			'loneHighSurrogates': loneHighSurrogates,
+			'bmp': bmp,
+			'astral': astral
+		};
+	};
+&nbsp;
+	var optimizeSurrogateMappings = function(surrogateMappings) {
+		var result = [];
+		var tmpLow = [];
+		var addLow = false;
+		var mapping;
+		var nextMapping;
+		var highSurrogates;
+		var lowSurrogates;
+		var nextHighSurrogates;
+		var nextLowSurrogates;
+		var index = -1;
+		var length = surrogateMappings.length;
+		while (++index &lt; length) {
+			mapping = surrogateMappings[index];
+			nextMapping = surrogateMappings[index + 1];
+			if (!nextMapping) {
+				result.push(mapping);
+				continue;
+			}
+			highSurrogates = mapping[0];
+			lowSurrogates = mapping[1];
+			nextHighSurrogates = nextMapping[0];
+			nextLowSurrogates = nextMapping[1];
+&nbsp;
+			// Check for identical high surrogate ranges.
+			tmpLow = lowSurrogates;
+			while (
+				nextHighSurrogates &amp;&amp;
+				highSurrogates[0] == nextHighSurrogates[0] &amp;&amp;
+				highSurrogates[1] == nextHighSurrogates[1]
+			) {
+				// Merge with the next item.
+				if (dataIsSingleton(nextLowSurrogates)) {
+					tmpLow = dataAdd(tmpLow, nextLowSurrogates[0]);
+				} else {
+					tmpLow = dataAddRange(
+						tmpLow,
+						nextLowSurrogates[0],
+						nextLowSurrogates[1] - 1
+					);
+				}
+				++index;
+				mapping = surrogateMappings[index];
+				highSurrogates = mapping[0];
+				lowSurrogates = mapping[1];
+				nextMapping = surrogateMappings[index + 1];
+				nextHighSurrogates = nextMapping &amp;&amp; nextMapping[0];
+				nextLowSurrogates = nextMapping &amp;&amp; nextMapping[1];
+				addLow = true;
+			}
+			result.push([
+				highSurrogates,
+				addLow ? tmpLow : lowSurrogates
+			]);
+			addLow = false;
+		}
+		return optimizeByLowSurrogates(result);
+	};
+&nbsp;
+	var optimizeByLowSurrogates = function(surrogateMappings) {
+		if (surrogateMappings.length == 1) {
+			return surrogateMappings;
+		}
+		var index = -1;
+		var innerIndex = -1;
+		while (++index &lt; surrogateMappings.length) {
+			var mapping = surrogateMappings[index];
+			var lowSurrogates = mapping[1];
+			var lowSurrogateStart = lowSurrogates[0];
+			var lowSurrogateEnd = lowSurrogates[1];
+			innerIndex = index; // Note: the loop starts at the next index.
+			while (++innerIndex &lt; surrogateMappings.length) {
+				var otherMapping = surrogateMappings[innerIndex];
+				var otherLowSurrogates = otherMapping[1];
+				var otherLowSurrogateStart = otherLowSurrogates[0];
+				var otherLowSurrogateEnd = otherLowSurrogates[1];
+				if (
+					lowSurrogateStart == otherLowSurrogateStart &amp;&amp;
+					lowSurrogateEnd == otherLowSurrogateEnd
+				) {
+					// Add the code points in the other item to this one.
+					if (dataIsSingleton(otherMapping[0])) {
+						mapping[0] = dataAdd(mapping[0], otherMapping[0][0]);
+					} else {
+						mapping[0] = dataAddRange(
+							mapping[0],
+							otherMapping[0][0],
+							otherMapping[0][1] - 1
+						);
+					}
+					// Remove the other, now redundant, item.
+					surrogateMappings.splice(innerIndex, 1);
+					--innerIndex;
+				}
+			}
+		}
+		return surrogateMappings;
+	};
+&nbsp;
+	var surrogateSet = function(data) {
+		// Exit early if `data` is an empty set.
+		if (!data.length) {
+			return {
+				'highSurrogatesData': [],
+				'surrogateMappings': []
+			};
+		}
+&nbsp;
+		// Iterate over the data per `(start, end)` pair.
+		var index = 0;
+		var start;
+		var end;
+		var startHigh;
+		var startLow;
+		var prevStartHigh = 0;
+		var prevEndHigh = 0;
+		var tmpLow = [];
+		var endHigh;
+		var endLow;
+		var highSurrogatesData = [];
+		var surrogateMappings = [];
+		var length = data.length;
+		var dataHigh = [];
+		while (index &lt; length) {
+			start = data[index];
+			end = data[index + 1] - 1;
+&nbsp;
+			startHigh = highSurrogate(start);
+			startLow = lowSurrogate(start);
+			endHigh = highSurrogate(end);
+			endLow = lowSurrogate(end);
+&nbsp;
+			var startsWithLowestLowSurrogate = startLow == LOW_SURROGATE_MIN;
+			var endsWithHighestLowSurrogate = endLow == LOW_SURROGATE_MAX;
+			var complete = false;
+&nbsp;
+			// Append the previous high-surrogate-to-low-surrogate mappings.
+			// Step 1: `(startHigh, startLow)` to `(startHigh, LOW_SURROGATE_MAX)`.
+			if (
+				startHigh == endHigh ||
+				startsWithLowestLowSurrogate &amp;&amp; endsWithHighestLowSurrogate
+			) {
+				highSurrogatesData = dataAddRange(
+					highSurrogatesData,
+					startHigh,
+					endHigh
+				);
+				surrogateMappings.push([
+					[startHigh, endHigh + 1],
+					[startLow, endLow + 1]
+				]);
+				complete = true;
+			} else {
+				highSurrogatesData = dataAdd(
+					highSurrogatesData,
+					startHigh
+				);
+				surrogateMappings.push([
+					[startHigh, startHigh + 1],
+					[startLow, LOW_SURROGATE_MAX + 1]
+				]);
+			}
+&nbsp;
+			// Step 2: `(startHigh + 1, LOW_SURROGATE_MIN)` to
+			// `(endHigh - 1, LOW_SURROGATE_MAX)`.
+			if (!complete &amp;&amp; startHigh + 1 &lt; endHigh) {
+				if (endsWithHighestLowSurrogate) {
+					// Combine step 2 and step 3.
+					highSurrogatesData = dataAddRange(
+						highSurrogatesData,
+						startHigh + 1,
+						endHigh
+					);
+					surrogateMappings.push([
+						[startHigh + 1, endHigh + 1],
+						[LOW_SURROGATE_MIN, endLow + 1]
+					]);
+					complete = true;
+				} else {
+					highSurrogatesData = dataAddRange(
+						highSurrogatesData,
+						startHigh + 1,
+						endHigh - 1
+					);
+					surrogateMappings.push([
+						[startHigh + 1, endHigh],
+						[LOW_SURROGATE_MIN, LOW_SURROGATE_MAX + 1]
+					]);
+				}
+			}
+&nbsp;
+			// Step 3. `(endHigh, LOW_SURROGATE_MIN)` to `(endHigh, endLow)`.
+			if (!complete) {
+				highSurrogatesData = dataAdd(
+					highSurrogatesData,
+					endHigh
+				);
+				surrogateMappings.push([
+					[endHigh, endHigh + 1],
+					[LOW_SURROGATE_MIN, endLow + 1]
+				]);
+			}
+&nbsp;
+			prevStartHigh = startHigh;
+			prevEndHigh = endHigh;
+&nbsp;
+			index += 2;
+		}
+&nbsp;
+		return {
+			'highSurrogatesData': highSurrogatesData,
+			'surrogateMappings': optimizeSurrogateMappings(surrogateMappings)
+			// The format of `surrogateMappings` is as follows:
+			//
+			//     [ surrogateMapping1, surrogateMapping2 ]
+			//
+			// i.e.:
+			//
+			//     [
+			//       [ highSurrogates1, lowSurrogates1 ],
+			//       [ highSurrogates2, lowSurrogates2 ]
+			//     ]
+		};
+	};
+&nbsp;
+	var createSurrogateCharacterClasses = function(surrogateMappings) {
+		var result = [];
+		forEach(surrogateMappings, function(surrogateMapping) {
+			var highSurrogates = surrogateMapping[0];
+			var lowSurrogates = surrogateMapping[1];
+			result.push(
+				createBMPCharacterClasses(highSurrogates) +
+				createBMPCharacterClasses(lowSurrogates)
+			);
 		});
+		return result.join('|');
+	};
 &nbsp;
-		var astralMapByLowRanges = {};
+	var createCharacterClassesFromData = function(data) {
+		var result = [];
 &nbsp;
-		forOwn(astralMap, function(highSurrogate, lowSurrogate) {
-			var bmpRange = createBMPCharacterClasses(lowSurrogate);
-			append(astralMapByLowRanges, bmpRange, +highSurrogate);
-		});
+		var parts = splitAtBMP(data);
+		var loneHighSurrogates = parts.loneHighSurrogates;
+		var bmp = parts.bmp;
+		var astral = parts.astral;
+		var hasAstral = !dataIsEmpty(parts.astral);
+		var hasLoneSurrogates = !dataIsEmpty(loneHighSurrogates);
 &nbsp;
-		var tmp = [];
+		var surrogatesData = surrogateSet(astral);
+		var highSurrogatesData = surrogatesData.highSurrogatesData;
+		var surrogateMappings = surrogatesData.surrogateMappings;
+&nbsp;
 		// If we’re not dealing with any astral symbols, there’s no need to move
 		// individual code points that are high surrogates to the end of the regex.
-		if (!hasAstral &amp;&amp; surrogates.length) {
-			bmp = sortUniqueNumbers(bmp.concat(surrogates));
-		}
-		if (bmp.length) {
-			tmp.push(createBMPCharacterClasses(bmp));
-		}
-		forOwn(astralMapByLowRanges, function(lowSurrogate, highSurrogate) {
-			tmp.push(createBMPCharacterClasses(highSurrogate) + lowSurrogate);
-		});
-		// Individual code points that are high surrogates must go at the end
-		// if astral symbols are to be matched as well.
-		if (hasAstral &amp;&amp; surrogates.length) {
-			tmp.push(createBMPCharacterClasses(surrogates));
-		}
-		return tmp
-			.join('|')
-			// Use `\0` instead of `\x00` where possible
-			.replace(regexNull, '\\0$1');
-	};
-&nbsp;
-	var fromCodePoints = function(codePoints) {
-		if (!isArray(codePoints)) {
-			throw TypeError('fromCodePoints(): The `codePoints` argument must be ' +
-				'an array.');
+		if (!hasAstral &amp;&amp; hasLoneSurrogates) {
+			bmp = dataAddData(bmp, loneHighSurrogates);
 		}
 &nbsp;
-		if (!codePoints.length) {
-			return '';
+		if (!dataIsEmpty(bmp)) {
+			// The data set contains BMP code points that are not high surrogates
+			// needed for astral code points in the set.
+			result.push(createBMPCharacterClasses(bmp));
 		}
-&nbsp;
-		codePoints = sortUniqueNumbers(codePoints);
-&nbsp;
-		return createCharacterClasses(codePoints);
-	};
-&nbsp;
-	var fromCodePointRange = function(start, end) {
-		return createCharacterClasses(range(start, end));
-	};
-&nbsp;
-	var fromCodePointRanges = function(codePointRanges) {
-		if (!isArray(codePointRanges)) {
-			throw TypeError('fromCodePointRanges(): The `ranges` argument must be ' +
-				'an array.');
+		if (surrogateMappings.length) {
+			// The data set contains astral code points; append character classes
+			// based on their surrogate pairs.
+			result.push(createSurrogateCharacterClasses(surrogateMappings));
 		}
-&nbsp;
-		if (!codePointRanges.length) {
-			return '';
+		if (hasAstral &amp;&amp; hasLoneSurrogates) {
+			// The data set contains lone high surrogates; append these. Lone high
+			// surrogates must go at the end of the regex if astral symbols are to be
+			// matched as well.
+			result.push(createBMPCharacterClasses(loneHighSurrogates));
 		}
-&nbsp;
-		return createCharacterClasses(ranges(codePointRanges));
-	};
-&nbsp;
-	var fromSymbols = function(symbols) {
-		if (!isArray(symbols)) {
-			throw TypeError('fromSymbols(): The `symbols` argument must be an ' +
-				'array.');
-		}
-&nbsp;
-		if (!symbols.length) {
-			return '';
-		}
-&nbsp;
-		var codePoints = map(symbols, symbolToCodePoint);
-&nbsp;
-		// Sort code points numerically
-		codePoints = codePoints.sort(function(a, b) {
-			return a - b;
-		});
-&nbsp;
-		return createCharacterClasses(codePoints);
-	};
-&nbsp;
-	var fromSymbolRange = function(start, end) {
-		return createCharacterClasses(
-			range(symbolToCodePoint(start), symbolToCodePoint(end))
-		);
-	};
-&nbsp;
-	var fromSymbolRanges = function(symbolRanges) {
-		if (!isArray(symbolRanges)) {
-			throw TypeError('fromSymbolRanges(): The `ranges` argument must be an ' +
-				'array.');
-		}
-&nbsp;
-		if (!symbolRanges.length) {
-			return '';
-		}
-&nbsp;
-		var codePoints = [];
-		forEach(symbolRanges, function(symbolRange) {
-			// If it’s a single symbol (not a range)
-			if (!isArray(symbolRange)) {
-				codePoints.push(symbolToCodePoint(symbolRange));
-				return;
-			}
-			// If it’s a range (not a single code point)
-			var start = symbolToCodePoint(symbolRange[0]);
-			var stop = symbolToCodePoint(symbolRange[1]);
-			codePoints = codePoints.concat(range(start, stop));
-		});
-		return createCharacterClasses(codePoints);
+		return result.join('|');
 	};
 &nbsp;
 	/*--------------------------------------------------------------------------*/
 &nbsp;
-	var Set = function(value) {
-		this.__codePoints__ = [];
-		return this;
+	// `regenerate` can be used as a constructor (and new methods can be added to
+	// its prototype) but also as a regular function, the latter of which is the
+	// documented and most common usage. For that reason, it’s not capitalized.
+	var regenerate = function(value) {
+		if (arguments.length &gt; 1) {
+			value = slice.call(arguments);
+		}
+		if (this instanceof regenerate) {
+			this.__data__ = [];
+			return value ? this.add(value) : this;
+		}
+		return (new regenerate).add(value);
 	};
 &nbsp;
-	var proto = Set.prototype;
+	var proto = regenerate.prototype;
 	extend(proto, {
 		'add': function(value) {
+			var $this = this;
+			if (value == null) {
+				return $this;
+			}
+			if (value instanceof regenerate) {
+				// Allow passing other Regenerate instances.
+				$this.__data__ = dataAddData($this.__data__, value.__data__);
+				return $this;
+			}
 			if (arguments.length &gt; 1) {
 				value = slice.call(arguments);
 			}
-			this.__codePoints__ = add(this.__codePoints__, value);
-			return this;
+			if (isArray(value)) {
+				forEach(value, function(item) {
+					$this.add(item);
+				});
+				return $this;
+			}
+			$this.__data__ = dataAdd(
+				$this.__data__,
+				isNumber(value) ? value : symbolToCodePoint(value)
+			);
+			return $this;
 		},
 		'remove': function(value) {
+			var $this = this;
+			if (value == null) {
+				return $this;
+			}
+			if (value instanceof regenerate) {
+				// Allow passing other Regenerate instances.
+				$this.__data__ = dataRemoveData($this.__data__, value.__data__);
+				return $this;
+			}
 			if (arguments.length &gt; 1) {
 				value = slice.call(arguments);
 			}
-			this.__codePoints__ = remove(this.__codePoints__, value);
-			return this;
+			if (isArray(value)) {
+				forEach(value, function(item) {
+					$this.remove(item);
+				});
+				return $this;
+			}
+			$this.__data__ = dataRemove(
+				$this.__data__,
+				isNumber(value) ? value : symbolToCodePoint(value)
+			);
+			return $this;
 		},
 		'addRange': function(start, end) {
-			this.__codePoints__ = add(this.__codePoints__, range(
+			var $this = this;
+			$this.__data__ = dataAddRange($this.__data__,
 				isNumber(start) ? start : symbolToCodePoint(start),
 				isNumber(end) ? end : symbolToCodePoint(end)
-			));
-			return this;
+			);
+			return $this;
 		},
 		'removeRange': function(start, end) {
+			var $this = this;
 			var startCodePoint = isNumber(start) ? start : symbolToCodePoint(start);
 			var endCodePoint = isNumber(end) ? end : symbolToCodePoint(end);
-			var array = [];
-			forEach(this.__codePoints__, function(codePoint) {
-				if (codePoint &lt; startCodePoint || codePoint &gt; endCodePoint) {
-					array.push(codePoint);
-				}
-			});
-			this.__codePoints__ = array;
-			return this;
+			$this.__data__ = dataRemoveRange(
+				$this.__data__,
+				startCodePoint,
+				endCodePoint
+			);
+			return $this;
 		},
-		'difference': function(array) {
-			this.__codePoints__ = difference(this.__codePoints__, array);
-			return this;
+		'difference': function(argument) {
+			var $this = this;
+			// Allow passing other Regenerate instances. TODO: Optimize this by
+			// writing and using `dataDifferenceData()` here when appropriate.
+			var array = argument instanceof regenerate ?
+				dataToArray(argument.__data__) :
+				argument;
+			$this.__data__ = dataDifference($this.__data__, array);
+			// TODO: allow non-code point values (i.e. strings or arrays) here?
+			return $this;
 		},
-		'intersection': function(array) {
-			this.__codePoints__ = intersection(this.__codePoints__, array);
-			return this;
+		'intersection': function(argument) {
+			var $this = this;
+			// Allow passing other Regenerate instances.
+			// TODO: Optimize this by writing and using `dataIntersectionData()`.
+			var array = argument instanceof regenerate ?
+				dataToArray(argument.__data__) :
+				argument;
+			$this.__data__ = dataIntersection($this.__data__, array);
+			return $this;
 		},
 		'contains': function(codePoint) {
-			return contains(
-				this.__codePoints__,
+			return dataContains(
+				this.__data__,
 				isNumber(codePoint) ? codePoint : symbolToCodePoint(codePoint)
 			);
 		},
+		'clone': function() {
+			var set = new regenerate;
+			set.__data__ = this.__data__.slice(0);
+			return set;
+		},
 		'toString': function() {
-			this.__codePoints__ = sortUniqueNumbers(this.__codePoints__);
-			return createCharacterClasses(this.__codePoints__);
+			var result = createCharacterClassesFromData(this.__data__);
+			// Use `\0` instead of `\x00` where possible.
+			return result.replace(regexNull, '\\0$1');
 		},
 		'toRegExp': function() {
-			this.__codePoints__ = sortUniqueNumbers(this.__codePoints__);
-			return RegExp(createCharacterClasses(this.__codePoints__));
+			return RegExp(this.toString());
 		},
-		'valueOf': function() { // has alias `toArray`
-			this.__codePoints__ = sortUniqueNumbers(this.__codePoints__);
-			return this.__codePoints__;
+		'valueOf': function() { // Note: `valueOf` is aliased as `toArray`.
+			return dataToArray(this.__data__);
 		}
 	});
 &nbsp;
 	proto.toArray = proto.valueOf;
 &nbsp;
-	var set = function(value) {
-		if (value instanceof Set) {
-			// this is already a set; don’t wrap it again
-			return value;
-		} else if (arguments.length &gt; 1) {
-			value = slice.call(arguments);
-		}
-		return (new Set).add(value);
-	};
-&nbsp;
-	extend(set, {
-		'version': '0.5.3',
-		'fromCodePoints': fromCodePoints,
-		'fromCodePointRange': fromCodePointRange,
-		'fromCodePointRanges': fromCodePointRanges,
-		'fromSymbols': fromSymbols,
-		'fromSymbolRange': fromSymbolRange,
-		'fromSymbolRanges': fromSymbolRanges,
-		'range': range,
-		'ranges': ranges,
-		'contains': contains,
-		'difference': difference,
-		'intersection': intersection,
-		'add': add,
-		'remove': remove
-	});
-&nbsp;
-	var regenerate = set;
+	regenerate.version = '0.6.0';
 &nbsp;
 	// Some AMD build optimizers, like r.js, check for specific condition patterns
 	// like the following:
@@ -2055,7 +3558,7 @@
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Aug 19 2013 22:54:54 GMT+0200 (CEST)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Apr 23 2014 16:00:17 GMT+0200 (CEST)</div>
 </div>
 
 <script src="../prettify.js"></script>
