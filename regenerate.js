@@ -1,15 +1,15 @@
 /*! http://mths.be/regenerate v0.5.4 by @mathias | MIT license */
 ;(function(root) {
 
-	// Detect free variables `exports`
+	// Detect free variables `exports`.
 	var freeExports = typeof exports == 'object' && exports;
 
-	// Detect free variable `module`
+	// Detect free variable `module`.
 	var freeModule = typeof module == 'object' && module &&
 		module.exports == freeExports && module;
 
 	// Detect free variable `global`, from Node.js or Browserified code,
-	// and use it as `root`
+	// and use it as `root`.
 	var freeGlobal = typeof global == 'object' && global;
 	if (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal) {
 		root = freeGlobal;
@@ -46,6 +46,14 @@
 		return destination;
 	};
 
+	var forEach = function(array, callback) {
+		var index = -1;
+		var length = array.length;
+		while (++index < length) {
+			callback(array[index], index);
+		}
+	};
+
 	var toString = object.toString;
 	var isArray = function(value) {
 		return toString.call(value) == '[object Array]';
@@ -53,14 +61,6 @@
 	var isNumber = function(value) {
 		return typeof value == 'number' ||
 			toString.call(value) == '[object Number]';
-	};
-
-	var forEach = function(array, callback) {
-		var index = -1;
-		var length = array.length;
-		while (++index < length) {
-			callback(array[index], index);
-		}
 	};
 
 	// This assumes that `number` is a positive integer that `toString()`s nicely
@@ -258,7 +258,7 @@
 					data.splice(index, 4, start, data[index + 3]);
 					return data;
 				}
-				// else, just replace `end` with a new value
+				// Else, just replace `end` with a new value.
 				data[index + 1] = codePoint + 1;
 				return data;
 			}
@@ -562,7 +562,7 @@
 			// http://mathiasbynens.be/notes/javascript-escapes#hexadecimal
 			string = '\\x' + pad(hex(codePoint), 2);
 		}
-		else { // if (codePoint <= 0xFFFF)
+		else { // `codePoint <= 0xFFFF` holds true.
 			// http://mathiasbynens.be/notes/javascript-escapes#unicode
 			string = '\\u' + pad(hex(codePoint), 4);
 		}
@@ -732,21 +732,12 @@
 				nextLowSurrogates = nextMapping && nextMapping[1];
 				addLow = true;
 			}
-
-			if (addLow) {
-				result.push([
-					highSurrogates,
-					tmpLow
-				]);
-				addLow = false;
-			} else {
-				result.push([
-					highSurrogates,
-					lowSurrogates
-				]);
-			}
+			result.push([
+				highSurrogates,
+				addLow ? tmpLow : lowSurrogates
+			]);
+			addLow = false;
 		}
-
 		return optimizeByLowSurrogates(result);
 	};
 

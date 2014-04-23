@@ -1,21 +1,26 @@
 (function(root) {
 	'use strict';
 
-	/** Use a single `load` function */
-	var load = typeof require == 'function' ? require : root.load;
+	var noop = Function.prototype;
 
-	/** The unit testing framework */
+	var load = (typeof require == 'function' && !(root.define && define.amd)) ?
+		require :
+		(!root.document && root.java && root.load) || noop;
+
 	var QUnit = (function() {
-		var noop = Function.prototype;
-		return root.QUnit || (
+		return  root.QUnit || (
 			root.addEventListener || (root.addEventListener = noop),
 			root.setTimeout || (root.setTimeout = noop),
 			root.QUnit = load('../node_modules/qunitjs/qunit/qunit.js') || root.QUnit,
-			(load('../node_modules/qunit-clib/qunit-clib.js') || { 'runInContext': noop }).runInContext(root),
 			addEventListener === noop && delete root.addEventListener,
 			root.QUnit
 		);
 	}());
+
+	var qe = load('../node_modules/qunit-extras/qunit-extras.js');
+	if (qe) {
+		qe.runInContext(root);
+	}
 
 	// Extend `Object.prototype` to see if Regenerate can handle it.
 	// 0xD834 is the high surrogate code point for U+1D306 (among others).
@@ -29,16 +34,11 @@
 
 	/*--------------------------------------------------------------------------*/
 
-	// Avoid using `regenerate.range` here since it slows down the coverage
-	// tests greatly
-	var range = function(start, stop) { // inclusive, e.g. `range(1, 3)` → `[1, 2, 3]`
+	// Inclusive `range`, e.g. `range(1, 3)` → `[1, 2, 3]`.
+	var range = function(start, stop) {
 		for (var result = []; start <= stop; result.push(start++));
 		return result;
 	};
-
-	// var bmp = range(0x0, 0xFFFF);
-	// var astral = range(0x010000, 0x10FFFF);
-	// var unicode = bmp.concat(astral);
 
 	// `throws` is a reserved word in ES3; alias it to avoid errors
 	var raises = QUnit.assert['throws'];

@@ -50,7 +50,7 @@ module.exports = function(grunt) {
 		'shell:test-node',
 	]);
 	grunt.registerTask('test', [
-		'travis',
+		'ci',
 		'shell:test-browser'
 	]);
 
