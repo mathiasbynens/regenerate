@@ -1,4 +1,4 @@
-/*! http://mths.be/regenerate v0.5.4 by @mathias | MIT license */
+/*! http://mths.be/regenerate v0.6.0 by @mathias | MIT license */
 ;(function(root) {
 
 	// Detect free variables `exports`.
@@ -1093,7 +1093,7 @@
 
 	proto.toArray = proto.valueOf;
 
-	regenerate.version = '0.5.4';
+	regenerate.version = '0.6.0';
 
 	// Some AMD build optimizers, like r.js, check for specific condition patterns
 	// like the following:
