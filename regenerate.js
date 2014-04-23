@@ -661,9 +661,11 @@
 					// remaining symbols to `astral`.
 					loneHighSurrogates.push(start, HIGH_SURROGATE_MAX + 1);
 					bmp.push(HIGH_SURROGATE_MAX + 1, 0xFFFF + 1);
-				} else { // `start < HIGH_SURROGATE_MIN` holds true.
+				} else if (start < HIGH_SURROGATE_MIN) {
 					bmp.push(start, HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1, 0xFFFF + 1);
 					loneHighSurrogates.push(HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1);
+				} else { // `start > HIGH_SURROGATE_MAX` holds true.
+					bmp.push(start, 0xFFFF + 1);
 				}
 				astral.push(0xFFFF + 1, end + 1);
 			}
@@ -756,9 +758,6 @@
 		var innerIndex = -1;
 		while (++index < surrogateMappings.length) {
 			var mapping = surrogateMappings[index];
-			if (!mapping) {
-				break;
-			}
 			var lowSurrogates = mapping[1];
 			var lowSurrogateStart = lowSurrogates[0];
 			var lowSurrogateEnd = lowSurrogates[1];
@@ -784,7 +783,6 @@
 					}
 					// Remove the other, now redundant, item.
 					surrogateMappings.splice(innerIndex, 1);
-					--index;
 					--innerIndex;
 				}
 			}
