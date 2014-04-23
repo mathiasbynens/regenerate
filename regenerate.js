@@ -961,20 +961,29 @@
 
 	/*--------------------------------------------------------------------------*/
 
-	var CodePointSet = function(value) {
-		this.__data__ = [];
-		return this;
+	// `regenerate` can be used as a constructor (and new methods can be added to
+	// its prototype) but also as a regular function, the latter of which is the
+	// documented and most common usage. For that reason, it’s not capitalized.
+	var regenerate = function(value) {
+		if (arguments.length > 1) {
+			value = slice.call(arguments);
+		}
+		if (this instanceof regenerate) {
+			this.__data__ = [];
+			return value ? this.add(value) : this;
+		}
+		return (new regenerate).add(value);
 	};
 
-	var proto = CodePointSet.prototype;
+	var proto = regenerate.prototype;
 	extend(proto, {
 		'add': function(value) {
 			var $this = this;
 			if (value == null) {
 				return $this;
 			}
-			if (value instanceof CodePointSet) {
-				// Allow passing other `CodePointSet`s.
+			if (value instanceof regenerate) {
+				// Allow passing other Regenerate instances.
 				$this.__data__ = dataAddData($this.__data__, value.__data__);
 				return $this;
 			}
@@ -998,8 +1007,8 @@
 			if (value == null) {
 				return $this;
 			}
-			if (value instanceof CodePointSet) {
-				// Allow passing other `CodePointSet`s.
+			if (value instanceof regenerate) {
+				// Allow passing other Regenerate instances.
 				$this.__data__ = dataRemoveData($this.__data__, value.__data__);
 				return $this;
 			}
@@ -1039,9 +1048,9 @@
 		},
 		'difference': function(argument) {
 			var $this = this;
-			// Allow passing other `CodePointSet`s. TODO: Optimize this by writing and
-			// using `dataDifferenceData()` here when appropriate.
-			var array = argument instanceof CodePointSet ?
+			// Allow passing other Regenerate instances. TODO: Optimize this by
+			// writing and using `dataDifferenceData()` here when appropriate.
+			var array = argument instanceof regenerate ?
 				dataToArray(argument.__data__) :
 				argument;
 			$this.__data__ = dataDifference($this.__data__, array);
@@ -1050,9 +1059,9 @@
 		},
 		'intersection': function(argument) {
 			var $this = this;
-			// Allow passing other `CodePointSet`s.
+			// Allow passing other Regenerate instances.
 			// TODO: Optimize this by writing and using `dataIntersectionData()`.
-			var array = argument instanceof CodePointSet ?
+			var array = argument instanceof regenerate ?
 				dataToArray(argument.__data__) :
 				argument;
 			$this.__data__ = dataIntersection($this.__data__, array);
@@ -1065,7 +1074,7 @@
 			);
 		},
 		'clone': function() {
-			var set = new CodePointSet;
+			var set = new regenerate;
 			set.__data__ = this.__data__.slice(0);
 			return set;
 		},
@@ -1084,19 +1093,7 @@
 
 	proto.toArray = proto.valueOf;
 
-	var set = function(value) {
-		if (value instanceof CodePointSet) {
-			// This is already a set; don’t wrap it again.
-			return value;
-		} else if (arguments.length > 1) {
-			value = slice.call(arguments);
-		}
-		return (new CodePointSet).add(value);
-	};
-
-	set.version = '0.5.4';
-
-	var regenerate = set;
+	regenerate.version = '0.5.4';
 
 	// Some AMD build optimizers, like r.js, check for specific condition patterns
 	// like the following:
