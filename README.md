@@ -83,10 +83,14 @@ set.toRegExp();
 // → /[`ace-i]|\uD834\uDF06/
 ```
 
-Any arguments passed to `regenerate()` will be added to the set right away. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+Any arguments passed to `regenerate()` will be added to the set right away. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
 
 ```js
 regenerate(0x1D306, 'A', '©', 0x2603).toString();
+// → '[A\\xA9\\u2603]|\\uD834\\uDF06'
+
+var items = [0x1D306, 'A', '©', 0x2603];
+regenerate(items).toString();
 // → '[A\\xA9\\u2603]|\\uD834\\uDF06'
 ```
 
@@ -96,6 +100,10 @@ Any arguments passed to `add()` are added to the set. Both code points (numbers)
 
 ```js
 regenerate().add(0x1D306, 'A', '©', 0x2603).toString();
+// → '[A\\xA9\\u2603]|\\uD834\\uDF06'
+
+var items = [0x1D306, 'A', '©', 0x2603];
+regenerate().add(items).toString();
 // → '[A\\xA9\\u2603]|\\uD834\\uDF06'
 ```
 
