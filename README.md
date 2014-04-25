@@ -169,29 +169,6 @@ regenerate()
 // → '[\\0-@\\{-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
 ```
 
-### `regenerate.prototype.difference(codePoints)`
-
-Removes any code points from the set that are present in both the set and the given `codePoints` array. `codePoints` must be an array of numeric code point values, i.e. numbers. If you want to use symbol values (strings) as well, use `regenerate#remove()` instead.
-
-```js
-regenerate()
-  .addRange(0x00, 0xFF) // add extended ASCII code points
-  .difference([0x61, 0x73]) // remove these code points from the set
-  .toString();
-// → '[\\0-`b-rt-\\xFF]'
-```
-
-Instead of the `codePoints` array, it’s also possible to pass in a Regenerate instance.
-
-```js
-var blacklist = regenerate().add(0x61, 0x73);
-var setB = regenerate()
-  .addRange(0x00, 0xFF) // add extended ASCII code points
-  .difference(blacklist) // remove the code points in the `blacklist` set from this set
-  .toString();
-// → '[\\0-`b-rt-\\xFF]'
-```
-
 ### `regenerate.prototype.intersection(codePoints)`
 
 Removes any code points from the set that are not present in both the set and the given `codePoints` array. `codePoints` must be an array of numeric code point values, i.e. numbers.
