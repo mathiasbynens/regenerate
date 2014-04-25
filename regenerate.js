@@ -451,22 +451,6 @@
 		return dataFromCodePoints(result);
 	};
 
-	var dataDifference = function(data, codePoints) {
-		var index = 0;
-		var length = codePoints.length;
-		var codePoint;
-		// Create a clone to avoid mutating the original `data`.
-		var newData = data.slice(0);
-		while (index < length) {
-			codePoint = codePoints[index];
-			if (dataContains(newData, codePoint)) {
-				newData = dataRemove(newData, codePoint);
-			}
-			++index;
-		}
-		return newData;
-	};
-
 	var dataIsEmpty = function(data) {
 		return !data.length;
 	};
@@ -1050,17 +1034,6 @@
 				startCodePoint,
 				endCodePoint
 			);
-			return $this;
-		},
-		'difference': function(argument) {
-			var $this = this;
-			// Allow passing other Regenerate instances. TODO: Optimize this by
-			// writing and using `dataDifferenceData()` here when appropriate.
-			var array = argument instanceof regenerate ?
-				dataToArray(argument.data) :
-				argument;
-			$this.data = dataDifference($this.data, array);
-			// TODO: allow non-code point values (i.e. strings or arrays) here?
 			return $this;
 		},
 		'intersection': function(argument) {

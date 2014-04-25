@@ -52,7 +52,7 @@
 				.add(0x1D306)
 				.add([15, 16, 20])
 				.remove(20)
-				.difference([9, 15])
+				.remove([9, 15])
 				.intersection([3, 7, 10, 16, 0x1D306, 9001])
 				.remove(7, 16);
 		var setB = regenerate(0x1337, 0x1338, 0x31337);
@@ -68,9 +68,9 @@
 			'remove(set)'
 		);
 		deepEqual(
-			regenerate(3, 10, 0x42, 0x1337, 0x1D306, 0x31337).difference(setB).toArray(),
+			regenerate(3, 10, 0x42, 0x1337, 0x1D306, 0x31337).remove(setB).toArray(),
 			[3, 10, 0x42, 0x1D306],
-			'difference(set)'
+			'remove(set)'
 		);
 		deepEqual(
 			regenerate(3, 10, 0x42, 0x1337, 0x1D306, 0x31337).intersection(setB).toArray(),
@@ -95,7 +95,7 @@
 		deepEqual(
 			set.toArray(),
 			[3, 10, 0x1D306],
-			'Set: add, remove, difference, intersection'
+			'Set: add, remove, remove, intersection'
 		);
 		equal(
 			set.toString(),
@@ -564,21 +564,14 @@
 			'contains'
 		);
 		deepEqual(
-			regenerate(1, 2, 3, 4, 5, 6, 7).difference([1, 3, 7]).toArray(),
+			regenerate(1, 2, 3, 4, 5, 6, 7).remove([1, 3, 7]).toArray(),
 			[2, 4, 5, 6],
-			'difference'
+			'remove'
 		);
 		deepEqual(
-			regenerate(1, 2, 3, 4).difference([0]).toArray(),
+			regenerate(1, 2, 3, 4).remove([0]).toArray(),
 			[1, 2, 3, 4],
-			'difference'
-		);
-		raises(
-			function() {
-				regenerate(1, 2, 3, 4).difference().toArray();
-			},
-			TypeError,
-			'difference without an argument'
+			'remove'
 		);
 		deepEqual(
 			regenerate(0x1D306, 0x41, 0x1D307, 0x42, 0x44, 0x1F4A9).remove('A', 0x1D307, ['B', 'D', '\uD83D\uDCA9']).toArray(),
@@ -681,7 +674,7 @@
 			'`regenerate` can be called as a constructor'
 		);
 		deepEqual(
-			[regenerate.prototype.add.length, regenerate.prototype.remove.length, regenerate.prototype.addRange.length, regenerate.prototype.removeRange.length, regenerate.prototype.difference.length, regenerate.prototype.intersection.length, regenerate.prototype.contains.length, regenerate.prototype.clone.length, regenerate.prototype.toString.length, regenerate.prototype.toRegExp.length, regenerate.prototype.valueOf.length, regenerate.prototype.toArray.length],
+			[regenerate.prototype.add.length, regenerate.prototype.remove.length, regenerate.prototype.addRange.length, regenerate.prototype.removeRange.length, regenerate.prototype.remove.length, regenerate.prototype.intersection.length, regenerate.prototype.contains.length, regenerate.prototype.clone.length, regenerate.prototype.toString.length, regenerate.prototype.toRegExp.length, regenerate.prototype.valueOf.length, regenerate.prototype.toArray.length],
 			[1, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0],
 			'Regenerate methods are available on `regenerate.prototype`'
 		);
