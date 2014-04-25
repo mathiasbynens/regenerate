@@ -163,7 +163,7 @@
 		var end;
 		while (index < data.length) {
 			start = data[index];
-			end = data[index + 1];
+			end = data[index + 1] - 1; // Note: the `- 1` makes `end` inclusive.
 
 			// Exit as soon as no more matching pairs can be found.
 			if (start > rangeEnd) {
@@ -174,7 +174,7 @@
 			// to be removed.
 			// E.g. we have `[0, 11, 40, 51]` and want to remove 0-10 → `[40, 51]`.
 			// E.g. we have `[40, 51]` and want to remove 0-100 → `[]`.
-			if (rangeStart <= start && rangeEnd + 1 >= end) {
+			if (rangeStart <= start && rangeEnd >= end) {
 				// Remove this pair.
 				data.splice(index, 2);
 				continue;
@@ -184,14 +184,20 @@
 			// this pair.
 			// E.g. we have `[0, 11]` and want to remove 4-6 → `[0, 4, 7, 11]`.
 			if (rangeStart >= start && rangeEnd < end) {
+				if (rangeStart == start) {
+					// Replace `[start, end]` with `[startB, endB]`.
+					data[index] = rangeEnd + 1;
+					data[index + 1] = end + 1;
+					return data;
+				}
 				// Replace `[start, end]` with `[startA, endA, startB, endB]`.
-				data.splice(index, 2, start, rangeStart, rangeEnd + 1, end);
+				data.splice(index, 2, start, rangeStart, rangeEnd + 1, end + 1);
 				return data;
 			}
 
 			// Check if only `rangeStart` is within the bounds of this pair.
 			// E.g. we have `[0, 11]` and want to remove 4-20 → `[0, 4]`.
-			if (rangeStart >= start && rangeStart < end) {
+			if (rangeStart >= start && rangeStart <= end) {
 				// Replace `end` with `rangeStart`.
 				data[index + 1] = rangeStart;
 				// Note: we cannot `return` just yet, in case any following pairs still
@@ -202,7 +208,7 @@
 
 			// Check if only `rangeEnd` is within the bounds of this pair.
 			// E.g. we have `[14, 31]` and want to remove 4-20 → `[21, 31]`.
-			else if (rangeEnd >= start && rangeEnd < end) {
+			else if (rangeEnd >= start && rangeEnd <= end) {
 				// Just replace `start`.
 				data[index] = rangeEnd + 1;
 				return data;
