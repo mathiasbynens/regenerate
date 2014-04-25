@@ -673,17 +673,22 @@
 		equal(
 			regenerate.prototype.valueOf,
 			regenerate.prototype.toArray,
-			'valueOf and toArray should be the same'
+			'`valueOf` and `toArray` should be the same'
 		);
 		equal(
 			new regenerate('a', 'b', 0x1D306).toString(),
 			regenerate('a', 'b', 0x1D306).toString(),
-			'regenerate can be called as a constructor'
+			'`regenerate` can be called as a constructor'
 		);
 		deepEqual(
 			[regenerate.prototype.add.length, regenerate.prototype.remove.length, regenerate.prototype.addRange.length, regenerate.prototype.removeRange.length, regenerate.prototype.difference.length, regenerate.prototype.intersection.length, regenerate.prototype.contains.length, regenerate.prototype.clone.length, regenerate.prototype.toString.length, regenerate.prototype.toRegExp.length, regenerate.prototype.valueOf.length, regenerate.prototype.toArray.length],
 			[1, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0],
-			'regenerate methods are available on regenerate.prototype'
+			'Regenerate methods are available on `regenerate.prototype`'
+		);
+		deepEqual(
+			regenerate(42).data,
+			[42, 43],
+			'each Regenerate instance `set` stores its data in `set.data` for plugins to use'
 		);
 	});
 	test('acid tests', function() {

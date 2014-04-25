@@ -975,7 +975,7 @@
 			value = slice.call(arguments);
 		}
 		if (this instanceof regenerate) {
-			this.__data__ = [];
+			this.data = [];
 			return value ? this.add(value) : this;
 		}
 		return (new regenerate).add(value);
@@ -990,7 +990,7 @@
 			}
 			if (value instanceof regenerate) {
 				// Allow passing other Regenerate instances.
-				$this.__data__ = dataAddData($this.__data__, value.__data__);
+				$this.data = dataAddData($this.data, value.data);
 				return $this;
 			}
 			if (arguments.length > 1) {
@@ -1002,8 +1002,8 @@
 				});
 				return $this;
 			}
-			$this.__data__ = dataAdd(
-				$this.__data__,
+			$this.data = dataAdd(
+				$this.data,
 				isNumber(value) ? value : symbolToCodePoint(value)
 			);
 			return $this;
@@ -1015,7 +1015,7 @@
 			}
 			if (value instanceof regenerate) {
 				// Allow passing other Regenerate instances.
-				$this.__data__ = dataRemoveData($this.__data__, value.__data__);
+				$this.data = dataRemoveData($this.data, value.data);
 				return $this;
 			}
 			if (arguments.length > 1) {
@@ -1027,15 +1027,15 @@
 				});
 				return $this;
 			}
-			$this.__data__ = dataRemove(
-				$this.__data__,
+			$this.data = dataRemove(
+				$this.data,
 				isNumber(value) ? value : symbolToCodePoint(value)
 			);
 			return $this;
 		},
 		'addRange': function(start, end) {
 			var $this = this;
-			$this.__data__ = dataAddRange($this.__data__,
+			$this.data = dataAddRange($this.data,
 				isNumber(start) ? start : symbolToCodePoint(start),
 				isNumber(end) ? end : symbolToCodePoint(end)
 			);
@@ -1045,8 +1045,8 @@
 			var $this = this;
 			var startCodePoint = isNumber(start) ? start : symbolToCodePoint(start);
 			var endCodePoint = isNumber(end) ? end : symbolToCodePoint(end);
-			$this.__data__ = dataRemoveRange(
-				$this.__data__,
+			$this.data = dataRemoveRange(
+				$this.data,
 				startCodePoint,
 				endCodePoint
 			);
@@ -1057,9 +1057,9 @@
 			// Allow passing other Regenerate instances. TODO: Optimize this by
 			// writing and using `dataDifferenceData()` here when appropriate.
 			var array = argument instanceof regenerate ?
-				dataToArray(argument.__data__) :
+				dataToArray(argument.data) :
 				argument;
-			$this.__data__ = dataDifference($this.__data__, array);
+			$this.data = dataDifference($this.data, array);
 			// TODO: allow non-code point values (i.e. strings or arrays) here?
 			return $this;
 		},
@@ -1068,24 +1068,24 @@
 			// Allow passing other Regenerate instances.
 			// TODO: Optimize this by writing and using `dataIntersectionData()`.
 			var array = argument instanceof regenerate ?
-				dataToArray(argument.__data__) :
+				dataToArray(argument.data) :
 				argument;
-			$this.__data__ = dataIntersection($this.__data__, array);
+			$this.data = dataIntersection($this.data, array);
 			return $this;
 		},
 		'contains': function(codePoint) {
 			return dataContains(
-				this.__data__,
+				this.data,
 				isNumber(codePoint) ? codePoint : symbolToCodePoint(codePoint)
 			);
 		},
 		'clone': function() {
 			var set = new regenerate;
-			set.__data__ = this.__data__.slice(0);
+			set.data = this.data.slice(0);
 			return set;
 		},
 		'toString': function() {
-			var result = createCharacterClassesFromData(this.__data__);
+			var result = createCharacterClassesFromData(this.data);
 			// Use `\0` instead of `\x00` where possible.
 			return result.replace(regexNull, '\\0$1');
 		},
@@ -1093,7 +1093,7 @@
 			return RegExp(this.toString());
 		},
 		'valueOf': function() { // Note: `valueOf` is aliased as `toArray`.
-			return dataToArray(this.__data__);
+			return dataToArray(this.data);
 		}
 	});
 
