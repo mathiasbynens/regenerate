@@ -173,6 +173,16 @@
 			'removeRange removing all code points'
 		);
 		deepEqual(
+			regenerate().addRange(0x300, 0x374).removeRange(0x370, 0x374).toString(),
+			'[\\u0300-\\u036F]',
+			'removeRange'
+		);
+		deepEqual(
+			regenerate().addRange(0x300, 0x374).removeRange(0x300, 0x304).toString(),
+			'[\\u0305-\\u0374]',
+			'removeRange'
+		);
+		deepEqual(
 			regenerate().addRange(0x0000, 0x0300).removeRange(0x0100, 0x0200).toRegExp(),
 			/[\0-\xFF\u0201-\u0300]/,
 			'toRegExp'
