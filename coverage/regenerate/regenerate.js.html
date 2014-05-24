@@ -199,16 +199,16 @@
     <h1>Code coverage report for <span class="entity">regenerate/regenerate.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">99.26% <small>(538 / 542)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">99.26% <small>(536 / 540)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class="metric">97.6% <small>(285 / 292)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">97.59% <small>(283 / 290)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
         Functions: <span class="metric">97.78% <small>(44 / 45)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">99.26% <small>(538 / 542)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">99.26% <small>(536 / 540)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
@@ -1382,14 +1382,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">3607</span>
-<span class="cline-any cline-yes">3607</span>
+<span class="cline-any cline-yes">3608</span>
+<span class="cline-any cline-yes">3608</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">3607</span>
+<span class="cline-any cline-yes">3608</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
@@ -1816,18 +1816,21 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">3685</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3685</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3684</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3683</span>
 <span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3681</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3680</span>
 <span class="cline-any cline-yes">1</span>
@@ -1836,9 +1839,6 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3678</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3677</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1853,7 +1853,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3670</span>
+<span class="cline-any cline-yes">3671</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1863,9 +1863,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">63</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3607</span>
+<span class="cline-any cline-yes">3608</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">51</span>
+<span class="cline-any cline-yes">52</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2913,10 +2913,10 @@
 	var codePointToString = function(codePoint) {
 		var string;
 		// http://mathiasbynens.be/notes/javascript-escapes#single
-		if (codePoint == 0x08) {
-			string = '\\b';
-		}
-		else if (codePoint == 0x09) {
+		// Note: the `\b` escape sequence for U+0008 BACKSPACE in strings has a
+		// different meaning in regular expressions (word boundary), so it cannot
+		// be used here.
+		if (codePoint == 0x09) {
 			string = '\\t';
 		}
 		// Note: IE &lt; 9 treats `'\v'` as `'v'`, so avoid using it.
@@ -3512,7 +3512,7 @@
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Apr 25 2014 14:29:38 GMT+0200 (CEST)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat May 24 2014 14:08:50 GMT+0200 (CEST)</div>
 </div>
 
 <script src="../prettify.js"></script>
