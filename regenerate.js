@@ -501,10 +501,10 @@
 	var codePointToString = function(codePoint) {
 		var string;
 		// http://mathiasbynens.be/notes/javascript-escapes#single
-		if (codePoint == 0x08) {
-			string = '\\b';
-		}
-		else if (codePoint == 0x09) {
+		// Note: the `\b` escape sequence for U+0008 BACKSPACE in strings has a
+		// different meaning in regular expressions (word boundary), so it cannot
+		// be used here.
+		if (codePoint == 0x09) {
 			string = '\\t';
 		}
 		// Note: IE < 9 treats `'\v'` as `'v'`, so avoid using it.
