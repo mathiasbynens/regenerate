@@ -278,7 +278,7 @@
 		);
 		equal(
 			regenerate(0x08, 0x0A, 0x0C, 0x0D, 0x22, 0x27, 0x5C).toString(),
-			'[\\b\\n\\f\\r"\'\\\\]',
+			'[\\x08\\n\\f\\r"\'\\\\]',
 			'toString escapes special characters using single escapes'
 		);
 		equal(
