@@ -165,7 +165,12 @@
 		equal(
 			regenerate('b').addRange('a', 'c').toString(),
 			'[a-c]',
-			'addRange where the new range wraps the old set'
+			'addRange where the new range wraps an old range in the set'
+		);
+		equal(
+			regenerate('b', 'x').addRange('a', 'c').toString(),
+			'[a-cx]',
+			'addRange where the new range wraps an old range in the set'
 		);
 		deepEqual(
 			regenerate(0x1D306).addRange(0x0, 0xFF).removeRange('\0', '\xFE').toArray(),

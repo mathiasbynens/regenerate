@@ -411,8 +411,9 @@
 
 			else if (rangeStart <= start && rangeEnd + 1 >= end) {
 				// The new range is a superset of the old range.
-				data = [rangeStart, rangeEnd + 1];
-				return data;
+				data[index] = rangeStart;
+				data[index + 1] = rangeEnd + 1;
+				added = true;
 			}
 
 			index += 2;
