@@ -409,6 +409,12 @@
 				// Note: we cannot `return` just yet.
 			}
 
+			else if (rangeStart <= start && rangeEnd + 1 >= end) {
+				// The new range is a superset of the old range.
+				data = [rangeStart, rangeEnd + 1];
+				return data;
+			}
+
 			index += 2;
 		}
 		// The loop has finished without doing anything; add the new pair to the end

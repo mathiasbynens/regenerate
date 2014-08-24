@@ -162,6 +162,11 @@
 			[0x0, 0x61, 0x62, 0x63],
 			'addRange with a Number object and a String object'
 		);
+		equal(
+			regenerate('b').addRange('a', 'c').toString(),
+			'[a-c]',
+			'addRange where the new range wraps the old set'
+		);
 		deepEqual(
 			regenerate(0x1D306).addRange(0x0, 0xFF).removeRange('\0', '\xFE').toArray(),
 			[0xFF, 0x1D306],
