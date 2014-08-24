@@ -1,6 +1,6 @@
 {
 	"name": "regenerate",
-	"version": "0.6.3",
+	"version": "0.6.4",
 	"description": "Generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points.",
 	"homepage": "http://mths.be/regenerate",
 	"main": "regenerate.js",
