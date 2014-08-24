@@ -24,7 +24,7 @@
 			'U+000000 to U+10FFFF.'
 	};
 
-	// http://mathiasbynens.be/notes/javascript-encoding#surrogate-pairs
+	// https://mathiasbynens.be/notes/javascript-encoding#surrogate-pairs
 	var HIGH_SURROGATE_MIN = 0xD800;
 	var HIGH_SURROGATE_MAX = 0xDBFF;
 	var LOW_SURROGATE_MIN = 0xDC00;
@@ -481,7 +481,7 @@
 
 	/*--------------------------------------------------------------------------*/
 
-	// http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+	// https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
 	var floor = Math.floor;
 	var highSurrogate = function(codePoint) {
 		return parseInt(
@@ -500,7 +500,7 @@
 	var stringFromCharCode = String.fromCharCode;
 	var codePointToString = function(codePoint) {
 		var string;
-		// http://mathiasbynens.be/notes/javascript-escapes#single
+		// https://mathiasbynens.be/notes/javascript-escapes#single
 		// Note: the `\b` escape sequence for U+0008 BACKSPACE in strings has a
 		// different meaning in regular expressions (word boundary), so it cannot
 		// be used here.
@@ -549,11 +549,11 @@
 			string = stringFromCharCode(codePoint);
 		}
 		else if (codePoint <= 0xFF) {
-			// http://mathiasbynens.be/notes/javascript-escapes#hexadecimal
+			// https://mathiasbynens.be/notes/javascript-escapes#hexadecimal
 			string = '\\x' + pad(hex(codePoint), 2);
 		}
 		else { // `codePoint <= 0xFFFF` holds true.
-			// http://mathiasbynens.be/notes/javascript-escapes#unicode
+			// https://mathiasbynens.be/notes/javascript-escapes#unicode
 			string = '\\u' + pad(hex(codePoint), 4);
 		}
 
@@ -578,7 +578,7 @@
 			// `first` is a high surrogate, and there is a next character. Assume
 			// it’s a low surrogate (else it’s invalid usage of Regenerate anyway).
 			second = symbol.charCodeAt(1);
-			// http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+			// https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
 			return (first - HIGH_SURROGATE_MIN) * 0x400 +
 				second - LOW_SURROGATE_MIN + 0x10000;
 		}

@@ -1,6 +1,6 @@
 # Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](http://img.shields.io/coveralls/mathiasbynens/regenerate/master.svg)](https://coveralls.io/r/mathiasbynens/regenerate) [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.svg)](https://gemnasium.com/mathiasbynens/regenerate)
 
-_Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](http://mathiasbynens.be/notes/javascript-unicode).)
+_Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](https://mathiasbynens.be/notes/javascript-unicode).)
 
 Feel free to fork if you see possible improvements!
 
@@ -275,7 +275,7 @@ regenerate(codePoints).toString();
 // → '[ \\.Ladeilmopr-u]'
 ```
 
-In ES6 you can do something similar with [`Array.from`](http://mths.be/array-from) which uses [the string’s iterator](http://mathiasbynens.be/notes/javascript-unicode#iterating-over-symbols) to split the given string into an array of strings that each contain a single symbol. [`regenerate()`](#regenerateprototypeaddvalue1-value2-value3-) accepts both strings and code points, remember?
+In ES6 you can do something similar with [`Array.from`](http://mths.be/array-from) which uses [the string’s iterator](https://mathiasbynens.be/notes/javascript-unicode#iterating-over-symbols) to split the given string into an array of strings that each contain a single symbol. [`regenerate()`](#regenerateprototypeaddvalue1-value2-value3-) accepts both strings and code points, remember?
 
 ```js
 var regenerate = require('regenerate');
@@ -305,7 +305,7 @@ To generate the code coverage report, use `grunt cover`.
 
 | [![twitter/mathias](https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125?s=70)](https://twitter.com/mathias "Follow @mathias on Twitter") |
 |---|
-| [Mathias Bynens](http://mathiasbynens.be/) |
+| [Mathias Bynens](https://mathiasbynens.be/) |
 
 ## License
 
