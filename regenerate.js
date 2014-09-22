@@ -1071,8 +1071,8 @@
 			// Use `\0` instead of `\x00` where possible.
 			return result.replace(regexNull, '\\0$1');
 		},
-		'toRegExp': function() {
-			return RegExp(this.toString());
+		'toRegExp': function(flags) {
+			return RegExp(this.toString(), flags || '');
 		},
 		'valueOf': function() { // Note: `valueOf` is aliased as `toArray`.
 			return dataToArray(this.data);
