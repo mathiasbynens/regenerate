@@ -197,6 +197,11 @@
 			/[\0-\xFF\u0201-\u0300]/,
 			'toRegExp'
 		);
+		deepEqual(
+			regenerate().addRange(0x0000, 0x0300).removeRange(0x0100, 0x0200).toRegExp('g'),
+			/[\0-\xFF\u0201-\u0300]/g,
+			'toRegExp flags'
+		);
 		raises(
 			function() {
 				regenerate(0x10, 0x1F).removeRange(0x1F, 0x1A).toArray();
@@ -685,7 +690,7 @@
 		);
 		deepEqual(
 			[regenerate.prototype.add.length, regenerate.prototype.remove.length, regenerate.prototype.addRange.length, regenerate.prototype.removeRange.length, regenerate.prototype.remove.length, regenerate.prototype.intersection.length, regenerate.prototype.contains.length, regenerate.prototype.clone.length, regenerate.prototype.toString.length, regenerate.prototype.toRegExp.length, regenerate.prototype.valueOf.length, regenerate.prototype.toArray.length],
-			[1, 1, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0],
+			[1, 1, 2, 2, 1, 1, 1, 0, 0, 1, 0, 0],
 			'Regenerate methods are available on `regenerate.prototype`'
 		);
 		deepEqual(

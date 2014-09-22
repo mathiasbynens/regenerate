@@ -227,9 +227,11 @@ regenerate(0x1D306, 0x1F4A9).toString();
 // → '\\uD834\\uDF06|\\uD83D\\uDCA9'
 ```
 
-### `regenerate.prototype.toRegExp()`
+### `regenerate.prototype.toRegExp(flags = '')`
 
 Returns a regular expression that matches all the symbols mapped to the code points within the set.
+Optionally, you can pass [flags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Parameters) 
+to be added to the regular expression.
 
 ```js
 var regex = regenerate(0x1D306, 0x1F4A9).toRegExp();
@@ -238,6 +240,9 @@ regex.test('𝌆');
 // → true
 regex.test('A');
 // → false
+
+// with flags
+var regex = regenerate(0x1D306, 0x1F4A9).toRegExp('g');
 ```
 
 **Note:** This probably shouldn’t be used. Regenerate is intended as a tool that is used as part of a build process, not at runtime.
