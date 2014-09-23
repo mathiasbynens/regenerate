@@ -260,7 +260,7 @@ A string representing the semantic version number.
 
 ## Combine Regenerate with other libraries
 
-Regenerate gets even better when combined with other libraries such as [Punycode.js](http://mths.be/punycode). Here’s an example where [Punycode.js](http://mths.be/punycode) is used to convert a string into an array of code points, that is then passed on to Regenerate:
+Regenerate gets even better when combined with other libraries such as [Punycode.js](https://mths.be/punycode). Here’s an example where [Punycode.js](https://mths.be/punycode) is used to convert a string into an array of code points, that is then passed on to Regenerate:
 
 ```js
 var regenerate = require('regenerate');
@@ -275,7 +275,7 @@ regenerate(codePoints).toString();
 // → '[ \\.Ladeilmopr-u]'
 ```
 
-In ES6 you can do something similar with [`Array.from`](http://mths.be/array-from) which uses [the string’s iterator](https://mathiasbynens.be/notes/javascript-unicode#iterating-over-symbols) to split the given string into an array of strings that each contain a single symbol. [`regenerate()`](#regenerateprototypeaddvalue1-value2-value3-) accepts both strings and code points, remember?
+In ES6 you can do something similar with [`Array.from`](https://mths.be/array-from) which uses [the string’s iterator](https://mathiasbynens.be/notes/javascript-unicode#iterating-over-symbols) to split the given string into an array of strings that each contain a single symbol. [`regenerate()`](#regenerateprototypeaddvalue1-value2-value3-) accepts both strings and code points, remember?
 
 ```js
 var regenerate = require('regenerate');
@@ -309,4 +309,4 @@ To generate the code coverage report, use `grunt cover`.
 
 ## License
 
-Regenerate is available under the [MIT](http://mths.be/mit) license.
+Regenerate is available under the [MIT](https://mths.be/mit) license.
