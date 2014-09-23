@@ -1,6 +1,6 @@
 {
 	"name": "regenerate",
-	"version": "0.6.4",
+	"version": "1.0.0",
 	"main": "regenerate.js",
 	"ignore": [
 		"coverage",
