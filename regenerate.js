@@ -782,7 +782,6 @@
 		// Exit early if `data` is an empty set.
 		if (!data.length) {
 			return {
-				'highSurrogatesData': [],
 				'surrogateMappings': []
 			};
 		}
@@ -798,7 +797,6 @@
 		var tmpLow = [];
 		var endHigh;
 		var endLow;
-		var highSurrogatesData = [];
 		var surrogateMappings = [];
 		var length = data.length;
 		var dataHigh = [];
@@ -821,21 +819,12 @@
 				startHigh == endHigh ||
 				startsWithLowestLowSurrogate && endsWithHighestLowSurrogate
 			) {
-				highSurrogatesData = dataAddRange(
-					highSurrogatesData,
-					startHigh,
-					endHigh
-				);
 				surrogateMappings.push([
 					[startHigh, endHigh + 1],
 					[startLow, endLow + 1]
 				]);
 				complete = true;
 			} else {
-				highSurrogatesData = dataAdd(
-					highSurrogatesData,
-					startHigh
-				);
 				surrogateMappings.push([
 					[startHigh, startHigh + 1],
 					[startLow, LOW_SURROGATE_MAX + 1]
@@ -847,22 +836,12 @@
 			if (!complete && startHigh + 1 < endHigh) {
 				if (endsWithHighestLowSurrogate) {
 					// Combine step 2 and step 3.
-					highSurrogatesData = dataAddRange(
-						highSurrogatesData,
-						startHigh + 1,
-						endHigh
-					);
 					surrogateMappings.push([
 						[startHigh + 1, endHigh + 1],
 						[LOW_SURROGATE_MIN, endLow + 1]
 					]);
 					complete = true;
 				} else {
-					highSurrogatesData = dataAddRange(
-						highSurrogatesData,
-						startHigh + 1,
-						endHigh - 1
-					);
 					surrogateMappings.push([
 						[startHigh + 1, endHigh],
 						[LOW_SURROGATE_MIN, LOW_SURROGATE_MAX + 1]
@@ -872,10 +851,6 @@
 
 			// Step 3. `(endHigh, LOW_SURROGATE_MIN)` to `(endHigh, endLow)`.
 			if (!complete) {
-				highSurrogatesData = dataAdd(
-					highSurrogatesData,
-					endHigh
-				);
 				surrogateMappings.push([
 					[endHigh, endHigh + 1],
 					[LOW_SURROGATE_MIN, endLow + 1]
@@ -889,7 +864,6 @@
 		}
 
 		return {
-			'highSurrogatesData': highSurrogatesData,
 			'surrogateMappings': optimizeSurrogateMappings(surrogateMappings)
 			// The format of `surrogateMappings` is as follows:
 			//
@@ -928,7 +902,6 @@
 		var hasLoneSurrogates = !dataIsEmpty(loneHighSurrogates);
 
 		var surrogatesData = surrogateSet(astral);
-		var highSurrogatesData = surrogatesData.highSurrogatesData;
 		var surrogateMappings = surrogatesData.surrogateMappings;
 
 		// If we’re not dealing with any astral symbols, there’s no need to move
