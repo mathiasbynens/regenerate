@@ -83,7 +83,7 @@ set.toRegExp();
 // → /[`ace-i]|\uD834\uDF06/
 ```
 
-Any arguments passed to `regenerate()` will be added to the set right away. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
+Any arguments passed to `regenerate()` will be added to the set right away. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
 
 ```js
 regenerate(0x1D306, 'A', '©', 0x2603).toString();
@@ -96,7 +96,7 @@ regenerate(items).toString();
 
 ### `regenerate.prototype.add(value1, value2, value3, ...)`
 
-Any arguments passed to `add()` are added to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
+Any arguments passed to `add()` are added to the set. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
 
 ```js
 regenerate().add(0x1D306, 'A', '©', 0x2603).toString();
@@ -124,7 +124,7 @@ regenerate(0x1D306, 'A', '©', 0x2603).toString();
 
 ### `regenerate.prototype.remove(value1, value2, value3, ...)`
 
-Any arguments passed to `remove()` are removed to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
+Any arguments passed to `remove()` are removed to the set. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
 
 ```js
 regenerate(0x1D306, 'A', '©', 0x2603).remove('☃').toString();
@@ -141,7 +141,7 @@ regenerate(0x1D306, 'A', '©', 0x2603).remove(set).toString();
 
 ### `regenerate.prototype.addRange(start, end)`
 
-Adds a range of code points from `start` to `end` (inclusive) to the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+Adds a range of code points from `start` to `end` (inclusive) to the set. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted.
 
 ```js
 regenerate(0x1D306).addRange(0x00, 0xFF).toString(16);
@@ -153,7 +153,7 @@ regenerate().addRange('A', 'z').toString();
 
 ### `regenerate.prototype.removeRange(start, end)`
 
-Removes a range of code points from `start` to `end` (inclusive) from the set. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+Removes a range of code points from `start` to `end` (inclusive) from the set. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted.
 
 ```js
 regenerate()
@@ -195,7 +195,7 @@ regenerate()
 
 ### `regenerate.prototype.contains(value)`
 
-Returns `true` if the given value is part of the set, and `false` otherwise. Both code points (numbers) as symbols (strings consisting of a single Unicode symbol) are accepted.
+Returns `true` if the given value is part of the set, and `false` otherwise. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted.
 
 ```js
 var set = regenerate().addRange(0x00, 0xFF);
