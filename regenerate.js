@@ -781,9 +781,7 @@
 	var surrogateSet = function(data) {
 		// Exit early if `data` is an empty set.
 		if (!data.length) {
-			return {
-				'surrogateMappings': []
-			};
+			return [];
 		}
 
 		// Iterate over the data per `(start, end)` pair.
@@ -863,19 +861,17 @@
 			index += 2;
 		}
 
-		return {
-			'surrogateMappings': optimizeSurrogateMappings(surrogateMappings)
-			// The format of `surrogateMappings` is as follows:
-			//
-			//     [ surrogateMapping1, surrogateMapping2 ]
-			//
-			// i.e.:
-			//
-			//     [
-			//       [ highSurrogates1, lowSurrogates1 ],
-			//       [ highSurrogates2, lowSurrogates2 ]
-			//     ]
-		};
+		// The format of `surrogateMappings` is as follows:
+		//
+		//     [ surrogateMapping1, surrogateMapping2 ]
+		//
+		// i.e.:
+		//
+		//     [
+		//       [ highSurrogates1, lowSurrogates1 ],
+		//       [ highSurrogates2, lowSurrogates2 ]
+		//     ]
+		return optimizeSurrogateMappings(surrogateMappings);
 	};
 
 	var createSurrogateCharacterClasses = function(surrogateMappings) {
@@ -901,8 +897,7 @@
 		var hasAstral = !dataIsEmpty(parts.astral);
 		var hasLoneSurrogates = !dataIsEmpty(loneHighSurrogates);
 
-		var surrogatesData = surrogateSet(astral);
-		var surrogateMappings = surrogatesData.surrogateMappings;
+		var surrogateMappings = surrogateSet(astral);
 
 		// If we’re not dealing with any astral symbols, there’s no need to move
 		// individual code points that are high surrogates to the end of the regex.
