@@ -429,9 +429,14 @@
 	var dataContains = function(data, codePoint) {
 		// Iterate over the data per `(start, end)` pair.
 		var index = 0;
-		var start;
-		var end;
 		var length = data.length;
+		var start = data[index];
+		var end = data[length - 1];
+		if (length >= 2) {
+			if (codePoint < start || codePoint > end) {
+				return false;
+			}
+		}
 		while (index < length) {
 			start = data[index];
 			end = data[index + 1];
