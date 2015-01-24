@@ -160,13 +160,13 @@ regenerate()
   .addRange(0x000000, 0x10FFFF) // add all Unicode code points
   .removeRange('A', 'z') // remove all symbols from `A` to `z`
   .toString();
-// → '[\\0-@\\{-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+// → '[\\0-@\\{-\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]'
 
 regenerate()
   .addRange(0x000000, 0x10FFFF) // add all Unicode code points
   .removeRange(0x0041, 0x007A) // remove all code points from U+0041 to U+007A
   .toString();
-// → '[\\0-@\\{-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]'
+// → '[\\0-@\\{-\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]'
 ```
 
 ### `regenerate.prototype.intersection(codePoints)`
@@ -295,7 +295,7 @@ regenerate(codePoints).toString();
 
 ## Support
 
-Regenerate supports at least Chrome 27+, Firefox 3+, Safari 4+, Opera 10+, IE 6+, Node.js v0.10.0+, Narwhal 0.3.2+, RingoJS 0.8+, PhantomJS 1.9.0+, and Rhino 1.7RC4+.
+Regenerate supports at least Chrome 27+, Firefox 3+, Safari 4+, Opera 10+, IE 6+, Node.js v0.10.0+, io.js v1.0.0+, Narwhal 0.3.2+, RingoJS 0.8+, PhantomJS 1.9.0+, and Rhino 1.7RC4+.
 
 ## Unit tests & code coverage
 

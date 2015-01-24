@@ -358,12 +358,12 @@
 		);
 		equal(
 			regenerate(0xD800, 0xD801, 0xD802, 0xD803, 0xDBFF).toString(),
-			'[\\uD800-\\uD803\\uDBFF]',
+			'[\\uD800-\\uD803\\uDBFF](?![\\uDC00-\\uDFFF])',
 			'Unmatched high surrogates'
 		);
 		equal(
 			regenerate(0xDC00, 0xDC01, 0xDC02, 0xDC03, 0xDC04, 0xDC05, 0xDFFB, 0xDFFD, 0xDFFE, 0xDFFF).toString(),
-			'[\\uDC00-\\uDC05\\uDFFB\\uDFFD-\\uDFFF]',
+			'(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDC05\\uDFFB\\uDFFD-\\uDFFF]',
 			'Unmatched low surrogates'
 		);
 		equal(
@@ -388,7 +388,7 @@
 		);
 		equal(
 			regenerate().addRange(0x0, 0xFFFF).toString(),
-			'[\\0-\\uFFFF]',
+			'[\\0-\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]',
 			'All BMP code points'
 		);
 		equal(
@@ -398,7 +398,7 @@
 		);
 		equal(
 			regenerate().addRange(0x0, 0x10FFFF).toString(),
-			'[\\0-\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF]',
+			'[\\0-\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]',
 			'All Unicode code points'
 		);
 		raises(
@@ -501,12 +501,12 @@
 		);
 		equal(
 			regenerate('\uD800', '\uD801', '\uD802', '\uD803', '\uDBFF').toString(),
-			'[\\uD800-\\uD803\\uDBFF]',
+			'[\\uD800-\\uD803\\uDBFF](?![\\uDC00-\\uDFFF])',
 			'Unmatched high surrogates, using symbols as input'
 		);
 		equal(
 			regenerate('\uDC00', '\uDC01', '\uDC02', '\uDC03', '\uDC04', '\uDC05', '\uDFFB', '\uDFFD', '\uDFFE', '\uDFFF').toString(),
-			'[\\uDC00-\\uDC05\\uDFFB\\uDFFD-\\uDFFF]',
+			'(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDC05\\uDFFB\\uDFFD-\\uDFFF]',
 			'Unmatched low surrogates, using symbols as input'
 		);
 		equal(
@@ -620,12 +620,12 @@
 		);
 		equal(
 			regenerate().addRange(0xD800, 0xDBFF).addRange(0xDC00, 0xDFFF).add(0xFFFF).toString(),
-			'[\\uD800-\\uDFFF\\uFFFF]',
+			'\\uFFFF|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]',
 			'BMP-only symbols incl. lone surrogates but with higher code points too'
 		);
 		equal(
 			regenerate().addRange(0xD800, 0xDBFF).addRange(0xDC00, 0xDFFF).add(0xFFFF, 0x1D306).toString(),
-			'[\\uDC00-\\uDFFF\\uFFFF]|\\uD834\\uDF06|[\\uD800-\\uDBFF]',
+			'\\uFFFF|\\uD834\\uDF06|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]',
 			'BMP-only symbols incl. lone surrogates but with higher code points and an astral code point too'
 		);
 		equal(
@@ -655,17 +655,17 @@
 		);
 		equal(
 			regenerate().addRange(0x20, 0xD900).toString(),
-			'[ -\\uD900]',
+			'[ -\\uD7FF]|[\\uD800-\\uD900](?![\\uDC00-\\uDFFF])',
 			'adding a range that starts in ASCII and ends in the high surrogate range'
 		);
 		equal(
 			regenerate().addRange(0x20, 0x1D306).toString(),
-			'[ -\\uD7FF\\uDC00-\\uFFFF]|[\\uD800-\\uD833][\\uDC00-\\uDFFF]|\\uD834[\\uDC00-\\uDF06]|[\\uD800-\\uDBFF]',
+			'[ -\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uD833][\\uDC00-\\uDFFF]|\\uD834[\\uDC00-\\uDF06]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]',
 			'adding a range that starts in ASCII and ends in the astral range'
 		);
 		equal(
 			regenerate().addRange(0xD900, 0x1D306).toString(),
-			'[\\uDC00-\\uFFFF]|[\\uD800-\\uD833][\\uDC00-\\uDFFF]|\\uD834[\\uDC00-\\uDF06]|[\\uD900-\\uDBFF]',
+			'[\\uE000-\\uFFFF]|[\\uD800-\\uD833][\\uDC00-\\uDFFF]|\\uD834[\\uDC00-\\uDF06]|[\\uD900-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]',
 			'adding a range that starts in the high surrogate range and ends in the astral range'
 		);
 		equal(
@@ -677,6 +677,13 @@
 			regenerate().addRange(0xFFEF, 0xFFF8).addRange(0xFFFE, 0x102FF).toString(),
 			'[\\uFFEF-\\uFFF8\\uFFFE\\uFFFF]|\\uD800[\\uDC00-\\uDEFF]',
 			'mixed BMP + astral code points'
+		);
+		equal(
+			'\uD834\uDF06'.match(
+				RegExp('(' + regenerate().addRange(0xD800, 0xDBFF).addRange(0xDC00, 0xDFFF).toString() + ')')
+			),
+			null,
+			'https://github.com/mathiasbynens/regenerate/issues/28'
 		);
 		equal(
 			regenerate.prototype.valueOf,

@@ -626,6 +626,7 @@
 	var splitAtBMP = function(data) {
 		// Iterate over the data per `(start, end)` pair.
 		var loneHighSurrogates = [];
+		var loneLowSurrogates = [];
 		var bmp = [];
 		var astral = [];
 		var index = 0;
@@ -635,51 +636,115 @@
 		while (index < length) {
 			start = data[index];
 			end = data[index + 1] - 1; // Note: the `- 1` makes `end` inclusive.
-			if (start <= 0xFFFF && end <= 0xFFFF) {
-				// Both `start` and `end` are within the BMP range.
-				if (start >= HIGH_SURROGATE_MIN && start <= HIGH_SURROGATE_MAX) {
-					// `start` lies in the high surrogates range.
-					if (end <= HIGH_SURROGATE_MAX) {
-						loneHighSurrogates.push(start, end + 1);
-					} else {
-						loneHighSurrogates.push(start, HIGH_SURROGATE_MAX + 1);
-						bmp.push(HIGH_SURROGATE_MAX + 1, end + 1);
-					}
-				} else if (end >= HIGH_SURROGATE_MIN && end <= HIGH_SURROGATE_MAX) {
-					bmp.push(start, HIGH_SURROGATE_MIN);
-					loneHighSurrogates.push(HIGH_SURROGATE_MIN, end + 1);
-				} else if (start < HIGH_SURROGATE_MIN && end > HIGH_SURROGATE_MAX) {
-					bmp.push(start, HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1, end + 1);
-					loneHighSurrogates.push(HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1);
-				} else {
+
+			if (start < HIGH_SURROGATE_MIN) {
+
+				// The range starts and ends before the high surrogate range.
+				// E.g. (0, 0x10).
+				if (end < HIGH_SURROGATE_MIN) {
 					bmp.push(start, end + 1);
 				}
-			}
-			else if (start <= 0xFFFF && end > 0xFFFF) {
-				// `start` is in the BMP range, but `end` lies within the astral range.
-				if (start >= HIGH_SURROGATE_MIN && start <= HIGH_SURROGATE_MAX) {
-					// `start` lies in the high surrogates range. Since `end` is astral,
-					// we can just add all high surrogates starting from `start` to
-					// `loneHighSurrogates`, any other BMP code points to `bmp`, and the
-					// remaining symbols to `astral`.
-					loneHighSurrogates.push(start, HIGH_SURROGATE_MAX + 1);
-					bmp.push(HIGH_SURROGATE_MAX + 1, 0xFFFF + 1);
-				} else if (start < HIGH_SURROGATE_MIN) {
-					bmp.push(start, HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1, 0xFFFF + 1);
-					loneHighSurrogates.push(HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1);
-				} else { // `start > HIGH_SURROGATE_MAX` holds true.
-					bmp.push(start, 0xFFFF + 1);
+
+				// The range starts before the high surrogate range and ends within it.
+				// E.g. (0, 0xD855).
+				if (end >= HIGH_SURROGATE_MIN && end <= HIGH_SURROGATE_MAX) {
+					bmp.push(start, HIGH_SURROGATE_MIN);
+					loneHighSurrogates.push(HIGH_SURROGATE_MIN, end + 1);
 				}
-				astral.push(0xFFFF + 1, end + 1);
-			}
-			else {
-				// Both `start` and `end` are in the astral range.
+
+				// The range starts before the high surrogate range and ends in the low
+				// surrogate range. E.g. (0, 0xDCFF).
+				if (end >= LOW_SURROGATE_MIN && end <= LOW_SURROGATE_MAX) {
+					bmp.push(start, HIGH_SURROGATE_MIN);
+					loneHighSurrogates.push(HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1);
+					loneLowSurrogates.push(LOW_SURROGATE_MIN, end + 1);
+				}
+
+				// The range starts before the high surrogate range and ends after the
+				// low surrogate range. E.g. (0, 0x10FFFF).
+				if (end > LOW_SURROGATE_MAX) {
+					bmp.push(start, HIGH_SURROGATE_MIN);
+					loneHighSurrogates.push(HIGH_SURROGATE_MIN, HIGH_SURROGATE_MAX + 1);
+					loneLowSurrogates.push(LOW_SURROGATE_MIN, LOW_SURROGATE_MAX + 1);
+					if (end <= 0xFFFF) {
+						bmp.push(LOW_SURROGATE_MAX + 1, end + 1);
+					} else {
+						bmp.push(LOW_SURROGATE_MAX + 1, 0xFFFF + 1);
+						astral.push(0xFFFF + 1, end + 1);
+					}
+				}
+
+			} else if (start >= HIGH_SURROGATE_MIN && start <= HIGH_SURROGATE_MAX) {
+
+				// The range starts and ends in the high surrogate range.
+				// E.g. (0xD855, 0xD866).
+				if (end >= HIGH_SURROGATE_MIN && end <= HIGH_SURROGATE_MAX) {
+					loneHighSurrogates.push(start, end + 1);
+				}
+
+				// The range starts in the high surrogate range and ends in the low
+				// surrogate range. E.g. (0xD855, 0xDCFF).
+				if (end >= LOW_SURROGATE_MIN && end <= LOW_SURROGATE_MAX) {
+					loneHighSurrogates.push(start, HIGH_SURROGATE_MAX + 1);
+					loneLowSurrogates.push(LOW_SURROGATE_MIN, end + 1);
+				}
+
+				// The range starts in the high surrogate range and ends after the low
+				// surrogate range. E.g. (0xD855, 0x10FFFF).
+				if (end > LOW_SURROGATE_MAX) {
+					loneHighSurrogates.push(start, HIGH_SURROGATE_MAX + 1);
+					loneLowSurrogates.push(LOW_SURROGATE_MIN, LOW_SURROGATE_MAX + 1);
+					if (end <= 0xFFFF) {
+						bmp.push(LOW_SURROGATE_MAX + 1, end + 1);
+					} else {
+						bmp.push(LOW_SURROGATE_MAX + 1, 0xFFFF + 1);
+						astral.push(0xFFFF + 1, end + 1);
+					}
+				}
+
+			} else if (start >= LOW_SURROGATE_MIN && start <= LOW_SURROGATE_MAX) {
+
+				// The range starts and ends in the low surrogate range.
+				// E.g. (0xDCFF, 0xDDFF).
+				if (end >= LOW_SURROGATE_MIN && end <= LOW_SURROGATE_MAX) {
+					loneLowSurrogates.push(start, end + 1);
+				}
+
+				// The range starts in the low surrogate range and ends after the low
+				// surrogate range. E.g. (0xDCFF, 0x10FFFF).
+				if (end > LOW_SURROGATE_MAX) {
+					loneLowSurrogates.push(start, LOW_SURROGATE_MAX + 1);
+					if (end <= 0xFFFF) {
+						bmp.push(LOW_SURROGATE_MAX + 1, end + 1);
+					} else {
+						bmp.push(LOW_SURROGATE_MAX + 1, 0xFFFF + 1);
+						astral.push(0xFFFF + 1, end + 1);
+					}
+				}
+
+			} else if (start > LOW_SURROGATE_MAX && start <= 0xFFFF) {
+
+				// The range starts and ends after the low surrogate range.
+				// E.g. (0xFFAA, 0x10FFFF).
+				if (end <= 0xFFFF) {
+					bmp.push(start, end + 1);
+				} else {
+					bmp.push(start, 0xFFFF + 1);
+					astral.push(0xFFFF + 1, end + 1);
+				}
+
+			} else {
+
+				// The range starts and ends in the astral range.
 				astral.push(start, end + 1);
+
 			}
+
 			index += 2;
 		}
 		return {
 			'loneHighSurrogates': loneHighSurrogates,
+			'loneLowSurrogates': loneLowSurrogates,
 			'bmp': bmp,
 			'astral': astral
 		};
@@ -898,18 +963,14 @@
 
 		var parts = splitAtBMP(data);
 		var loneHighSurrogates = parts.loneHighSurrogates;
+		var loneLowSurrogates = parts.loneLowSurrogates;
 		var bmp = parts.bmp;
 		var astral = parts.astral;
 		var hasAstral = !dataIsEmpty(parts.astral);
-		var hasLoneSurrogates = !dataIsEmpty(loneHighSurrogates);
+		var hasLoneHighSurrogates = !dataIsEmpty(loneHighSurrogates);
+		var hasLoneLowSurrogates = !dataIsEmpty(loneLowSurrogates);
 
 		var surrogateMappings = surrogateSet(astral);
-
-		// If we’re not dealing with any astral symbols, there’s no need to move
-		// individual code points that are high surrogates to the end of the regex.
-		if (!hasAstral && hasLoneSurrogates) {
-			bmp = dataAddData(bmp, loneHighSurrogates);
-		}
 
 		if (!dataIsEmpty(bmp)) {
 			// The data set contains BMP code points that are not high surrogates
@@ -921,11 +982,20 @@
 			// based on their surrogate pairs.
 			result.push(createSurrogateCharacterClasses(surrogateMappings));
 		}
-		if (hasAstral && hasLoneSurrogates) {
-			// The data set contains lone high surrogates; append these. Lone high
-			// surrogates must go at the end of the regex if astral symbols are to be
-			// matched as well.
-			result.push(createBMPCharacterClasses(loneHighSurrogates));
+		// https://gist.github.com/mathiasbynens/bbe7f870208abcfec860
+		if (hasLoneHighSurrogates) {
+			result.push(
+				createBMPCharacterClasses(loneHighSurrogates) +
+				// Make sure the high surrogates aren’t part of a surrogate pair.
+				'(?![\\uDC00-\\uDFFF])'
+			);
+		}
+		if (hasLoneLowSurrogates) {
+			result.push(
+				// Make sure the low surrogates aren’t part of a surrogate pair.
+				'(?:[^\\uD800-\\uDBFF]|^)' +
+				createBMPCharacterClasses(loneLowSurrogates)
+			);
 		}
 		return result.join('|');
 	};
@@ -1066,7 +1136,7 @@
 			return regenerate;
 		});
 	}	else if (freeExports && !freeExports.nodeType) {
-		if (freeModule) { // in Node.js or RingoJS v0.8.0+
+		if (freeModule) { // in Node.js, io.js, or RingoJS v0.8.0+
 			freeModule.exports = regenerate;
 		} else { // in Narwhal or RingoJS v0.7.0-
 			freeExports.regenerate = regenerate;
