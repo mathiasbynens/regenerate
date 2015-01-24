@@ -30,7 +30,7 @@ In a browser:
 <script src="regenerate.js"></script>
 ```
 
-In [Node.js](https://nodejs.org/), and [RingoJS ≥ v0.8.0](http://ringojs.org/):
+In [Node.js](https://nodejs.org/), [io.js](https://iojs.org/), and [RingoJS ≥ v0.8.0](http://ringojs.org/):
 
 ```js
 var regenerate = require('regenerate');
