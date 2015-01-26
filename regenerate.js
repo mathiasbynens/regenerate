@@ -958,7 +958,7 @@
 		return result.join('|');
 	};
 
-	var createCharacterClassesFromData = function(data) {
+	var createCharacterClassesFromData = function(data, bmpOnly) {
 		var result = [];
 
 		var parts = splitAtBMP(data);
@@ -987,13 +987,13 @@
 			result.push(
 				createBMPCharacterClasses(loneHighSurrogates) +
 				// Make sure the high surrogates aren’t part of a surrogate pair.
-				'(?![\\uDC00-\\uDFFF])'
+				(bmpOnly ? '' : '(?![\\uDC00-\\uDFFF])')
 			);
 		}
 		if (hasLoneLowSurrogates) {
 			result.push(
 				// Make sure the low surrogates aren’t part of a surrogate pair.
-				'(?:[^\\uD800-\\uDBFF]|^)' +
+				(bmpOnly ? '' : '(?:[^\\uD800-\\uDBFF]|^)') +
 				createBMPCharacterClasses(loneLowSurrogates)
 			);
 		}
@@ -1110,8 +1110,11 @@
 			set.data = this.data.slice(0);
 			return set;
 		},
-		'toString': function() {
-			var result = createCharacterClassesFromData(this.data);
+		'toString': function(options) {
+			var result = createCharacterClassesFromData(
+				this.data,
+				options ? options.bmpOnly : false
+			);
 			// Use `\0` instead of `\x00` where possible.
 			return result.replace(regexNull, '\\0$1');
 		},

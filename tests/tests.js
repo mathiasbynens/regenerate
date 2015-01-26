@@ -362,9 +362,29 @@
 			'Unmatched high surrogates'
 		);
 		equal(
+			regenerate(0xD800, 0xD801, 0xD802, 0xD803, 0xDBFF).toString({ 'bmpOnly': false }),
+			'[\\uD800-\\uD803\\uDBFF](?![\\uDC00-\\uDFFF])',
+			'Unmatched high surrogates with `bmpOnly: false`'
+		);
+		equal(
+			regenerate(0xD800, 0xD801, 0xD802, 0xD803, 0xDBFF).toString({ 'bmpOnly': true }),
+			'[\\uD800-\\uD803\\uDBFF]',
+			'Unmatched high surrogates with `bmpOnly: true`'
+		);
+		equal(
 			regenerate(0xDC00, 0xDC01, 0xDC02, 0xDC03, 0xDC04, 0xDC05, 0xDFFB, 0xDFFD, 0xDFFE, 0xDFFF).toString(),
 			'(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDC05\\uDFFB\\uDFFD-\\uDFFF]',
 			'Unmatched low surrogates'
+		);
+		equal(
+			regenerate(0xDC00, 0xDC01, 0xDC02, 0xDC03, 0xDC04, 0xDC05, 0xDFFB, 0xDFFD, 0xDFFE, 0xDFFF).toString({ 'bmpOnly': false }),
+			'(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDC05\\uDFFB\\uDFFD-\\uDFFF]',
+			'Unmatched low surrogates with `bmpOnly: false`'
+		);
+		equal(
+			regenerate(0xDC00, 0xDC01, 0xDC02, 0xDC03, 0xDC04, 0xDC05, 0xDFFB, 0xDFFD, 0xDFFE, 0xDFFF).toString({ 'bmpOnly': true }),
+			'[\\uDC00-\\uDC05\\uDFFB\\uDFFD-\\uDFFF]',
+			'Unmatched low surrogates with `bmpOnly: true`'
 		);
 		equal(
 			regenerate(0x0, 0x1, 0x2, 0x3, 0x1D306, 0x1D307, 0x1D308, 0x1D30A).toString(),
@@ -697,7 +717,7 @@
 		);
 		deepEqual(
 			[regenerate.prototype.add.length, regenerate.prototype.remove.length, regenerate.prototype.addRange.length, regenerate.prototype.removeRange.length, regenerate.prototype.remove.length, regenerate.prototype.intersection.length, regenerate.prototype.contains.length, regenerate.prototype.clone.length, regenerate.prototype.toString.length, regenerate.prototype.toRegExp.length, regenerate.prototype.valueOf.length, regenerate.prototype.toArray.length],
-			[1, 1, 2, 2, 1, 1, 1, 0, 0, 1, 0, 0],
+			[1, 1, 2, 2, 1, 1, 1, 0, 1, 1, 0, 0],
 			'Regenerate methods are available on `regenerate.prototype`'
 		);
 		deepEqual(

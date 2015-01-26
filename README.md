@@ -218,13 +218,29 @@ setB.toArray();
 // → [0x1D306, 0x1F4A9]
 ```
 
-### `regenerate.prototype.toString()`
+### `regenerate.prototype.toString(options)`
 
 Returns a string representing (part of) a regular expression that matches all the symbols mapped to the code points within the set.
 
 ```js
 regenerate(0x1D306, 0x1F4A9).toString();
 // → '\\uD834\\uDF06|\\uD83D\\uDCA9'
+```
+
+If the `bmpOnly` property of the optional `options` object is set to `true`, the output matches surrogates individually, regardless of whether they’re lone surrogates or just part of a surrogate pair. This simplifies the output, but it can only be used in case you’re certain the strings it will be used on don’t contain any astral symbols.
+
+```js
+var highSurrogates = regenerate().addRange(0xD800, 0xDBFF);
+highSurrogates.toString();
+// → '[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])'
+highSurrogates.toString({ 'bmpOnly': true });
+// → '[\\uD800-\\uDBFF]'
+
+var lowSurrogates = regenerate().addRange(0xDC00, 0xDFFF);
+lowSurrogates.toString();
+// → '(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]'
+lowSurrogates.toString({ 'bmpOnly': true });
+// → '[\\uDC00-\\uDFFF]'
 ```
 
 ### `regenerate.prototype.toRegExp(flags = '')`
