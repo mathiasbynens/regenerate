@@ -474,6 +474,31 @@
 			'addRange: Invalid code point < 0x0000'
 		);
 		equal(
+			regenerate().addRange(0, 0xDCFF).toString(),
+			'[\\0-\\uD7FF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDCFF]',
+			'Range starts before the high surrogate range and ends in the low surrogate range'
+		);
+		equal(
+			regenerate().addRange(0xD855, 0xFFFF).toString(),
+			'[\\uE000-\\uFFFF]|[\\uD855-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]',
+			'Range starts in the high surrogate range and ends after the low surrogate range'
+		);
+		equal(
+			regenerate().addRange(0xDCFF, 0xDDFF).toString(),
+			'(?:[^\\uD800-\\uDBFF]|^)[\\uDCFF-\\uDDFF]',
+			'Range starts and ends in the low surrogate range'
+		);
+		equal(
+			regenerate().addRange(0xDCFF, 0xFFFF).toString(),
+			'[\\uE000-\\uFFFF]|(?:[^\\uD800-\\uDBFF]|^)[\\uDCFF-\\uDFFF]',
+			'Range starts in the low surrogate range and ends after the low surrogate range'
+		);
+		equal(
+			regenerate().addRange(0xDCFF, 0x10FFFF).toString(),
+			'[\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|(?:[^\\uD800-\\uDBFF]|^)[\\uDCFF-\\uDFFF]',
+			'Range starts in the low surrogate range and ends after the low surrogate range'
+		);
+		equal(
 			regenerate(0x200C).addRange(0xF900, 0xFDCF).addRange(0xFDF0, 0xFFFD).addRange(0x010000, 0x0EFFFF).toString(),
 			'[\\u200C\\uF900-\\uFDCF\\uFDF0-\\uFFFD]|[\\uD800-\\uDB7F][\\uDC00-\\uDFFF]',
 			'Various code points'
