@@ -479,6 +479,16 @@
 			'Range starts before the high surrogate range and ends in the low surrogate range'
 		);
 		equal(
+			regenerate(0xD800 - 1).addRange(0xD800, 0xDBFF).toString(),
+			'\\uD7FF|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])',
+			'Range starts right before high surrogate range'
+		);
+		equal(
+			regenerate(0xD800 - 1).addRange(0xD800, 0xDBFF).toString({ 'bmpOnly': true }),
+			'[\\uD7FF-\\uDBFF]',
+			'Range starts right before high surrogate range with `bmpOnly: true`'
+		);
+		equal(
 			regenerate().addRange(0xD855, 0xFFFF).toString(),
 			'[\\uE000-\\uFFFF]|[\\uD855-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]',
 			'Range starts in the high surrogate range and ends after the low surrogate range'
@@ -497,6 +507,16 @@
 			regenerate().addRange(0xDCFF, 0x10FFFF).toString(),
 			'[\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|(?:[^\\uD800-\\uDBFF]|^)[\\uDCFF-\\uDFFF]',
 			'Range starts in the low surrogate range and ends after the low surrogate range'
+		);
+		equal(
+			regenerate(0xDC00 - 1).addRange(0xDC00, 0xDFFF).toString(),
+			'\\uDBFF(?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]',
+			'Range starts right before low surrogate range'
+		);
+		equal(
+			regenerate(0xDC00 - 1).addRange(0xDC00, 0xDFFF).toString({ 'bmpOnly': true }),
+			'[\\uDBFF-\\uDFFF]',
+			'Range starts right before low surrogate range with `bmpOnly: true`'
 		);
 		equal(
 			regenerate(0x200C).addRange(0xF900, 0xFDCF).addRange(0xFDF0, 0xFFFD).addRange(0x010000, 0x0EFFFF).toString(),

@@ -972,6 +972,13 @@
 
 		var surrogateMappings = surrogateSet(astral);
 
+		if (bmpOnly) {
+			bmp = dataAddData(bmp, loneHighSurrogates);
+			hasLoneHighSurrogates = false;
+			bmp = dataAddData(bmp, loneLowSurrogates);
+			hasLoneLowSurrogates = false;
+		}
+
 		if (!dataIsEmpty(bmp)) {
 			// The data set contains BMP code points that are not high surrogates
 			// needed for astral code points in the set.
@@ -987,13 +994,13 @@
 			result.push(
 				createBMPCharacterClasses(loneHighSurrogates) +
 				// Make sure the high surrogates aren’t part of a surrogate pair.
-				(bmpOnly ? '' : '(?![\\uDC00-\\uDFFF])')
+				'(?![\\uDC00-\\uDFFF])'
 			);
 		}
 		if (hasLoneLowSurrogates) {
 			result.push(
 				// Make sure the low surrogates aren’t part of a surrogate pair.
-				(bmpOnly ? '' : '(?:[^\\uD800-\\uDBFF]|^)') +
+				'(?:[^\\uD800-\\uDBFF]|^)' +
 				createBMPCharacterClasses(loneLowSurrogates)
 			);
 		}
