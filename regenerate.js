@@ -1,4 +1,4 @@
-/*! https://mths.be/regenerate v1.2.0 by @mathias | MIT license */
+/*! https://mths.be/regenerate v1.2.1 by @mathias | MIT license */
 ;(function(root) {
 
 	// Detect free variables `exports`.
@@ -1023,7 +1023,7 @@
 		return (new regenerate).add(value);
 	};
 
-	regenerate.version = '1.2.0';
+	regenerate.version = '1.2.1';
 
 	var proto = regenerate.prototype;
 	extend(proto, {
