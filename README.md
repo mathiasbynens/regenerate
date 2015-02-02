@@ -1,4 +1,4 @@
-# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](http://img.shields.io/coveralls/mathiasbynens/regenerate/master.svg)](https://coveralls.io/r/mathiasbynens/regenerate) [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.svg)](https://gemnasium.com/mathiasbynens/regenerate)
+# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](https://coveralls.io/repos/mathiasbynens/regenerate/badge.svg)](https://coveralls.io/r/mathiasbynens/regenerate) [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.svg)](https://gemnasium.com/mathiasbynens/regenerate)
 
 _Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](https://mathiasbynens.be/notes/javascript-unicode).)
 
@@ -242,6 +242,8 @@ lowSurrogates.toString();
 lowSurrogates.toString({ 'bmpOnly': true });
 // → '[\\uDC00-\\uDFFF]'
 ```
+
+Note that lone low surrogates cannot be matched accurately using regular expressions in JavaScript. Regenerate’s output makes a best-effort approach but [there can be false negatives in this regard](https://github.com/mathiasbynens/regenerate/issues/28#issuecomment-72224808).
 
 ### `regenerate.prototype.toRegExp(flags = '')`
 

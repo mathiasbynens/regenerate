@@ -8,7 +8,7 @@
 	var freeModule = typeof module == 'object' && module &&
 		module.exports == freeExports && module;
 
-	// Detect free variable `global`, from Node.js or Browserified code,
+	// Detect free variable `global`, from Node.js/io.js or Browserified code,
 	// and use it as `root`.
 	var freeGlobal = typeof global == 'object' && global;
 	if (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal) {
@@ -999,7 +999,9 @@
 		}
 		if (hasLoneLowSurrogates) {
 			result.push(
-				// Make sure the low surrogates aren’t part of a surrogate pair.
+				// It is not possible to accurately assert the low surrogates aren’t
+				// part of a surrogate pair, since JavaScript regular expressions do
+				// not support lookbehind.
 				'(?:[^\\uD800-\\uDBFF]|^)' +
 				createBMPCharacterClasses(loneLowSurrogates)
 			);
