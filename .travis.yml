@@ -1,6 +1,7 @@
 language: node_js
 node_js:
   - "0.10"
+  - "iojs"
 before_script:
   - "npm install -g grunt-cli"
   # Narwhal uses a hardcoded path to openjdk v6, so use that version
