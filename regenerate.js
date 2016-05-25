@@ -30,8 +30,8 @@
 	var LOW_SURROGATE_MIN = 0xDC00;
 	var LOW_SURROGATE_MAX = 0xDFFF;
 
-	// In Regenerate output, `\0` will never be preceded by `\` because we sort
-	// by code point value, so let’s keep this regular expression simple.
+	// In Regenerate output, `\0` is never preceded by `\` because we sort by
+	// code point value, so let’s keep this regular expression simple.
 	var regexNull = /\\x00([^0123456789]|$)/g;
 
 	var object = {};
@@ -580,6 +580,13 @@
 		return string;
 	};
 
+	var codePointToStringUnicode = function(codePoint) {
+		if (codePoint <= 0xFFFF) {
+			return codePointToString(codePoint);
+		}
+		return '\\u{' + codePoint.toString(16).toUpperCase() + '}';
+	};
+
 	var symbolToCodePoint = function(symbol) {
 		var length = symbol.length;
 		var first = symbol.charCodeAt(0);
@@ -617,6 +624,31 @@
 				result += codePointToString(start) + codePointToString(end);
 			} else {
 				result += codePointToString(start) + '-' + codePointToString(end);
+			}
+			index += 2;
+		}
+		return '[' + result + ']';
+	};
+
+	var createUnicodeCharacterClasses = function(data) {
+		// Iterate over the data per `(start, end)` pair.
+		var result = '';
+		var index = 0;
+		var start;
+		var end;
+		var length = data.length;
+		if (dataIsSingleton(data)) {
+			return codePointToStringUnicode(data[0]);
+		}
+		while (index < length) {
+			start = data[index];
+			end = data[index + 1] - 1; // Note: the `- 1` makes `end` inclusive.
+			if (start == end) {
+				result += codePointToStringUnicode(start);
+			} else if (start + 1 == end) {
+				result += codePointToStringUnicode(start) + codePointToStringUnicode(end);
+			} else {
+				result += codePointToStringUnicode(start) + '-' + codePointToStringUnicode(end);
 			}
 			index += 2;
 		}
@@ -958,7 +990,10 @@
 		return result.join('|');
 	};
 
-	var createCharacterClassesFromData = function(data, bmpOnly) {
+	var createCharacterClassesFromData = function(data, bmpOnly, hasUnicodeFlag) {
+		if (hasUnicodeFlag) {
+			return createUnicodeCharacterClasses(data);
+		}
 		var result = [];
 
 		var parts = splitAtBMP(data);
@@ -1122,13 +1157,19 @@
 		'toString': function(options) {
 			var result = createCharacterClassesFromData(
 				this.data,
-				options ? options.bmpOnly : false
+				options ? options.bmpOnly : false,
+				options ? options.hasUnicodeFlag : false
 			);
 			// Use `\0` instead of `\x00` where possible.
 			return result.replace(regexNull, '\\0$1');
 		},
 		'toRegExp': function(flags) {
-			return RegExp(this.toString(), flags || '');
+			var pattern = this.toString(
+				flags && flags.indexOf('u') != -1 ?
+					{ 'hasUnicodeFlag': true } :
+					null
+			);
+			return RegExp(pattern, flags || '');
 		},
 		'valueOf': function() { // Note: `valueOf` is aliased as `toArray`.
 			return dataToArray(this.data);

@@ -245,6 +245,18 @@ lowSurrogates.toString({ 'bmpOnly': true });
 
 Note that lone low surrogates cannot be matched accurately using regular expressions in JavaScript. Regenerate’s output makes a best-effort approach but [there can be false negatives in this regard](https://github.com/mathiasbynens/regenerate/issues/28#issuecomment-72224808).
 
+If the `hasUnicodeFlag` property of the optional `options` object is set to `true`, the output makes use of Unicode code point escapes (`\u{…}`) where applicable. This simplifies the output at the cost of compatibility and portability, since it means the output can only be used as a pattern in a regular expression with [the ES6 `u` flag](https://mathiasbynens.be/notes/es6-unicode-regex) enabled.
+
+```js
+var set = regenerate().addRange(0x0, 0x10FFFF);
+
+set.toString();
+// → '[\\0-\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]''
+
+set.toString({ 'hasUnicodeFlag': true });
+// → '[\\0-\\u{10FFFF}]'
+```
+
 ### `regenerate.prototype.toRegExp(flags = '')`
 
 Returns a regular expression that matches all the symbols mapped to the code points within the set. Optionally, you can pass [flags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Parameters) to be added to the regular expression.

@@ -202,6 +202,19 @@
 			/[\0-\xFF\u0201-\u0300]/g,
 			'toRegExp with flags'
 		);
+		var supportsUnicodeFlag = (function() {
+			try {
+				var regex = new RegExp('\\u{1D306}', 'u');
+				return true;
+			} catch (exception) {
+				return false
+			}
+		}());
+		supportsUnicodeFlag && deepEqual(
+			regenerate().addRange(0x0, 0x10FFFF).toRegExp('gu'),
+			new RegExp('[\\0-\\u{10FFFF}]', 'gu'),
+			'toRegExp with `u` flag triggers `hasUnicodeFlag: true`'
+		);
 		raises(
 			function() {
 				regenerate(0x10, 0x1F).removeRange(0x1F, 0x1A).toArray();
@@ -385,6 +398,21 @@
 			regenerate(0xDC00, 0xDC01, 0xDC02, 0xDC03, 0xDC04, 0xDC05, 0xDFFB, 0xDFFD, 0xDFFE, 0xDFFF).toString({ 'bmpOnly': true }),
 			'[\\uDC00-\\uDC05\\uDFFB\\uDFFD-\\uDFFF]',
 			'Unmatched low surrogates with `bmpOnly: true`'
+		);
+		equal(
+			regenerate('a', '\xA9', 0x1D306).toString({ 'hasUnicodeFlag': true }),
+			'[a\\xA9\\u{1D306}]',
+			'Various code points with `hasUnicodeFlag: true`'
+		);
+		equal(
+			regenerate().addRange(0x0, 0x10FFFF).toString({ 'hasUnicodeFlag': true }),
+			'[\\0-\\u{10FFFF}]',
+			'All Unicode code points with `hasUnicodeFlag: true`'
+		);
+		equal(
+			regenerate().addRange(0xFFFE, 0x010001).toString({ 'hasUnicodeFlag': true }),
+			'[\\uFFFE-\\u{10001}]',
+			'Range that starts within BMP and ends in astral range with `hasUnicodeFlag: true`'
 		);
 		equal(
 			regenerate(0x0, 0x1, 0x2, 0x3, 0x1D306, 0x1D307, 0x1D308, 0x1D30A).toString(),
