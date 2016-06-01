@@ -350,6 +350,11 @@
 			'Empty array as input returns empty array'
 		);
 		equal(
+			regenerate().toString(),
+			'[]',
+			'Empty set stringifies to `[]` (and not `(?:)` which matches the empty string)'
+		);
+		equal(
 			regenerate(0x10, 0x11, 0x12, 0x13, 0x40, 0x41, 0x42, 0x43, 0x44, 0x2603, 0xFD3F, 0xFFFF).toString(),
 			'[\\x10-\\x13@-D\\u2603\\uFD3F\\uFFFF]',
 			'Random BMP code points'
