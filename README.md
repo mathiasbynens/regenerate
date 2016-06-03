@@ -1,8 +1,6 @@
-# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](https://coveralls.io/repos/mathiasbynens/regenerate/badge.svg)](https://coveralls.io/r/mathiasbynens/regenerate) [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.svg)](https://gemnasium.com/mathiasbynens/regenerate)
+# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](https://img.shields.io/codecov/c/github/mathiasbynens/regenerate.svg)](https://codecov.io/gh/mathiasbynens/regenerate) [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.svg)](https://gemnasium.com/mathiasbynens/regenerate)
 
-_Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](https://mathiasbynens.be/notes/javascript-unicode).)
-
-Feel free to fork if you see possible improvements!
+_Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate ES5-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](https://mathiasbynens.be/notes/javascript-unicode).)
 
 ## Installation
 
@@ -316,10 +314,10 @@ var regenerate = require('regenerate');
 
 var string = 'Lorem ipsum dolor sit amet.';
 // Get an array of all symbols used in the string:
-var codePoints = Array.from(string);
+var symbols = Array.from(string);
 
 // Generate a regular expression that matches any of the symbols used in the string:
-regenerate(codePoints).toString();
+regenerate(symbols).toString();
 // → '[ \\.Ladeilmopr-u]'
 ```
 
