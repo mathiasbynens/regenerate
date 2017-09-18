@@ -370,8 +370,13 @@
 			'BMP code points within the a-zA-Z range, unordered'
 		);
 		equal(
-			regenerate(0x20, 0x21, 0x23).toString(),
-			'[ !#]',
+			regenerate(0x2F).toString(),
+			'\\/',
+			'U+002F should be escaped to enable embedding in a literal'
+		);
+		equal(
+			regenerate(0x20, 0x21, 0x23, 0x2F).toString(),
+			'[ !#\\/]',
 			'Random BMP code points'
 		);
 		equal(
