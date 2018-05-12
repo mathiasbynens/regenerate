@@ -315,8 +315,8 @@
 			'toString escapes special characters using single escapes'
 		);
 		equal(
-			set.clone().add('a', '.', '-', ']').toString(),
-			'[\\x03\\n\\-\\.\\]a]|\\uD834\\uDF06',
+			set.clone().add('a', '.', '-', ']', '/').toString(),
+			'[\\x03\\n\\x2D-\\/\\]a]|\\uD834\\uDF06',
 			'toString uses hexadecimal and Unicode escapes when appropriate'
 		);
 		deepEqual(
