@@ -1,4 +1,4 @@
-# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](https://img.shields.io/codecov/c/github/mathiasbynens/regenerate.svg)](https://codecov.io/gh/mathiasbynens/regenerate) [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.svg)](https://gemnasium.com/mathiasbynens/regenerate)
+# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](https://img.shields.io/codecov/c/github/mathiasbynens/regenerate.svg)](https://codecov.io/gh/mathiasbynens/regenerate)
 
 _Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate ES5-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](https://mathiasbynens.be/notes/javascript-unicode).)
 
@@ -122,7 +122,7 @@ regenerate(0x1D306, 'A', '©', 0x2603).toString();
 
 ### `regenerate.prototype.remove(value1, value2, value3, ...)`
 
-Any arguments passed to `remove()` are removed to the set. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
+Any arguments passed to `remove()` are removed from the set. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
 
 ```js
 regenerate(0x1D306, 'A', '©', 0x2603).remove('☃').toString();
