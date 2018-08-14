@@ -55,7 +55,7 @@
 	};
 
 	var toString = object.toString;
-	var isArray = function(value) {
+	var isArray =  Array.isArray || function(value) {
 		return toString.call(value) == '[object Array]';
 	};
 	var isNumber = function(value) {
