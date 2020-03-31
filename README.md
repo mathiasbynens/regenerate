@@ -241,7 +241,7 @@ lowSurrogates.toString({ 'bmpOnly': true });
 // → '[\\uDC00-\\uDFFF]'
 ```
 
-Note that lone low surrogates cannot be matched accurately using regular expressions in JavaScript. Regenerate’s output makes a best-effort approach but [there can be false negatives in this regard](https://github.com/mathiasbynens/regenerate/issues/28#issuecomment-72224808).
+Note that lone low surrogates cannot be matched accurately using regular expressions in JavaScript without the use of [lookbehind assertions](https://mathiasbynens.be/notes/es-regexp-proposals#lookbehinds), which aren't yet widely supported. Regenerate’s output makes a best-effort approach but [there can be false negatives in this regard](https://github.com/mathiasbynens/regenerate/issues/28#issuecomment-72224808).
 
 If the `hasUnicodeFlag` property of the optional `options` object is set to `true`, the output makes use of Unicode code point escapes (`\u{…}`) where applicable. This simplifies the output at the cost of compatibility and portability, since it means the output can only be used as a pattern in a regular expression with [the ES6 `u` flag](https://mathiasbynens.be/notes/es6-unicode-regex) enabled.
 
