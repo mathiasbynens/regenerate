@@ -378,7 +378,7 @@
 
 			}
 
-			else if (start == rangeEnd + 1) {
+			else if (start == rangeEnd + 1 || start == rangeEnd) {
 				data[index] = rangeStart;
 				return data;
 			}

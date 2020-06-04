@@ -325,6 +325,16 @@
 			'add extending the start of a range'
 		);
 		deepEqual(
+			regenerate().addRange(3, 6).addRange(1, 2).toArray(),
+			[1, 2, 3, 4, 5, 6],
+			'add extending the start of a range'
+		);
+		deepEqual(
+			regenerate().addRange(3, 6).addRange(1, 3).toArray(),
+			[1, 2, 3, 4, 5, 6],
+			'add extending the start of a range'
+		);
+		deepEqual(
 			regenerate(set),
 			set,
 			'Don’t wrap existing sets'
