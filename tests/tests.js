@@ -818,6 +818,11 @@
 			[42, 43],
 			'each Regenerate instance `set` stores its data in `set.data` for plugins to use'
 		);
+		equal(
+			regenerate().add(0x11450, 0x11C50, 0x11C52).toString(),
+			'\\uD805\\uDC50|\\uD807[\\uDC50\\uDC52]',
+			'a test for a bug in `optimizeByLowSurrogates`'
+		);
 	});
 	test('acid tests', function() {
 		// Based on the output for https://gist.github.com/mathiasbynens/6334847
