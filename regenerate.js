@@ -870,7 +870,7 @@
 				if (
 					lowSurrogateStart == otherLowSurrogateStart &&
 					lowSurrogateEnd == otherLowSurrogateEnd &&
-					otherMapping[1].length === 2
+					otherLowSurrogates.length === 2
 				) {
 					// Add the code points in the other item to this one.
 					if (dataIsSingleton(otherMapping[0])) {
