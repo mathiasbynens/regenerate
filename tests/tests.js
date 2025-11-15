@@ -215,6 +215,19 @@
 			new RegExp('[\\0-\\u{10FFFF}]', 'gu'),
 			'toRegExp with `u` flag triggers `hasUnicodeFlag: true`'
 		);
+		var supportsUnicodeSetsFlag = (function () {
+			try {
+				var regex = new RegExp('\\u{1D306}', 'v');
+				return true;
+			} catch (exception) {
+				return false
+			}
+		}());
+		supportsUnicodeSetsFlag && deepEqual(
+			regenerate().addRange(0x0, 0x10FFFF).toRegExp('gv'),
+			new RegExp('[\\0-\\u{10FFFF}]', 'gv'),
+			'toRegExp with `v` flag triggers `hasUnicodeFlag: true`'
+		);
 		raises(
 			function() {
 				regenerate(0x10, 0x1F).removeRange(0x1F, 0x1A).toArray();
