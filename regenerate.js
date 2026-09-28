@@ -464,6 +464,32 @@
 		return dataFromCodePoints(result);
 	};
 
+	var dataIntersectionData = function(dataA, dataB) {
+		var indexA = 0;
+		var indexB = 0;
+		var lengthA = dataA.length;
+		var lengthB = dataB.length;
+		var startA, endA, startB, endB, start, end;
+		var result = [];
+		while (indexA < lengthA && indexB < lengthB) {
+			startA = dataA[indexA];
+			endA = dataA[indexA + 1];
+			startB = dataB[indexB];
+			endB = dataB[indexB + 1];
+			start = startA > startB ? startA : startB;
+			end = endA < endB ? endA : endB;
+			if (start < end) {
+				result.push(start, end);
+			}
+			if (endA < endB) {
+				indexA += 2;
+			} else {
+				indexB += 2;
+			}
+		}
+		return result;
+	};
+
 	var dataIsEmpty = function(data) {
 		return !data.length;
 	};
@@ -1137,12 +1163,12 @@
 		},
 		'intersection': function(argument) {
 			var $this = this;
-			// Allow passing other Regenerate instances.
-			// TODO: Optimize this by writing and using `dataIntersectionData()`.
-			var array = argument instanceof regenerate ?
-				dataToArray(argument.data) :
-				argument;
-			$this.data = dataIntersection($this.data, array);
+			if (argument instanceof regenerate) {
+				// Allow passing other Regenerate instances.
+				$this.data = dataIntersectionData($this.data, argument.data);
+				return $this;
+			}
+			$this.data = dataIntersection($this.data, argument);
 			return $this;
 		},
 		'contains': function(codePoint) {
