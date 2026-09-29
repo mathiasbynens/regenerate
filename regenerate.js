@@ -470,21 +470,6 @@
 		return false;
 	};
 
-	var dataIntersection = function(data, codePoints) {
-		var index = 0;
-		var length = codePoints.length;
-		var codePoint;
-		var result = [];
-		while (index < length) {
-			codePoint = codePoints[index];
-			if (dataContains(data, codePoint)) {
-				result.push(codePoint);
-			}
-			++index;
-		}
-		return dataFromCodePoints(result);
-	};
-
 	var dataIntersectionData = function(dataA, dataB) {
 		var indexA = 0;
 		var indexB = 0;
@@ -1303,7 +1288,10 @@
 				$this.data = dataIntersectionData($this.data, argument.data);
 				return $this;
 			}
-			$this.data = dataIntersection($this.data, argument);
+			$this.data = dataIntersectionData(
+				$this.data,
+				dataFromValues(argument, false)
+			);
 			return $this;
 		},
 		'contains': function(codePoint) {

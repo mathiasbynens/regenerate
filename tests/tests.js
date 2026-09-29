@@ -94,6 +94,26 @@ describe('regenerate', () => {
 				[1, 2, 3]
 			);
 		});
+		it('intersection with an array of symbols, nested arrays, and sets', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0x60, 0x70).add(0x1D306)
+					.intersection(['a', [0x62, ['c']], regenerate(0x70, 0x71), '𝌆'])
+					.toArray(),
+				[0x61, 0x62, 0x63, 0x70, 0x1D306]
+			);
+		});
+		it('intersection with an array ignores invalid code points', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2, 3).intersection([-1, 2, 0x110000, NaN, null]).toArray(),
+				[2]
+			);
+		});
+		it('intersection with an empty array', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2, 3).intersection([]).toArray(),
+				[]
+			);
+		});
 		it('remove that triggers an upper limit change in the data structure', () => {
 			assert.deepStrictEqual(
 				regenerate(0, 1, 2, 3, 4, 5).remove(5).toArray(),
