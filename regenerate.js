@@ -81,38 +81,40 @@
 
 	/*--------------------------------------------------------------------------*/
 
+	var compareNumbers = function(a, b) {
+		return a - b;
+	};
+
+	// Turns an array of code points into data. The code points may be in any
+	// order and may contain duplicates. Note: unsorted `codePoints` are sorted
+	// in place.
 	var dataFromCodePoints = function(codePoints) {
-		var index = -1;
 		var length = codePoints.length;
-		var max = length - 1;
+		var index = 0;
+		var start;
+		var end;
+		var codePoint;
 		var result = [];
-		var isStart = true;
-		var tmp;
-		var previous = 0;
-		while (++index < length) {
-			tmp = codePoints[index];
-			if (isStart) {
-				result.push(tmp);
-				previous = tmp;
-				isStart = false;
-			} else {
-				if (tmp == previous + 1) {
-					if (index != max) {
-						previous = tmp;
-						continue;
-					} else {
-						isStart = true;
-						result.push(tmp + 1);
-					}
-				} else {
-					// End the previous range and start a new one.
-					result.push(previous + 1, tmp);
-					previous = tmp;
+		// Turn runs of consecutive code points into `(start, end)` pairs, skipping
+		// duplicates. Input is often sorted already, so rather than sorting up
+		// front, sort and start over only once a code point turns out to be
+		// smaller than the one before it.
+		while (index < length) {
+			start = codePoints[index];
+			if (result.length && start < result[result.length - 1]) {
+				codePoints.sort(compareNumbers);
+				return dataFromCodePoints(codePoints);
+			}
+			end = start + 1;
+			while (++index < length && (codePoint = codePoints[index]) <= end) {
+				if (codePoint == end) {
+					++end;
+				} else if (codePoint < end - 1) {
+					codePoints.sort(compareNumbers);
+					return dataFromCodePoints(codePoints);
 				}
 			}
-		}
-		if (!isStart) {
-			result.push(tmp + 1);
+			result.push(start, end);
 		}
 		return result;
 	};
@@ -228,6 +230,17 @@
 		var length = data.length;
 		if (codePoint < 0x0 || codePoint > 0x10FFFF) {
 			throw RangeError(ERRORS.codePointRange);
+		}
+		// Fast path: the code point lies at or after the start of the last pair,
+		// which is the common case when adding code points in ascending order.
+		if (length && codePoint >= data[length - 2]) {
+			end = data[length - 1];
+			if (codePoint > end) {
+				data.push(codePoint, codePoint + 1);
+			} else if (codePoint == end) {
+				data[length - 1] = codePoint + 1;
+			}
+			return data;
 		}
 		while (index < length) {
 			start = data[index];
@@ -496,6 +509,124 @@
 			}
 		}
 		return result;
+	};
+
+	var dataUnion = function(dataA, dataB) {
+		// Walk both sorted lists of `(start, end)` pairs in lockstep, always taking
+		// the pair that starts first, and merge it into the previous output pair if
+		// the two overlap or touch.
+		var indexA = 0;
+		var indexB = 0;
+		var lengthA = dataA.length;
+		var lengthB = dataB.length;
+		var start;
+		var end;
+		var last;
+		var result = [];
+		while (indexA < lengthA || indexB < lengthB) {
+			if (
+				indexB >= lengthB ||
+				(indexA < lengthA && dataA[indexA] <= dataB[indexB])
+			) {
+				start = dataA[indexA];
+				end = dataA[indexA + 1];
+				indexA += 2;
+			} else {
+				start = dataB[indexB];
+				end = dataB[indexB + 1];
+				indexB += 2;
+			}
+			last = result.length - 1;
+			if (last > 0 && start <= result[last]) {
+				if (end > result[last]) {
+					result[last] = end;
+				}
+			} else {
+				result.push(start, end);
+			}
+		}
+		return result;
+	};
+
+	var dataDifference = function(dataA, dataB) {
+		// For each pair in `dataA`, cut out the overlapping pairs of `dataB`.
+		var indexA = 0;
+		var indexB = 0;
+		var lengthA = dataA.length;
+		var lengthB = dataB.length;
+		var index;
+		var start;
+		var end;
+		var result = [];
+		while (indexA < lengthA) {
+			start = dataA[indexA];
+			end = dataA[indexA + 1];
+			indexA += 2;
+			// Skip the pairs of `dataB` that end before this pair starts.
+			while (indexB < lengthB && dataB[indexB + 1] <= start) {
+				indexB += 2;
+			}
+			index = indexB;
+			while (start < end && index < lengthB && dataB[index] < end) {
+				if (dataB[index] > start) {
+					result.push(start, dataB[index]);
+				}
+				if (dataB[index + 1] > start) {
+					start = dataB[index + 1];
+				}
+				index += 2;
+			}
+			if (start < end) {
+				result.push(start, end);
+			}
+		}
+		return result;
+	};
+
+	// Collects the code points in `values` (anything `add` or `remove` accepts in
+	// an array: code points, symbols, nested arrays, and Regenerate instances)
+	// and returns them as data. With `validate`, out-of-range code points throw
+	// like `dataAdd` does; otherwise they’re skipped, as `dataRemove` does.
+	var dataFromValues = function(values, validate) {
+		var codePoints = [];
+		var sets = [];
+		var collect = function(values) {
+			var index = -1;
+			var length = values.length;
+			var value;
+			var codePoint;
+			while (++index < length) {
+				value = values[index];
+				// Check for primitive numbers first, as they’re the common case.
+				if (typeof value == 'number') {
+					codePoint = value;
+				} else if (value == null) {
+					continue;
+				} else if (value instanceof regenerate) {
+					sets.push(value.data);
+					continue;
+				} else if (isArray(value)) {
+					collect(value);
+					continue;
+				} else {
+					codePoint = isNumber(value) ? +value : symbolToCodePoint(value);
+				}
+				if (codePoint >= 0x0 && codePoint <= 0x10FFFF) {
+					codePoints.push(codePoint);
+				} else if (validate) {
+					throw RangeError(ERRORS.codePointRange);
+				}
+			}
+		};
+		collect(values);
+
+		var data = dataFromCodePoints(codePoints);
+		var index = -1;
+		var length = sets.length;
+		while (++index < length) {
+			data = dataUnion(data, sets[index]);
+		}
+		return data;
 	};
 
 	var dataIsEmpty = function(data) {
@@ -1114,9 +1245,7 @@
 				value = slice.call(arguments);
 			}
 			if (isArray(value)) {
-				forEach(value, function(item) {
-					$this.add(item);
-				});
+				$this.data = dataUnion($this.data, dataFromValues(value, true));
 				return $this;
 			}
 			$this.data = dataAdd(
@@ -1139,9 +1268,7 @@
 				value = slice.call(arguments);
 			}
 			if (isArray(value)) {
-				forEach(value, function(item) {
-					$this.remove(item);
-				});
+				$this.data = dataDifference($this.data, dataFromValues(value, false));
 				return $this;
 			}
 			$this.data = dataRemove(
