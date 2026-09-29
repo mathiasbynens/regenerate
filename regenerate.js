@@ -326,26 +326,26 @@
 	};
 
 	var dataContains = function(data, codePoint) {
-		var index = 0;
+		// Binary search for the number of `(start, end)` pairs that start at or
+		// before `codePoint`. `codePoint` is in the set if it lies before the end of
+		// the last of those pairs.
 		var length = data.length;
-		// Exit early if `codePoint` is not within `data`’s overall range.
-		var start = data[index];
-		var end = data[length - 1];
-		if (length >= 2) {
-			if (codePoint < start || codePoint > end) {
-				return false;
+		var low = 0;
+		var high = length >> 1;
+		var middle;
+		// Exit early if `codePoint` is not within `data`'s overall range.
+		if (!length || codePoint < data[0] || codePoint >= data[length - 1]) {
+			return false;
+		}
+		while (low < high) {
+			middle = (low + high) >> 1;
+			if (data[middle << 1] <= codePoint) {
+				low = middle + 1;
+			} else {
+				high = middle;
 			}
 		}
-		// Iterate over the data per `(start, end)` pair.
-		while (index < length) {
-			start = data[index];
-			end = data[index + 1];
-			if (codePoint >= start && codePoint < end) {
-				return true;
-			}
-			index += 2;
-		}
-		return false;
+		return low > 0 && codePoint < data[(low << 1) - 1];
 	};
 
 	var dataIntersectionData = function(dataA, dataB) {

@@ -221,6 +221,33 @@ describe('regenerate', () => {
 				false
 			);
 		});
+		const multiRangeSet = regenerate(0, 5)
+			.addRange(10, 12)
+			.addRange(20, 22)
+			.addRange(30, 32)
+			.add(0x10FFFF);
+		it('contains: first and last code point of each of several ranges', () => {
+			assert.deepStrictEqual(
+				[0, 5, 10, 12, 20, 22, 30, 32, 0x10FFFF].map(function(codePoint) {
+					return multiRangeSet.contains(codePoint);
+				}),
+				[true, true, true, true, true, true, true, true, true]
+			);
+		});
+		it('contains: code points before, between, and after several ranges', () => {
+			assert.deepStrictEqual(
+				[-1, 1, 4, 6, 9, 13, 19, 23, 29, 33, 0x10FFFE, 0x110000].map(function(codePoint) {
+					return multiRangeSet.contains(codePoint);
+				}),
+				[false, false, false, false, false, false, false, false, false, false, false, false]
+			);
+		});
+		it('contains: empty set', () => {
+			assert.strictEqual(
+				regenerate().contains(0),
+				false
+			);
+		});
 		it('Set: start with a huge set, then remove a huge subset of code points', () => {
 			assert.deepStrictEqual(
 				regenerate().addRange(0x0, 0x10FFFF).removeRange(0xA, 0x10FFFF).toArray(),
