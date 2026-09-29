@@ -1,4 +1,4 @@
-# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](https://img.shields.io/codecov/c/github/mathiasbynens/regenerate.svg)](https://codecov.io/gh/mathiasbynens/regenerate)
+# Regenerate [![Build status](https://github.com/mathiasbynens/regenerate/workflows/run-checks/badge.svg)](https://github.com/mathiasbynens/regenerate/actions?query=workflow%3Arun-checks) [![regenerate on npm](https://img.shields.io/npm/v/regenerate)](https://www.npmjs.com/package/regenerate)
 
 _Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate ES5-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](https://mathiasbynens.be/notes/javascript-unicode).)
 
