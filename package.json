@@ -23,17 +23,9 @@
   },
   "bugs": "https://github.com/mathiasbynens/regenerate/issues",
   "scripts": {
-    "cover": "istanbul cover --report html --verbose --dir coverage tests/tests.js",
-    "test": "node tests/tests.js",
-    "bench": "node --experimental-bench --bench benchmark.mjs"
-  },
-  "devDependencies": {
-    "codecov": "^1.0.1",
-    "grunt": "^0.4.5",
-    "grunt-shell": "^1.1.1",
-    "istanbul": "^0.4.3",
-    "qunit-extras": "^1.1.0",
-    "qunitjs": "~1.11.0",
-    "requirejs": "^2.1.15"
+    "bench": "node --experimental-bench --bench benchmark.mjs",
+    "cover": "NODE_V8_COVERAGE=coverage node --test --experimental-test-coverage tests/tests.js",
+    "test": "node --test tests/tests.js",
+    "test-node6": "mocha tests"
   }
 }
