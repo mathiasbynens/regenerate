@@ -628,7 +628,14 @@
 		if (codePoint <= 0xFFFF) {
 			return codePointToString(codePoint);
 		}
-		return '\\u{' + codePoint.toString(16).toUpperCase() + '}';
+		// Astral code points have five or six hexadecimal digits: their highest
+		// byte is 0x01 to 0x10, written without its leading zero, if any.
+		var high = codePoint >> 16;
+		return '\\u{' +
+			(high < 0x10 ? hexBytes[high].charAt(1) : '10') +
+			hexBytes[(codePoint >> 8) & 0xFF] +
+			hexBytes[codePoint & 0xFF] +
+			'}';
 	};
 
 	var symbolToCodePoint = function(symbol) {
