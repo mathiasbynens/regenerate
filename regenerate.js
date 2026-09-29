@@ -159,64 +159,42 @@
 		if (rangeEnd < rangeStart) {
 			throw Error(ERRORS.rangeOrder);
 		}
-		// Iterate over the data per `(start, end)` pair.
+		var length = data.length;
+		var rangeEndExclusive = rangeEnd + 1;
 		var index = 0;
+		var first;
 		var start;
 		var end;
-		while (index < data.length) {
-			start = data[index];
-			end = data[index + 1] - 1; // Note: the `- 1` makes `end` inclusive.
-
-			// Exit as soon as no more matching pairs can be found.
-			if (start > rangeEnd) {
-				return data;
-			}
-
-			// Check if this range pair is equal to, or forms a subset of, the range
-			// to be removed.
-			// E.g. we have `[0, 11, 40, 51]` and want to remove 0-10 → `[40, 51]`.
-			// E.g. we have `[40, 51]` and want to remove 0-100 → `[]`.
-			if (rangeStart <= start && rangeEnd >= end) {
-				// Remove this pair.
-				data.splice(index, 2);
-				continue;
-			}
-
-			// Check if both `rangeStart` and `rangeEnd` are within the bounds of
-			// this pair.
-			// E.g. we have `[0, 11]` and want to remove 4-6 → `[0, 4, 7, 11]`.
-			if (rangeStart >= start && rangeEnd < end) {
-				if (rangeStart == start) {
-					// Replace `[start, end]` with `[startB, endB]`.
-					data[index] = rangeEnd + 1;
-					data[index + 1] = end + 1;
-					return data;
-				}
-				// Replace `[start, end]` with `[startA, endA, startB, endB]`.
-				data.splice(index, 2, start, rangeStart, rangeEnd + 1, end + 1);
-				return data;
-			}
-
-			// Check if only `rangeStart` is within the bounds of this pair.
-			// E.g. we have `[0, 11]` and want to remove 4-20 → `[0, 4]`.
-			if (rangeStart >= start && rangeStart <= end) {
-				// Replace `end` with `rangeStart`.
-				data[index + 1] = rangeStart;
-				// Note: we cannot `return` just yet, in case any following pairs still
-				// contain matching code points.
-				// E.g. we have `[0, 11, 14, 31]` and want to remove 4-20
-				// → `[0, 4, 21, 31]`.
-			}
-
-			// Check if only `rangeEnd` is within the bounds of this pair.
-			// E.g. we have `[14, 31]` and want to remove 4-20 → `[21, 31]`.
-			else if (rangeEnd >= start && rangeEnd <= end) {
-				// Just replace `start`.
-				data[index] = rangeEnd + 1;
-				return data;
-			}
-
+		// Skip the pairs that end before the range starts.
+		while (index < length && data[index + 1] <= rangeStart) {
 			index += 2;
+		}
+		// Find the pairs that overlap the range, i.e. `data[first]` up to (but not
+		// including) `data[index]`.
+		first = index;
+		while (index < length && data[index] < rangeEndExclusive) {
+			index += 2;
+		}
+		if (first == index) {
+			return data;
+		}
+		// Replace the overlapping pairs with a single `splice`, keeping the parts of
+		// the first and last pair that lie outside the range, if any.
+		// E.g. we have `[0, 11, 14, 31]` and want to remove 4-20 -> `[0, 4, 21, 31]`.
+		start = data[first];
+		end = data[index - 1];
+		if (start < rangeStart) {
+			if (end > rangeEndExclusive) {
+				data.splice(
+					first, index - first, start, rangeStart, rangeEndExclusive, end
+				);
+			} else {
+				data.splice(first, index - first, start, rangeStart);
+			}
+		} else if (end > rangeEndExclusive) {
+			data.splice(first, index - first, rangeEndExclusive, end);
+		} else {
+			data.splice(first, index - first);
 		}
 		return data;
 	};
@@ -299,122 +277,50 @@
 		) {
 			throw RangeError(ERRORS.codePointRange);
 		}
-		// Iterate over the data per `(start, end)` pair.
+		var length = data.length;
+		var rangeEndExclusive = rangeEnd + 1;
 		var index = 0;
+		var first;
 		var start;
 		var end;
-		var added = false;
-		var length = data.length;
 		// Fast path: the range starts at or after the start of the last pair, which
 		// is the common case when adding ranges in ascending order.
 		if (length && rangeStart >= data[length - 2]) {
 			end = data[length - 1];
 			if (rangeStart > end) {
-				data.push(rangeStart, rangeEnd + 1);
-			} else if (rangeEnd + 1 > end) {
+				data.push(rangeStart, rangeEndExclusive);
+			} else if (rangeEndExclusive > end) {
 				// The range overlaps or touches the last pair; extend it.
-				data[length - 1] = rangeEnd + 1;
+				data[length - 1] = rangeEndExclusive;
 			}
 			return data;
 		}
-		while (index < length) {
-			start = data[index];
-			end = data[index + 1];
-
-			if (added) {
-				// The range has already been added to the set; at this point, we just
-				// need to get rid of the following ranges in case they overlap.
-
-				// Check if this range can be combined with the previous range.
-				if (start == rangeEnd + 1) {
-					data.splice(index - 1, 2);
-					return data;
-				}
-
-				// Exit as soon as no more possibly overlapping pairs can be found.
-				if (start > rangeEnd) {
-					return data;
-				}
-
-				// E.g. `[0, 11, 12, 16]` and we’ve added 5-15, so we now have
-				// `[0, 16, 12, 16]`. Remove the `12,16` part, as it lies within the
-				// `0,16` range that was previously added.
-				if (start >= rangeStart && start <= rangeEnd) {
-					// `start` lies within the range that was previously added.
-
-					if (end > rangeStart && end - 1 <= rangeEnd) {
-						// `end` lies within the range that was previously added as well,
-						// so remove this pair.
-						data.splice(index, 2);
-						index -= 2;
-						// Note: we cannot `return` just yet, as there may still be other
-						// overlapping pairs.
-					} else {
-						// `start` lies within the range that was previously added, but
-						// `end` doesn’t. E.g. `[0, 11, 12, 31]` and we’ve added 5-15, so
-						// now we have `[0, 16, 12, 31]`. This must be written as `[0, 31]`.
-						// Remove the previously added `end` and the current `start`.
-						data.splice(index - 1, 2);
-						index -= 2;
-					}
-
-					// Note: we cannot return yet.
-				}
-
-			}
-
-			else if (start == rangeEnd + 1 || start == rangeEnd) {
-				data[index] = rangeStart;
-				return data;
-			}
-
-			// Check if a new pair must be inserted *before* the current one.
-			else if (start > rangeEnd) {
-				data.splice(index, 0, rangeStart, rangeEnd + 1);
-				return data;
-			}
-
-			else if (rangeStart >= start && rangeStart < end && rangeEnd + 1 <= end) {
-				// The new range lies entirely within an existing range pair. No action
-				// needed.
-				return data;
-			}
-
-			else if (
-				// E.g. `[0, 11]` and you add 5-15 → `[0, 16]`.
-				(rangeStart >= start && rangeStart < end) ||
-				// E.g. `[0, 3]` and you add 3-6 → `[0, 7]`.
-				end == rangeStart
-			) {
-				// Replace `end` with the new value.
-				data[index + 1] = rangeEnd + 1;
-				// Make sure the next range pair doesn’t overlap, e.g. `[0, 11, 12, 14]`
-				// and you add 5-15 → `[0, 16]`, i.e. remove the `12,14` part.
-				added = true;
-				// Note: we cannot `return` just yet.
-			}
-
-			else if (rangeStart < start && rangeEnd + 1 < end) {
-				// E.g. `[3, 11]` and you add 0-8 → `[0, 11]`. At this point we know
-				// that `start <= rangeEnd`, so the new range overlaps the start of this
-				// pair and ends within it.
-				data[index] = rangeStart;
-				return data;
-			}
-
-			else if (rangeStart <= start && rangeEnd + 1 >= end) {
-				// The new range is a superset of the old range.
-				data[index] = rangeStart;
-				data[index + 1] = rangeEnd + 1;
-				added = true;
-			}
-
+		// Skip the pairs that end before the range starts, without touching it.
+		while (index < length && data[index + 1] < rangeStart) {
 			index += 2;
 		}
-		// The loop has finished without doing anything; add the new pair to the end
-		// of the data set.
-		if (!added) {
-			data.push(rangeStart, rangeEnd + 1);
+		// Find the pairs that overlap or touch the range, i.e. `data[first]` up to
+		// (but not including) `data[index]`.
+		first = index;
+		while (index < length && data[index] <= rangeEndExclusive) {
+			index += 2;
+		}
+		if (first == index) {
+			// Nothing to merge with; insert a new pair.
+			data.splice(first, 0, rangeStart, rangeEndExclusive);
+			return data;
+		}
+		// Merge the range and the pairs it overlaps or touches into a single pair.
+		// E.g. `[0, 11, 12, 14, 20, 31]` and you add 5-15 -> `[0, 16, 20, 31]`.
+		start = data[first] < rangeStart ? data[first] : rangeStart;
+		end = data[index - 1] > rangeEndExclusive ?
+			data[index - 1] :
+			rangeEndExclusive;
+		if (index - first == 2) {
+			data[first] = start;
+			data[first + 1] = end;
+		} else {
+			data.splice(first, index - first, start, end);
 		}
 		return data;
 	};

@@ -461,6 +461,45 @@ describe('regenerate', () => {
 				[0, 3, 10, 21]
 			);
 		});
+		it('addRange inserting a range between two ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(20, 22).addRange(10, 12).data,
+				[0, 3, 10, 13, 20, 23]
+			);
+		});
+		it('addRange touching and merging several ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(10, 12).addRange(20, 22)
+					.addRange(30, 32).addRange(3, 19).data,
+				[0, 23, 30, 33]
+			);
+		});
+		it('addRange covering all ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(10, 12).addRange(20, 22).addRange(0, 30).data,
+				[0, 31]
+			);
+		});
+		it('removeRange cutting into the first and last of several ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 5).addRange(10, 15).addRange(20, 25)
+					.addRange(30, 35).removeRange(3, 22).data,
+				[0, 3, 23, 26, 30, 36]
+			);
+		});
+		it('removeRange removing several whole ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 5).addRange(10, 15).addRange(20, 25)
+					.removeRange(10, 25).data,
+				[0, 6]
+			);
+		});
+		it('removeRange in the gap between two ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 5).addRange(10, 15).removeRange(6, 9).data,
+				[0, 6, 10, 16]
+			);
+		});
 		it('toString escapes special characters using single escapes', () => {
 			assert.strictEqual(
 				regenerate(0x08, 0x0A, 0x0C, 0x0D, 0x22, 0x27, 0x5C).toString(),
