@@ -321,11 +321,11 @@ Regenerate supports at least Chrome 27+, Firefox 3+, Safari 4+, Opera 10+, IE 6+
 
 ## Unit tests & code coverage
 
-After cloning this repository, run `npm install` to install the dependencies needed for Regenerate development and testing. You may want to install Istanbul _globally_ using `npm install istanbul -g`.
+After cloning this repository, run `npm install` to install the dependencies needed for Regenerate development and testing.
 
-Once that’s done, you can run the unit tests in Node using `npm test` or `node tests/tests.js`. To run the tests in Rhino, Ringo, Narwhal, and web browsers as well, use `grunt test`.
+Once that’s done, you can run the unit tests in Node using `npm test`. To run them in Node.js 6, install Mocha 6 using `npm install mocha@6` and use `npm run test-node6`.
 
-To generate the code coverage report, use `grunt cover`.
+To generate the code coverage report, use `npm run cover`.
 
 ## Author
 

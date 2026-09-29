@@ -7,7 +7,6 @@
 		"tests",
 		".*",
 		"component.json",
-		"Gruntfile.js",
 		"node_modules",
 		"package.json"
 	]

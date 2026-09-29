@@ -4,5 +4,4 @@ coverage
 tests
 bower.json
 component.json
-Gruntfile.js
 benchmark.mjs
