@@ -255,10 +255,13 @@ suite('query', () => {
 	const lookups = 10_000;
 	benchEach('contains', {
 		run: ({ set }) => {
+			// Spread the lookups across the set's own range, from its lowest to its
+			// highest code point, so that they exercise the search.
+			const start = set.data[0];
+			const span = set.data[set.data.length - 1] - start;
 			let found = 0;
 			for (let index = 0; index < lookups; index++) {
-				// Spread the lookups across the whole code point space.
-				found += set.contains((index * 7919) % 0x110000);
+				found += set.contains(start + (index * 7919) % span);
 			}
 			return found;
 		},
