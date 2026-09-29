@@ -289,46 +289,6 @@
 		return data;
 	};
 
-	var dataAddData = function(dataA, dataB) {
-		// Iterate over the data per `(start, end)` pair.
-		var index = 0;
-		var start;
-		var end;
-		var data = dataA.slice();
-		var length = dataB.length;
-		while (index < length) {
-			start = dataB[index];
-			end = dataB[index + 1] - 1;
-			if (start == end) {
-				data = dataAdd(data, start);
-			} else {
-				data = dataAddRange(data, start, end);
-			}
-			index += 2;
-		}
-		return data;
-	};
-
-	var dataRemoveData = function(dataA, dataB) {
-		// Iterate over the data per `(start, end)` pair.
-		var index = 0;
-		var start;
-		var end;
-		var data = dataA.slice();
-		var length = dataB.length;
-		while (index < length) {
-			start = dataB[index];
-			end = dataB[index + 1] - 1;
-			if (start == end) {
-				data = dataRemove(data, start);
-			} else {
-				data = dataRemoveRange(data, start, end);
-			}
-			index += 2;
-		}
-		return data;
-	};
-
 	var dataAddRange = function(data, rangeStart, rangeEnd) {
 		if (rangeEnd < rangeStart) {
 			throw Error(ERRORS.rangeOrder);
@@ -1160,9 +1120,9 @@
 		var surrogateMappings = surrogateSet(astral);
 
 		if (bmpOnly) {
-			bmp = dataAddData(bmp, loneHighSurrogates);
+			bmp = dataUnion(bmp, loneHighSurrogates);
 			hasLoneHighSurrogates = false;
-			bmp = dataAddData(bmp, loneLowSurrogates);
+			bmp = dataUnion(bmp, loneLowSurrogates);
 			hasLoneLowSurrogates = false;
 		}
 
@@ -1223,7 +1183,7 @@
 			}
 			if (value instanceof regenerate) {
 				// Allow passing other Regenerate instances.
-				$this.data = dataAddData($this.data, value.data);
+				$this.data = dataUnion($this.data, value.data);
 				return $this;
 			}
 			if (arguments.length > 1) {
@@ -1246,7 +1206,7 @@
 			}
 			if (value instanceof regenerate) {
 				// Allow passing other Regenerate instances.
-				$this.data = dataRemoveData($this.data, value.data);
+				$this.data = dataDifference($this.data, value.data);
 				return $this;
 			}
 			if (arguments.length > 1) {
