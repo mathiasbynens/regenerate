@@ -63,18 +63,25 @@
 			toString.call(value) == '[object Number]';
 	};
 
-	// This assumes that `number` is a positive integer that `toString()`s nicely
-	// (which is the case for all code point values).
-	var zeroes = '0000';
-	var pad = function(number, totalCharacters) {
-		var string = String(number);
-		return string.length < totalCharacters
-			? (zeroes + string).slice(-totalCharacters)
-			: string;
+	// `hexBytes[n]` is the uppercase, zero-padded, two-digit hexadecimal
+	// representation of `n`, for `0 <= n <= 0xFF`.
+	var hexBytes = [];
+	(function() {
+		var digits = '0123456789ABCDEF';
+		var index = -1;
+		while (++index <= 0xFF) {
+			hexBytes[index] = digits.charAt(index >> 4) + digits.charAt(index & 0xF);
+		}
+	}());
+
+	// These assume that `number` is an integer in the range the output can
+	// represent, which is the case for the BMP code points they're used with.
+	var hex2 = function(number) {
+		return hexBytes[number];
 	};
 
-	var hex = function(number) {
-		return Number(number).toString(16).toUpperCase();
+	var hex4 = function(number) {
+		return hexBytes[number >> 8] + hexBytes[number & 0xFF];
 	};
 
 	var slice = [].slice;
@@ -600,19 +607,19 @@
 			string = stringFromCharCode(codePoint);
 		}
 		else if (codePoint <= 0xFF) {
-			string = '\\x' + pad(hex(codePoint), 2);
+			string = '\\x' + hex2(codePoint);
 		}
 		else { // `codePoint <= 0xFFFF` holds true.
 			// https://mathiasbynens.be/notes/javascript-escapes#unicode
-			string = '\\u' + pad(hex(codePoint), 4);
+			string = '\\u' + hex4(codePoint);
 		}
 
 		// There’s no need to account for astral symbols / surrogate pairs here,
 		// since `codePointToString` is private and only used for BMP code points.
 		// But if that’s what you need, just add an `else` block with this code:
 		//
-		//     string = '\\u' + pad(hex(highSurrogate(codePoint)), 4)
-		//     	+ '\\u' + pad(hex(lowSurrogate(codePoint)), 4);
+		//     string = '\\u' + hex4(highSurrogate(codePoint))
+		//     	+ '\\u' + hex4(lowSurrogate(codePoint));
 
 		return string;
 	};
