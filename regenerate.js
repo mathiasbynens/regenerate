@@ -305,6 +305,18 @@
 		var end;
 		var added = false;
 		var length = data.length;
+		// Fast path: the range starts at or after the start of the last pair, which
+		// is the common case when adding ranges in ascending order.
+		if (length && rangeStart >= data[length - 2]) {
+			end = data[length - 1];
+			if (rangeStart > end) {
+				data.push(rangeStart, rangeEnd + 1);
+			} else if (rangeEnd + 1 > end) {
+				// The range overlaps or touches the last pair; extend it.
+				data[length - 1] = rangeEnd + 1;
+			}
+			return data;
+		}
 		while (index < length) {
 			start = data[index];
 			end = data[index + 1];
