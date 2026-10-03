@@ -1275,6 +1275,29 @@ describe('regenerate', () => {
 				'\\uD805\\uDC50|\\uD807[\\uDC50\\uDC52]'
 			);
 		});
+		it('`optimizeByLowSurrogates` doesn’t merge items with more low surrogates into ones with fewer', () => {
+			// 0x1D30D = D834 DF0D
+			// 0x1D30F = D834 DF0F
+			// 0x1D70D = D835 DF0D
+			// The merged set should not match 0x1D70F (D835 DF0F).
+			const set = regenerate(0x1D30D, 0x1D30F, 0x1D70D);
+			assert.strictEqual(
+				set.toString(),
+				'\\uD834[\\uDF0D\\uDF0F]|\\uD835\\uDF0D'
+			);
+			assert.strictEqual(set.toRegExp().test('\u{1D70F}'), false);
+		});
+		it('`optimizeByLowSurrogates` with the astral decimal digits U+10D30 to U+10D49 and U+16130 to U+16139', () => {
+			const set = regenerate()
+				.addRange(0x10D30, 0x10D39)
+				.addRange(0x10D40, 0x10D49)
+				.addRange(0x16130, 0x16139);
+			assert.strictEqual(
+				set.toString(),
+				'\\uD803[\\uDD30-\\uDD39\\uDD40-\\uDD49]|\\uD818[\\uDD30-\\uDD39]'
+			);
+			assert.strictEqual(set.toRegExp().test('\u{16140}'), false);
+		});
 	});
 
 	describe('acid tests', () => {
