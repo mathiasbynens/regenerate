@@ -107,11 +107,9 @@
 		// front, sort and start over only once a code point turns out to be
 		// smaller than the one before it.
 		while (index < length) {
+			// The inner loop only stops at a code point above `end`, so `start` is
+			// always greater than result[result.length - 1].
 			start = codePoints[index];
-			if (result.length && start < result[result.length - 1]) {
-				codePoints.sort(compareNumbers);
-				return dataFromCodePoints(codePoints);
-			}
 			end = start + 1;
 			while (++index < length && (codePoint = codePoints[index]) <= end) {
 				if (codePoint == end) {
