@@ -64,6 +64,59 @@ describe('regenerate', () => {
 				[3, 10, 0x42, 0x1D306]
 			);
 		});
+		it('add(set) joining two ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(6, 8).add(regenerate().addRange(3, 5)).data,
+				[0, 9]
+			);
+		});
+		it('add(set) with a range spanning several ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(4, 6).addRange(8, 10)
+					.add(regenerate().addRange(1, 9).add(20)).data,
+				[0, 11, 20, 21]
+			);
+		});
+		it('add(set) with an empty set', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2).add(regenerate()).data,
+				[1, 3]
+			);
+		});
+		it('add(set) to an empty set', () => {
+			assert.deepStrictEqual(
+				regenerate().add(regenerate(1, 2)).data,
+				[1, 3]
+			);
+		});
+		it('remove(set) cutting several ranges out of one', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 20).remove(regenerate(0, 5, 20).addRange(10, 12)).data,
+				[1, 5, 6, 10, 13, 20]
+			);
+		});
+		it('remove(set) with a range spanning several ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(4, 6).addRange(8, 10)
+					.remove(regenerate().addRange(1, 9)).data,
+				[0, 1, 10, 11]
+			);
+		});
+		it('remove(set) with no overlap', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2).remove(regenerate(5)).data,
+				[1, 3]
+			);
+		});
+		it('add(set) result does not share data with the argument', () => {
+			const addedSet = regenerate(3);
+			const addResult = regenerate(1).add(addedSet);
+			addedSet.add(2);
+			assert.deepStrictEqual(
+				addResult.toArray(),
+				[1, 3]
+			);
+		});
 		it('intersection(set)', () => {
 			assert.deepStrictEqual(
 				regenerate(3, 10, 0x42, 0x1337, 0x1D306, 0x31337).intersection(setB).toArray(),
@@ -74,6 +127,44 @@ describe('regenerate', () => {
 			assert.deepStrictEqual(
 				regenerate(0, 1, 2, 3, 4, 5).intersection([3, 4, 5]).toArray(),
 				[3, 4, 5]
+			);
+		});
+		it('intersection with unsorted code points', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2, 3, 10).intersection([10, 3, 1, 2]).data,
+				[1, 4, 10, 11]
+			);
+		});
+		it('intersection with duplicate code points', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2, 3).intersection([2, 2, 3, 1, 1]).data,
+				[1, 4]
+			);
+		});
+		it('intersection with unsorted code points leaves a usable set', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2, 3).intersection([3, 1]).add(2).toArray(),
+				[1, 2, 3]
+			);
+		});
+		it('intersection with an array of symbols, nested arrays, and sets', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0x60, 0x70).add(0x1D306)
+					.intersection(['a', [0x62, ['c']], regenerate(0x70, 0x71), '𝌆'])
+					.toArray(),
+				[0x61, 0x62, 0x63, 0x70, 0x1D306]
+			);
+		});
+		it('intersection with an array ignores invalid code points', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2, 3).intersection([-1, 2, 0x110000, NaN, null]).toArray(),
+				[2]
+			);
+		});
+		it('intersection with an empty array', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2, 3).intersection([]).toArray(),
+				[]
 			);
 		});
 		it('remove that triggers an upper limit change in the data structure', () => {
@@ -127,6 +218,33 @@ describe('regenerate', () => {
 		it('contains: false', () => {
 			assert.strictEqual(
 				regenerate().add([0x1D307, 0x1D3A0, 0x1D3FF]).remove([0x1D3A0, 0x1D3FF]).contains(0x1D3A0),
+				false
+			);
+		});
+		const multiRangeSet = regenerate(0, 5)
+			.addRange(10, 12)
+			.addRange(20, 22)
+			.addRange(30, 32)
+			.add(0x10FFFF);
+		it('contains: first and last code point of each of several ranges', () => {
+			assert.deepStrictEqual(
+				[0, 5, 10, 12, 20, 22, 30, 32, 0x10FFFF].map(function(codePoint) {
+					return multiRangeSet.contains(codePoint);
+				}),
+				[true, true, true, true, true, true, true, true, true]
+			);
+		});
+		it('contains: code points before, between, and after several ranges', () => {
+			assert.deepStrictEqual(
+				[-1, 1, 4, 6, 9, 13, 19, 23, 29, 33, 0x10FFFE, 0x110000].map(function(codePoint) {
+					return multiRangeSet.contains(codePoint);
+				}),
+				[false, false, false, false, false, false, false, false, false, false, false, false]
+			);
+		});
+		it('contains: empty set', () => {
+			assert.strictEqual(
+				regenerate().contains(0),
 				false
 			);
 		});
@@ -340,6 +458,75 @@ describe('regenerate', () => {
 				[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
 			);
 		});
+		it('addRange appending disjoint ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(10, 12).addRange(20, 22).data,
+				[0, 3, 10, 13, 20, 23]
+			);
+		});
+		it('addRange appending a range touching the last range', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(10, 12).addRange(13, 15).data,
+				[0, 3, 10, 16]
+			);
+		});
+		it('addRange appending a range overlapping the last range', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(10, 12).addRange(11, 20).data,
+				[0, 3, 10, 21]
+			);
+		});
+		it('addRange with a range within the last range', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(10, 20).addRange(12, 15).data,
+				[0, 3, 10, 21]
+			);
+		});
+		it('addRange with a range starting at the start of the last range', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(10, 12).addRange(10, 20).data,
+				[0, 3, 10, 21]
+			);
+		});
+		it('addRange inserting a range between two ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(20, 22).addRange(10, 12).data,
+				[0, 3, 10, 13, 20, 23]
+			);
+		});
+		it('addRange touching and merging several ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 2).addRange(10, 12).addRange(20, 22)
+					.addRange(30, 32).addRange(3, 19).data,
+				[0, 23, 30, 33]
+			);
+		});
+		it('addRange covering all ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(10, 12).addRange(20, 22).addRange(0, 30).data,
+				[0, 31]
+			);
+		});
+		it('removeRange cutting into the first and last of several ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 5).addRange(10, 15).addRange(20, 25)
+					.addRange(30, 35).removeRange(3, 22).data,
+				[0, 3, 23, 26, 30, 36]
+			);
+		});
+		it('removeRange removing several whole ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 5).addRange(10, 15).addRange(20, 25)
+					.removeRange(10, 25).data,
+				[0, 6]
+			);
+		});
+		it('removeRange in the gap between two ranges', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 5).addRange(10, 15).removeRange(6, 9).data,
+				[0, 6, 10, 16]
+			);
+		});
 		it('toString escapes special characters using single escapes', () => {
 			assert.strictEqual(
 				regenerate(0x08, 0x0A, 0x0C, 0x0D, 0x22, 0x27, 0x5C).toString(),
@@ -416,6 +603,61 @@ describe('regenerate', () => {
 			assert.deepStrictEqual(
 				regenerate(0x61).add(0x61, 0x61, 0x62).add(0x61).toArray(),
 				[0x61, 0x62]
+			);
+		});
+		it('add with an unsorted array containing duplicates', () => {
+			assert.deepStrictEqual(
+				regenerate([5, 3, 4, 3, 10, 5, 0]).data,
+				[0, 1, 3, 6, 10, 11]
+			);
+		});
+		it('add with an array of nested arrays, symbols, and sets', () => {
+			assert.deepStrictEqual(
+				regenerate(2, 3, 20).add([12, [1, 'a', [0x1D306]], regenerate(21, 22), 4]).data,
+				[1, 5, 12, 13, 20, 23, 0x61, 0x62, 0x1D306, 0x1D307]
+			);
+		});
+		it('add with an array of Number objects', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2).add([new Number(3), new Number(3)]).data,
+				[1, 4]
+			);
+		});
+		it('remove with an unsorted array containing duplicates', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 20).remove([15, 3, 4, 3, 0, 20, 16]).data,
+				[1, 3, 5, 15, 17, 20]
+			);
+		});
+		it('remove with an array of nested arrays, sets, and null', () => {
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 5).remove([2, [4, regenerate(0)], null, 'a']).data,
+				[1, 2, 3, 4, 5, 6]
+			);
+		});
+		it('remove with an array ignores invalid code points', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 2, 3).remove([-1, 2, 0x110000, NaN]).toArray(),
+				[1, 3]
+			);
+		});
+		it('add with an array containing an invalid code point leaves the set unchanged', () => {
+			const setBeforeInvalidAdd = regenerate(1, 2);
+			assert.throws(
+				function() {
+					setBeforeInvalidAdd.add([3, 4, 0x110000]);
+				},
+				RangeError
+			);
+			assert.deepStrictEqual(
+				setBeforeInvalidAdd.toArray(),
+				[1, 2]
+			);
+		});
+		it('add code points after, within, and before the last range', () => {
+			assert.deepStrictEqual(
+				regenerate().add(1).add(2).add(5).add(5).add(3).add(6).add(0).data,
+				[0, 4, 5, 7]
 			);
 		});
 		it('Empty set returns empty array', () => {
