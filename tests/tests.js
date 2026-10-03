@@ -335,6 +335,31 @@
 			'add extending the start of a range'
 		);
 		deepEqual(
+			regenerate().addRange(3, 6).addRange(1, 4).toArray(),
+			[1, 2, 3, 4, 5, 6],
+			'addRange overlapping the start of a range'
+		);
+		deepEqual(
+			regenerate().addRange(79, 94).addRange(75, 86).toArray(),
+			range(75, 94),
+			'addRange overlapping the start of a range'
+		);
+		deepEqual(
+			regenerate().addRange(0, 2).addRange(10, 20).addRange(5, 15).toArray(),
+			[0, 1, 2].concat(range(5, 20)),
+			'addRange overlapping the start of a later range'
+		);
+		deepEqual(
+			regenerate().addRange(10, 20).addRange(30, 40).addRange(5, 15).toArray(),
+			range(5, 20).concat(range(30, 40)),
+			'addRange overlapping the start of a range followed by another range'
+		);
+		deepEqual(
+			regenerate().addRange(10, 20).addRange(5, 15).addRange(0, 7).toArray(),
+			range(0, 20),
+			'addRange overlapping the start of a range twice'
+		);
+		deepEqual(
 			regenerate(set),
 			set,
 			'Don’t wrap existing sets'

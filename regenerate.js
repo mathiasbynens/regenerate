@@ -409,6 +409,14 @@
 				// Note: we cannot `return` just yet.
 			}
 
+			else if (rangeStart < start && rangeEnd + 1 < end) {
+				// E.g. `[3, 11]` and you add 0-8 → `[0, 11]`. At this point we know
+				// that `start <= rangeEnd`, so the new range overlaps the start of this
+				// pair and ends within it.
+				data[index] = rangeStart;
+				return data;
+			}
+
 			else if (rangeStart <= start && rangeEnd + 1 >= end) {
 				// The new range is a superset of the old range.
 				data[index] = rangeStart;
