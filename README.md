@@ -1,4 +1,4 @@
-# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](https://img.shields.io/codecov/c/github/mathiasbynens/regenerate.svg)](https://codecov.io/gh/mathiasbynens/regenerate)
+# Regenerate [![Build status](https://github.com/mathiasbynens/regenerate/workflows/run-checks/badge.svg)](https://github.com/mathiasbynens/regenerate/actions?query=workflow%3Arun-checks) [![regenerate on npm](https://img.shields.io/npm/v/regenerate)](https://www.npmjs.com/package/regenerate)
 
 _Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate ES5-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](https://mathiasbynens.be/notes/javascript-unicode).)
 
@@ -321,11 +321,11 @@ Regenerate supports at least Chrome 27+, Firefox 3+, Safari 4+, Opera 10+, IE 6+
 
 ## Unit tests & code coverage
 
-After cloning this repository, run `npm install` to install the dependencies needed for Regenerate development and testing. You may want to install Istanbul _globally_ using `npm install istanbul -g`.
+After cloning this repository, run `npm install` to install the dependencies needed for Regenerate development and testing.
 
-Once that’s done, you can run the unit tests in Node using `npm test` or `node tests/tests.js`. To run the tests in Rhino, Ringo, Narwhal, and web browsers as well, use `grunt test`.
+Once that’s done, you can run the unit tests in Node using `npm test`. To run them in Node.js 6, install Mocha 6 using `npm install mocha@6` and use `npm run test-node6`.
 
-To generate the code coverage report, use `grunt cover`.
+To generate the code coverage report, use `npm run cover`.
 
 ## Author
 
