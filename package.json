@@ -24,7 +24,8 @@
   "bugs": "https://github.com/mathiasbynens/regenerate/issues",
   "scripts": {
     "cover": "istanbul cover --report html --verbose --dir coverage tests/tests.js",
-    "test": "node tests/tests.js"
+    "test": "node tests/tests.js",
+    "bench": "node --experimental-bench --bench benchmark.mjs"
   },
   "devDependencies": {
     "codecov": "^1.0.1",
