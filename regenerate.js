@@ -1207,7 +1207,7 @@
 		},
 		'toRegExp': function(flags) {
 			var pattern = this.toString(
-				flags && flags.indexOf('u') != -1 ?
+				/[uv]/.test(flags || '') ?
 					{ 'hasUnicodeFlag': true } :
 					null
 			);
