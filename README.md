@@ -243,7 +243,7 @@ If the `hasUnicodeFlag` property of the optional `options` object is set to `tru
 var set = regenerate().addRange(0x0, 0x10FFFF);
 
 set.toString();
-// → '[\\0-\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]''
+// → '[\\0-\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]'
 
 set.toString({ 'hasUnicodeFlag': true });
 // → '[\\0-\\u{10FFFF}]'
