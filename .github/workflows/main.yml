@@ -32,6 +32,27 @@ jobs:
       - name: Test
         run: npm test
 
+  coveralls:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      - name: Test with coverage
+        run: >-
+          NODE_V8_COVERAGE=coverage node --test --experimental-test-coverage
+          --test-coverage-exclude=tests/tests.js
+          --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=lcov --test-reporter-destination=lcov.info
+          tests/tests.js
+      - name: Upload to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: lcov.info
+
   node-6-compat:
     runs-on: ubuntu-latest
     steps:
