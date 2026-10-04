@@ -914,7 +914,9 @@
 			var mapping = surrogateMappings[index];
 			var lowSurrogates = mapping[1];
 			if (lowSurrogates.length !== 2) {
-				// Merge can only be performed when both lowSurrogates.length and otherLowSurrogates.length are equal, that is, both are single ranges of length 2.
+				// Merge can only be performed when both lowSurrogates.length and
+				// otherLowSurrogates.length are equal, that is, both are single
+				// ranges of length 2.
 				continue;
 			}
 			var lowSurrogateStart = lowSurrogates[0];

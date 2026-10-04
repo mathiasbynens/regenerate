@@ -423,7 +423,7 @@ describe('regenerate', () => {
 				'\\u{1F600}'
 			);
 		});
-		it('toString with `hasUnicodeFlag` and two code points', () => {
+		it('toString with `hasUnicodeFlag` and three code points', () => {
 			assert.strictEqual(
 				regenerate(0x1F600, 0x1F601, 0x1F603).toString({ hasUnicodeFlag: true }),
 				'[\\u{1F600}\\u{1F601}\\u{1F603}]'
