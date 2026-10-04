@@ -107,11 +107,9 @@
 		// front, sort and start over only once a code point turns out to be
 		// smaller than the one before it.
 		while (index < length) {
+			// The inner loop only stops at a code point above `end`, so `start` is
+			// always greater than result[result.length - 1].
 			start = codePoints[index];
-			if (result.length && start < result[result.length - 1]) {
-				codePoints.sort(compareNumbers);
-				return dataFromCodePoints(codePoints);
-			}
 			end = start + 1;
 			while (++index < length && (codePoint = codePoints[index]) <= end) {
 				if (codePoint == end) {
@@ -600,7 +598,7 @@
 			// The code point maps to one of these printable ASCII symbols
 			// (including the space character):
 			//
-			//      !"#%&',/0123456789:;<=>@ABCDEFGHIJKLMNO
+			//      !"#%&',0123456789:;<=>@ABCDEFGHIJKLMNO
 			//     PQRSTUVWXYZ_`abcdefghijklmnopqrstuvwxyz~
 			//
 			// These can safely be used directly.
@@ -626,7 +624,13 @@
 
 	var codePointToStringUnicode = function(codePoint) {
 		if (codePoint <= 0xFFFF) {
-			return codePointToString(codePoint);
+			if (codePoint < HIGH_SURROGATE_MIN || codePoint > LOW_SURROGATE_MAX) {
+				return codePointToString(codePoint);
+			}
+			// With the `u` flag, `\uD834\uDF06` is read as the single code point
+			// U+1D306, so a high surrogate followed by a low surrogate would no
+			// longer match either of them. `\u{…}` escapes are never combined.
+			return '\\u{' + hex4(codePoint) + '}';
 		}
 		// Astral code points have five or six hexadecimal digits: their highest
 		// byte is 0x01 to 0x10, written without its leading zero, if any.
@@ -654,6 +658,14 @@
 				second - LOW_SURROGATE_MIN + 0x10000;
 		}
 		return first;
+	};
+
+	// Turns a code point or a symbol into a primitive code point, so that
+	// `Number` objects don’t end up in the data. Primitive numbers are returned
+	// as is, which keeps them fast to work with.
+	var toCodePoint = function(value) {
+		return typeof value == 'number' ? value :
+			isNumber(value) ? +value : symbolToCodePoint(value);
 	};
 
 	var createBMPCharacterClasses = function(data) {
@@ -901,6 +913,12 @@
 		while (++index < surrogateMappings.length) {
 			var mapping = surrogateMappings[index];
 			var lowSurrogates = mapping[1];
+			if (lowSurrogates.length !== 2) {
+				// Merge can only be performed when both lowSurrogates.length and
+				// otherLowSurrogates.length are equal, that is, both are single
+				// ranges of length 2.
+				continue;
+			}
 			var lowSurrogateStart = lowSurrogates[0];
 			var lowSurrogateEnd = lowSurrogates[1];
 			innerIndex = index; // Note: the loop starts at the next index.
@@ -1099,7 +1117,7 @@
 		}
 		if (this instanceof regenerate) {
 			this.data = [];
-			return value ? this.add(value) : this;
+			return this.add(value);
 		}
 		return (new regenerate).add(value);
 	};
@@ -1110,6 +1128,9 @@
 	extend(proto, {
 		'add': function(value) {
 			var $this = this;
+			if (arguments.length > 1) {
+				value = slice.call(arguments);
+			}
 			if (value == null) {
 				return $this;
 			}
@@ -1118,21 +1139,21 @@
 				$this.data = dataUnion($this.data, value.data);
 				return $this;
 			}
-			if (arguments.length > 1) {
-				value = slice.call(arguments);
-			}
 			if (isArray(value)) {
 				$this.data = dataUnion($this.data, dataFromValues(value, true));
 				return $this;
 			}
 			$this.data = dataAdd(
 				$this.data,
-				isNumber(value) ? value : symbolToCodePoint(value)
+				toCodePoint(value)
 			);
 			return $this;
 		},
 		'remove': function(value) {
 			var $this = this;
+			if (arguments.length > 1) {
+				value = slice.call(arguments);
+			}
 			if (value == null) {
 				return $this;
 			}
@@ -1141,31 +1162,28 @@
 				$this.data = dataDifference($this.data, value.data);
 				return $this;
 			}
-			if (arguments.length > 1) {
-				value = slice.call(arguments);
-			}
 			if (isArray(value)) {
 				$this.data = dataDifference($this.data, dataFromValues(value, false));
 				return $this;
 			}
 			$this.data = dataRemove(
 				$this.data,
-				isNumber(value) ? value : symbolToCodePoint(value)
+				toCodePoint(value)
 			);
 			return $this;
 		},
 		'addRange': function(start, end) {
 			var $this = this;
 			$this.data = dataAddRange($this.data,
-				isNumber(start) ? start : symbolToCodePoint(start),
-				isNumber(end) ? end : symbolToCodePoint(end)
+				toCodePoint(start),
+				toCodePoint(end)
 			);
 			return $this;
 		},
 		'removeRange': function(start, end) {
 			var $this = this;
-			var startCodePoint = isNumber(start) ? start : symbolToCodePoint(start);
-			var endCodePoint = isNumber(end) ? end : symbolToCodePoint(end);
+			var startCodePoint = toCodePoint(start);
+			var endCodePoint = toCodePoint(end);
 			$this.data = dataRemoveRange(
 				$this.data,
 				startCodePoint,

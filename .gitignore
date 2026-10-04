@@ -1,5 +1,6 @@
 # Coverage report
 coverage
+lcov.info
 
 # Installed npm modules
 node_modules

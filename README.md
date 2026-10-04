@@ -1,4 +1,4 @@
-# Regenerate [![Build status](https://github.com/mathiasbynens/regenerate/workflows/run-checks/badge.svg)](https://github.com/mathiasbynens/regenerate/actions?query=workflow%3Arun-checks) [![regenerate on npm](https://img.shields.io/npm/v/regenerate)](https://www.npmjs.com/package/regenerate)
+# Regenerate [![Build status](https://github.com/mathiasbynens/regenerate/workflows/run-checks/badge.svg)](https://github.com/mathiasbynens/regenerate/actions?query=workflow%3Arun-checks) [![Coverage status](https://coveralls.io/repos/github/mathiasbynens/regenerate/badge.svg?branch=main)](https://coveralls.io/github/mathiasbynens/regenerate?branch=main) [![regenerate on npm](https://img.shields.io/npm/v/regenerate)](https://www.npmjs.com/package/regenerate)
 
 _Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate ES5-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](https://mathiasbynens.be/notes/javascript-unicode).)
 
@@ -243,7 +243,7 @@ If the `hasUnicodeFlag` property of the optional `options` object is set to `tru
 var set = regenerate().addRange(0x0, 0x10FFFF);
 
 set.toString();
-// → '[\\0-\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]''
+// → '[\\0-\\uD7FF\\uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]'
 
 set.toString({ 'hasUnicodeFlag': true });
 // → '[\\0-\\u{10FFFF}]'
