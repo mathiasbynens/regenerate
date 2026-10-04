@@ -120,6 +120,38 @@ describe('regenerate', () => {
 				[1, 3]
 			);
 		});
+		it('add(set, ...) with a set followed by other arguments', () => {
+			assert.deepStrictEqual(
+				regenerate().add(regenerate(1), 5, 'A', [7], regenerate(9)).toArray(),
+				[1, 5, 7, 9, 0x41]
+			);
+			assert.deepStrictEqual(
+				regenerate().add(regenerate(1, 2), 5, 'A', [7], regenerate(8, 9)).toArray(),
+				[1, 2, 5, 7, 8, 9, 0x41]
+			);
+		});
+		it('add(set, ...) with null as the first argument', () => {
+			assert.deepStrictEqual(
+				regenerate().add(null, 5).toArray(),
+				[5]
+			);
+		});
+		it('remove(set, ...) with a set followed by other arguments', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 5, 7, 9, 0x41).remove(regenerate(1), 5, 'A', [7]).toArray(),
+				[9]
+			);
+			assert.deepStrictEqual(
+				regenerate(1, 5, 7, 9, 0x41).remove(regenerate(1, 2), 5, 'A', [7, 8]).toArray(),
+				[9]
+			);
+		});
+		it('remove(set, ...) with null as the first argument', () => {
+			assert.deepStrictEqual(
+				regenerate(1, 5).remove(null, 5).toArray(),
+				[1]
+			);
+		});
 		it('intersection(set)', () => {
 			assert.deepStrictEqual(
 				regenerate(3, 10, 0x42, 0x1337, 0x1D306, 0x31337).intersection(setB).toArray(),

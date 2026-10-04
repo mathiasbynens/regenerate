@@ -1126,6 +1126,9 @@
 	extend(proto, {
 		'add': function(value) {
 			var $this = this;
+			if (arguments.length > 1) {
+				value = slice.call(arguments);
+			}
 			if (value == null) {
 				return $this;
 			}
@@ -1133,9 +1136,6 @@
 				// Allow passing other Regenerate instances.
 				$this.data = dataUnion($this.data, value.data);
 				return $this;
-			}
-			if (arguments.length > 1) {
-				value = slice.call(arguments);
 			}
 			if (isArray(value)) {
 				$this.data = dataUnion($this.data, dataFromValues(value, true));
@@ -1149,6 +1149,9 @@
 		},
 		'remove': function(value) {
 			var $this = this;
+			if (arguments.length > 1) {
+				value = slice.call(arguments);
+			}
 			if (value == null) {
 				return $this;
 			}
@@ -1156,9 +1159,6 @@
 				// Allow passing other Regenerate instances.
 				$this.data = dataDifference($this.data, value.data);
 				return $this;
-			}
-			if (arguments.length > 1) {
-				value = slice.call(arguments);
 			}
 			if (isArray(value)) {
 				$this.data = dataDifference($this.data, dataFromValues(value, false));
