@@ -136,7 +136,7 @@ regenerate(0x1D306, 'A', '©', 0x2603).remove(set).toString();
 Adds a range of code points from `start` to `end` (inclusive) to the set. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted.
 
 ```js
-regenerate(0x1D306).addRange(0x00, 0xFF).toString(16);
+regenerate(0x1D306).addRange(0x00, 0xFF).toString();
 // → '[\\0-\\xFF]|\\uD834\\uDF06'
 
 regenerate().addRange('A', 'z').toString();
@@ -290,7 +290,9 @@ Regenerate gets even better when combined with other libraries such as [Punycode
 
 ```js
 var regenerate = require('regenerate');
-var punycode = require('punycode');
+// The trailing slash loads the npm package rather than Node’s deprecated
+// built-in `punycode` module.
+var punycode = require('punycode/');
 
 var string = 'Lorem ipsum dolor sit amet.';
 // Get an array of all code points used in the string:
