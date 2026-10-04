@@ -327,6 +327,8 @@ Once that’s done, you can run the unit tests in Node using `npm test`. To run 
 
 To generate the code coverage report, use `npm run cover`.
 
+To fuzz Regenerate, use `npm run fuzz`. The fuzzers in `tests/fuzz` check random sets and operations against a reference model, and check that the output matches exactly the code points in the set. Each fuzzer runs for 10 seconds by default; use `npm run fuzz -- --duration 60` to run longer. Every failure comes with a command to replay it, e.g. `npm run fuzz -- --fuzzer operations --replay 1401181150`.
+
 ## Author
 
 | [![twitter/mathias](https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125?s=70)](https://twitter.com/mathias "Follow @mathias on Twitter") |
