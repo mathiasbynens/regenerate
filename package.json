@@ -4,6 +4,7 @@
   "description": "Generate JavaScript-compatible regular expressions based on a given set of Unicode symbols or code points.",
   "homepage": "https://mths.be/regenerate",
   "main": "regenerate.js",
+  "types": "regenerate.d.ts",
   "keywords": [
     "regex",
     "regexp",
