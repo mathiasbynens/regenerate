@@ -598,7 +598,7 @@
 			// The code point maps to one of these printable ASCII symbols
 			// (including the space character):
 			//
-			//      !"#%&',/0123456789:;<=>@ABCDEFGHIJKLMNO
+			//      !"#%&',0123456789:;<=>@ABCDEFGHIJKLMNO
 			//     PQRSTUVWXYZ_`abcdefghijklmnopqrstuvwxyz~
 			//
 			// These can safely be used directly.
