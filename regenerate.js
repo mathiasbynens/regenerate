@@ -1115,7 +1115,7 @@
 		}
 		if (this instanceof regenerate) {
 			this.data = [];
-			return value ? this.add(value) : this;
+			return this.add(value);
 		}
 		return (new regenerate).add(value);
 	};

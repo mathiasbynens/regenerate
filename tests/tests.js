@@ -1329,6 +1329,10 @@ describe('regenerate', () => {
 				regenerate('a', 'b', 0x1D306).toString()
 			);
 		});
+		it('`regenerate` called as a constructor with the code point 0', () => {
+			assert.deepStrictEqual(new regenerate(0).toArray(), [0]);
+			assert.deepStrictEqual(new regenerate(0).toArray(), regenerate(0).toArray());
+		});
 		it('Regenerate methods are available on `regenerate.prototype`', () => {
 			assert.deepStrictEqual(
 				[regenerate.prototype.add.length, regenerate.prototype.remove.length, regenerate.prototype.addRange.length, regenerate.prototype.removeRange.length, regenerate.prototype.remove.length, regenerate.prototype.intersection.length, regenerate.prototype.contains.length, regenerate.prototype.clone.length, regenerate.prototype.toString.length, regenerate.prototype.toRegExp.length, regenerate.prototype.valueOf.length, regenerate.prototype.toArray.length],
