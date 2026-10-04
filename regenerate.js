@@ -624,7 +624,13 @@
 
 	var codePointToStringUnicode = function(codePoint) {
 		if (codePoint <= 0xFFFF) {
-			return codePointToString(codePoint);
+			if (codePoint < HIGH_SURROGATE_MIN || codePoint > LOW_SURROGATE_MAX) {
+				return codePointToString(codePoint);
+			}
+			// With the `u` flag, `\uD834\uDF06` is read as the single code point
+			// U+1D306, so a high surrogate followed by a low surrogate would no
+			// longer match either of them. `\u{…}` escapes are never combined.
+			return '\\u{' + hex4(codePoint) + '}';
 		}
 		// Astral code points have five or six hexadecimal digits: their highest
 		// byte is 0x01 to 0x10, written without its leading zero, if any.

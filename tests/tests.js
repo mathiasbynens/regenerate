@@ -397,6 +397,32 @@ describe('regenerate', () => {
 				'[\\u{1F600}\\u{1F601}\\u{1F603}]'
 			);
 		});
+		(supportsUnicodeFlag ? it : it.skip)('toString with `hasUnicodeFlag` keeps a high and a low surrogate apart', () => {
+			const set = regenerate(0xD834, 0xDF06);
+			assert.strictEqual(
+				set.toString({ hasUnicodeFlag: true }),
+				'[\\u{D834}\\u{DF06}]'
+			);
+			const regex = set.toRegExp('u');
+			assert.strictEqual(regex.test('\uD834'), true);
+			assert.strictEqual(regex.test('\uDF06'), true);
+			assert.strictEqual(regex.test('\u{1D306}'), false);
+		});
+		(supportsUnicodeFlag ? it : it.skip)('toString with `hasUnicodeFlag` and a range ending in a high surrogate followed by low surrogates', () => {
+			const set = regenerate()
+				.addRange(0xD800, 0xD801)
+				.addRange(0xDC05, 0xDC10)
+				.add(0xE000);
+			assert.strictEqual(
+				set.toString({ hasUnicodeFlag: true }),
+				'[\\u{D800}\\u{D801}\\u{DC05}-\\u{DC10}\\uE000]'
+			);
+			// This used to throw “Range out of order in character class”.
+			const regex = set.toRegExp('u');
+			assert.strictEqual(regex.test('\uD801'), true);
+			assert.strictEqual(regex.test('\uDC05'), true);
+			assert.strictEqual(regex.test('\u{10405}'), false);
+		});
 		it('removeRange: incorrect usage', () => {
 			assert.throws(
 				function() {
