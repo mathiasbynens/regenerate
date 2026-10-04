@@ -694,6 +694,20 @@ describe('regenerate', () => {
 				[1, 4]
 			);
 		});
+		it('Number objects are stored as primitive code points', () => {
+			assert.deepStrictEqual(regenerate(new Number(5)).data, [5, 6]);
+			assert.deepStrictEqual(regenerate(new Number(5)).toArray(), [5]);
+			assert.deepStrictEqual(regenerate().add(new Number(5)).data, [5, 6]);
+			assert.deepStrictEqual(
+				regenerate().addRange(new Number(5), new Number(7)).data,
+				[5, 8]
+			);
+			assert.deepStrictEqual(regenerate(1, 2, 3).remove(new Number(2)).data, [1, 2, 3, 4]);
+			assert.deepStrictEqual(
+				regenerate().addRange(0, 9).removeRange(new Number(2), new Number(3)).data,
+				[0, 2, 4, 10]
+			);
+		});
 		it('remove with an unsorted array containing duplicates', () => {
 			assert.deepStrictEqual(
 				regenerate().addRange(0, 20).remove([15, 3, 4, 3, 0, 20, 16]).data,

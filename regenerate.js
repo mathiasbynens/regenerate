@@ -660,6 +660,14 @@
 		return first;
 	};
 
+	// Turns a code point or a symbol into a primitive code point, so that
+	// `Number` objects don’t end up in the data. Primitive numbers are returned
+	// as is, which keeps them fast to work with.
+	var toCodePoint = function(value) {
+		return typeof value == 'number' ? value :
+			isNumber(value) ? +value : symbolToCodePoint(value);
+	};
+
 	var createBMPCharacterClasses = function(data) {
 		// Iterate over the data per `(start, end)` pair.
 		var result = '';
@@ -1135,7 +1143,7 @@
 			}
 			$this.data = dataAdd(
 				$this.data,
-				isNumber(value) ? value : symbolToCodePoint(value)
+				toCodePoint(value)
 			);
 			return $this;
 		},
@@ -1158,22 +1166,22 @@
 			}
 			$this.data = dataRemove(
 				$this.data,
-				isNumber(value) ? value : symbolToCodePoint(value)
+				toCodePoint(value)
 			);
 			return $this;
 		},
 		'addRange': function(start, end) {
 			var $this = this;
 			$this.data = dataAddRange($this.data,
-				isNumber(start) ? start : symbolToCodePoint(start),
-				isNumber(end) ? end : symbolToCodePoint(end)
+				toCodePoint(start),
+				toCodePoint(end)
 			);
 			return $this;
 		},
 		'removeRange': function(start, end) {
 			var $this = this;
-			var startCodePoint = isNumber(start) ? start : symbolToCodePoint(start);
-			var endCodePoint = isNumber(end) ? end : symbolToCodePoint(end);
+			var startCodePoint = toCodePoint(start);
+			var endCodePoint = toCodePoint(end);
 			$this.data = dataRemoveRange(
 				$this.data,
 				startCodePoint,
