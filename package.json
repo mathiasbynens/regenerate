@@ -25,6 +25,7 @@
   "scripts": {
     "bench": "node --experimental-bench --bench benchmark.mjs",
     "cover": "NODE_V8_COVERAGE=coverage node --test --experimental-test-coverage tests/tests.js",
+    "fuzz": "node tests/fuzz/index.mjs",
     "test": "node --test tests/tests.js",
     "test-node6": "mocha tests"
   }

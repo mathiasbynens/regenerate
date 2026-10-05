@@ -53,6 +53,21 @@ jobs:
         with:
           file: lcov.info
 
+  fuzz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      # Each run uses a new random seed, which is printed in the log. A failure
+      # comes with an `npm run fuzz -- ... --replay <seed>` command to reproduce it.
+      - name: Fuzz
+        run: npm run fuzz -- --duration 60
+
   node-6-compat:
     runs-on: ubuntu-latest
     steps:
